@@ -6,8 +6,10 @@ const { button } = van.tags;
 export const Button = ({ color, text, onclick }) =>
   button(
     {
-      class: () => "mavlinkui-button " + ("mavlinkui-button-" + (color.val || color)),
-      // style: () => `background-color: ${van.val(color)};`,
+      class: () =>
+        "mavlinkui" +
+        (" mavlinkui-" + (color.val || color) || "primary") +
+        " mavlinkui-button",
       onclick,
     },
     text

@@ -1,0 +1,39 @@
+.mavlinkui {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0.25em 0.5em;
+    text-decoration: none;
+    border-radius: 0.25em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-touch-callout: none;
+    user-select: none;
+    cursor: pointer;
+    outline: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1em;
+    
+    border: 0.125em solid;
+  }
+  
+  .mavlinkui-primary {
+    border-color: #41addd;
+    background-color: white;
+    color: #41addd;
+  
+    &:active {
+      background-color: #41addd;
+      color: white;
+    }
+  }
+  
+  .mavlinkui-secondary {
+    border-color: rgb(221, 179, 65);
+    background-color: white;
+    color: rgb(221, 179, 65);
+  
+    &:active {
+      background-color: rgb(221, 179, 65);
+      color: white;
+    }
+  }
