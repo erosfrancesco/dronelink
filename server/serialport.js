@@ -46,4 +46,3 @@ const openMavlinkConnection =
   };
 
 export default openMavlinkConnection;
-// module.exports = openMavlinkConnection;
