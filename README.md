@@ -11,6 +11,7 @@ Need a nodejs process to read from serial. Websocket is provided in order to com
 ## Backend (server)
 
 This is where nodejs:
+
 - handles device serial comunication (package: [serialport](https://www.npmjs.com/package/serialport))
 - parse mavlink packages (package: [node-mavlink](https://www.npmjs.com/package/node-mavlink))
 - provides a Websocket server for the UI, so it can manage mavlink packages (package: [ws](https://www.npmjs.com/package/ws))
