@@ -1,0 +1,20 @@
+{
+  "name": "mavlink-van-ui",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "start-server": "node server/index",
+    "start-frontend": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "terser": "^5.19.2",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "vanjs-core": "^1.2.6"
+  }
+}
