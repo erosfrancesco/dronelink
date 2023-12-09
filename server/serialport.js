@@ -1,12 +1,12 @@
 import { SerialPort } from "serialport";
 
 import { mavlinkRegistry, chat } from "./messages/actions.js";
-import { REGISTRY, setupMavlinkReader } from "./mavlink.js";
+import { setupMavlinkReader, getAvailableCommands } from "./mavlink.js";
 
 const sendMavlinkRegistry = (connection) => {
   const res = JSON.stringify({
     type: mavlinkRegistry,
-    data: REGISTRY,
+    data: getAvailableCommands(),
   });
 
   connection.send(res);
@@ -26,7 +26,8 @@ const onDeviceConnected = (connection, path) => {
 const openMavlinkConnection =
   (connection) =>
   async (path = "COM6", baudRate = 9600) => {
-    sendMavlinkRegistry(connection);
+    //TODO: - Set up ws command for this
+    // sendMavlinkRegistry(connection);
 
     try {
       const port = new SerialPort({
