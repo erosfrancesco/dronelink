@@ -26,7 +26,6 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
   const reader = port
     .pipe(new MavLinkPacketSplitter())
     .pipe(new MavLinkPacketParser());
-  console.log("Reader ok", port);
 
   reader.on("data", (packet) => {
     const packetClass = PacketClasses[packet.header.msgid];
@@ -81,5 +80,8 @@ export const handleMavlinkPacketRead = (ws, { type, ...args }) => {
   const { data, packetType } = args;
   console.log("Got mavlink packet:", packetType, data);
 };
+
+// TODO: -
+// send test packet
 
 export default setupMavlinkReader;

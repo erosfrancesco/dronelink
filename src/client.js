@@ -1,14 +1,11 @@
-import { deviceConnected } from "../server/messages/actions.js";
+import { openDeviceConnectionCommand } from "../server/adapters/index.js";
 const ws = new WebSocket("ws://localhost:" + 5000);
 
 const onWSOpen = () => {
   console.log("Connection to server extabilished");
   console.log("Trying to connect to port");
 
-  
-// TODO: -------------------------------------------------------------------------------------
-// Port mapping for when is already connected
-  ws.send(JSON.stringify({ type: deviceConnected, port: "COM6" }));
+  ws.send(openDeviceConnectionCommand({ port: "COM6" }));
 };
 
 const onWSMessage = (buffer) => {
