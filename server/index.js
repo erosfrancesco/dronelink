@@ -1,8 +1,12 @@
+import { handleMessage, messageCommand } from "./adapters/WSActions.js";
+import { handleSerialPortConnect } from "./adapters/serialport.js";
+/*
 import {
   handleChat,
   handleConnect,
   handleMavlinkPackage,
 } from "./messages/index.js";
+/** */
 
 import { WebSocketServer } from "ws";
 const port = process.env.PORT || 5000;
@@ -14,14 +18,17 @@ wss.on("connection", (ws) => {
   ws.on("message", (buffer) => {
     try {
       const data = JSON.parse(buffer);
-      const { type, ...args } = data;
+      // const { type } = data;
 
-      handleConnect(ws, data);
-      handleChat(ws, data);
-      handleMavlinkPackage(ws, data);
-    } catch (e) {
+      handleSerialPortConnect(ws, data);
+      // handleConnect(ws, data);
+      // handleChat(ws, data);
+      // handleMavlinkPackage(ws, data);
+      handleMessage(ws, data);
+    } catch (error) {
       console.log("Error parsing message: ", buffer);
-      console.error(e);
+      console.log(error);
+      ws.send(messageCommand({ error }));
     }
   });
 });

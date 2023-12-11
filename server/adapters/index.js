@@ -1,16 +1,8 @@
+// TO BE INCLUDED
 import { SerialPort } from "serialport";
 
-import { mavlinkRegistry, chat } from "./messages/actions.js";
-import { setupMavlinkReader, getAvailableCommands } from "./mavlink.js";
-
-const sendMavlinkRegistry = (connection) => {
-  const res = JSON.stringify({
-    type: mavlinkRegistry,
-    data: getAvailableCommands(),
-  });
-
-  connection.send(res);
-};
+import { chat } from "../messages/actions.js";
+import { setupMavlinkReader } from "./mavlink.js";
 
 // TODO: -------------------------------------------------------------------------------------
 // Port mapping for when is already connected
@@ -30,9 +22,17 @@ const openMavlinkConnection =
     // sendMavlinkRegistry(connection);
 
     try {
-      const port = new SerialPort({
-        path,
-        baudRate,
+      const port = new SerialPort(
+        {
+          path,
+          baudRate,
+        },
+        false
+      );
+
+      port.on("error", (e) => {
+        console.log("port error", e); // THIS SHOULD WORK!
+        // throw e;
       });
 
       port.on("open", () => onDeviceConnected(connection, path));

@@ -1,4 +1,5 @@
-import { mavlinkPacketReceived } from "./messages/actions.js";
+// TO BE INCLUDED
+import { mavlinkPacketReceived } from "../messages/actions.js";
 import {
   MavLinkProtocolV2,
   send,
@@ -23,7 +24,7 @@ const PacketClasses = {
 };
 //
 
-export const setupMavlinkReader = (ws, port) => {
+export const setupMavlinkReader = (ws, port, onPacketReceived = () => {}) => {
   const reader = port
     .pipe(new MavLinkPacketSplitter())
     .pipe(new MavLinkPacketParser());
@@ -38,6 +39,9 @@ export const setupMavlinkReader = (ws, port) => {
     const data = protocol.data(payload, packetClass);
     const packetType = packetClass.MSG_NAME;
 
+    onPacketReceived(data, packetType, packetClass, packet)
+
+    /*
     const res = JSON.stringify(
       {
         type: mavlinkPacketReceived,
@@ -50,6 +54,7 @@ export const setupMavlinkReader = (ws, port) => {
     );
 
     ws.send(res);
+    /** */
   });
 
   // TODO: - Set up ws command for this...

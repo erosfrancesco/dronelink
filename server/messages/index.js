@@ -1,16 +1,18 @@
-import openMavlinkConnection from "../serialport.js";
+// TO BE REMOVED
+
+import openMavlinkConnection from "../adapters/index.js";
 import {
   deviceConnected,
   chat,
   mavlinkPacketReceived,
   mavlinkRegistry,
+  serverError,
 } from "./actions.js";
 
 //
 // UTILS
 //
 export const defaultErrorHandler = (action) => (e) => {
-  // DOESN'T WORK? Tested with handleConnect with no Devices. WHAT?
   console.log("Error executing: ", action);
   console.log(e);
   throw e;
@@ -70,9 +72,20 @@ export const handleMavlinkRegistry = (ws, { type, ...args }) => {
   console.log(args.data);
 };
 
+export const handleServerError = (ws, { type, ...args }) => {
+  if (type !== serverError) {
+    return;
+  }
+
+  const { error } = args;
+  console.log('Got error from server:', error)
+  // console.error(error);
+}
+
 export default {
   handleConnect,
   handleChat,
   handleMavlinkPackage,
   handleMavlinkRegistry,
+  handleServerError
 };
