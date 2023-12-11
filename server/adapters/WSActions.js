@@ -1,4 +1,5 @@
-export const messageCommandType = "server_error";
+// WS ADAPTER
+export const messageCommandType = "server_message";
 
 export const messageCommand = ({ error, message }) => {
   const res = JSON.stringify({

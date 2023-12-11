@@ -1,5 +1,3 @@
-// TO BE INCLUDED
-import { mavlinkPacketReceived } from "../messages/actions.js";
 import {
   MavLinkProtocolV2,
   send,
@@ -24,10 +22,11 @@ const PacketClasses = {
 };
 //
 
-export const setupMavlinkReader = (ws, port, onPacketReceived = () => {}) => {
+export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
   const reader = port
     .pipe(new MavLinkPacketSplitter())
     .pipe(new MavLinkPacketParser());
+  console.log("Reader ok", port);
 
   reader.on("data", (packet) => {
     const packetClass = PacketClasses[packet.header.msgid];
@@ -39,47 +38,13 @@ export const setupMavlinkReader = (ws, port, onPacketReceived = () => {}) => {
     const data = protocol.data(payload, packetClass);
     const packetType = packetClass.MSG_NAME;
 
-    onPacketReceived(data, packetType, packetClass, packet)
-
-    /*
-    const res = JSON.stringify(
-      {
-        type: mavlinkPacketReceived,
-        packetType,
-        packetClass,
-        data,
-      },
-      // bigint and other values??
-      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
-    );
-
-    ws.send(res);
-    /** */
-  });
-
-  // TODO: - Set up ws command for this...
-  // ParamRequestList
-  sendTestPacket(
-    port /*
-    "ParamRequestList", {
-    targetSystem: 1,
-    targetComponent: 1,
-  }/** */
-  ).then((res) => {
-    console.log("Packet sent", res);
-    ws.send(
-      JSON.stringify({
-        type: "chat",
-        message: "Test packet sent.",
-      })
-    );
+    onPacketReceived(data, packetType, packetClass, packet);
   });
 
   return reader;
 };
 
-// Still a work in progress, but we're here...
-export const sendTestPacket = async (port, command, args = {}) => {
+export const sendPacketCommand = async (port, command, args = {}) => {
   const packet = new (Commands[command] ||
     Commands.RequestProtocolVersionCommand)();
 
@@ -97,8 +62,24 @@ export const sendTestPacket = async (port, command, args = {}) => {
 
 export const getAvailableCommands = () => Object.keys(Commands);
 
-export default {
-  sendTestPacket,
-  setupMavlinkReader,
-  getAvailableCommands,
+// WS ADAPTER
+export const parseMavlinkPacketCommandType = "on_packet_read"; // THIS MUST BE EXPOSED
+
+export const parseMavlinkPacketCommand = (data, packetType, packetClass) => {
+  return JSON.stringify(
+    { type: parseMavlinkPacketCommandType, data, packetType, packetClass },
+    // bigint and other values??
+    (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+  );
 };
+
+export const handleMavlinkPacketRead = (ws, { type, ...args }) => {
+  if (type !== parseMavlinkPacketCommandType) {
+    return;
+  }
+
+  const { data, packetType } = args;
+  console.log("Got mavlink packet:", packetType, data);
+};
+
+export default setupMavlinkReader;

@@ -1,49 +1,42 @@
-// TO BE INCLUDED
-import { SerialPort } from "serialport";
+import { messageCommand } from "./WSActions.js";
+import { setupMavlinkReader, parseMavlinkPacketCommand } from "./mavlink.js";
+import openSerialConnection from "./serialport.js";
 
-import { chat } from "../messages/actions.js";
-import { setupMavlinkReader } from "./mavlink.js";
-
-// TODO: -------------------------------------------------------------------------------------
-// Port mapping for when is already connected
-const onDeviceConnected = (connection, path) => {
-  const res = JSON.stringify({
-    type: chat,
-    message: "Device connected on: " + path,
-  });
-
-  connection.send(res);
-};
-
-const openMavlinkConnection =
-  (connection) =>
-  async (path = "COM6", baudRate = 9600) => {
-    //TODO: - Set up ws command for this
-    // sendMavlinkRegistry(connection);
-
-    try {
-      const port = new SerialPort(
-        {
-          path,
-          baudRate,
-        },
-        false
-      );
-
-      port.on("error", (e) => {
-        console.log("port error", e); // THIS SHOULD WORK!
-        // throw e;
-      });
-
-      port.on("open", () => onDeviceConnected(connection, path));
-
-      const reader = setupMavlinkReader(connection, port);
-
-      return port;
-    } catch (e) {
-      console.log("Error e", e);
-      throw e;
-    }
+const handleParsedPackets =
+  (ws) =>
+  (...args) => {
+    ws.send(parseMavlinkPacketCommand(...args));
   };
 
-export default openMavlinkConnection;
+// WS ADAPTER
+export const openDeviceConnectionCommandType = "open_connection_to_device";
+
+export const openDeviceConnectionCommand = (args) => {
+  const { port, baudRate } = args || {};
+
+  return JSON.stringify({
+    type: openDeviceConnectionCommandType,
+    port,
+    baudRate,
+  });
+};
+
+export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
+  if (type !== openDeviceConnectionCommandType) {
+    return;
+  }
+
+  const { port, baudRate } = args;
+
+  const serial = openSerialConnection(port, baudRate);
+  const reader = setupMavlinkReader(serial, handleParsedPackets(ws));
+
+  serial.on("error", (e) => {
+    console.log("Error: ", e);
+    ws.send(messageCommand({ error: e.message }));
+  });
+
+  ws.send(messageCommand({ message: "Device connected" }));
+};
+
+export default handleOpenDeviceConnectionCommand;
