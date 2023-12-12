@@ -1,5 +1,5 @@
 import { SerialPort } from "serialport";
-import { messageCommand } from "./utils.js";
+import { messageCommand } from '../../messages.js';
 
 const ConnectedPorts = {}; // PORT ALREADY CONNECTED
 
@@ -20,6 +20,8 @@ export const openSerialConnection = (path = "COM6", baudRate = 9600) => {
 };
 
 // WS ADAPTER
+// Don't use this. Only for test purposes
+/*
 export const connectToSerialCommandType = "connect_to_serial";
 
 export const connectToSerialCommand = ({ port, baudRate }) => {
@@ -32,7 +34,6 @@ export const connectToSerialCommand = ({ port, baudRate }) => {
   return res;
 };
 
-// Don't use this. Only for test purposes
 export const handleSerialPortConnect = (ws, { type, ...args }) => {
   if (type !== connectToSerialCommandType) {
     return;
@@ -56,5 +57,6 @@ export const handleSerialPortConnect = (ws, { type, ...args }) => {
     ws.send(messageCommand({ message: "Port connected" }));
   });
 };
+/** */
 
 export default openSerialConnection;

@@ -1,7 +1,11 @@
 import { WebSocketServer } from "ws";
-import { handleMavlinkPacketSend } from "./adapters/mavlink.js";
-import { handleMessage, messageCommand } from "./adapters/utils.js";
-import handleOpenDeviceConnectionCommand from "./adapters/index.js";
+import {
+  handleMavlinkPacketSend,
+  handleOpenDeviceConnectionCommand,
+  handleMessage
+} from "./adapters/index.js";
+
+import { messageCommand } from "../messages.js";
 
 const port = process.env.PORT || 5000;
 const wss = new WebSocketServer({ port });
@@ -24,3 +28,6 @@ wss.on("connection", (ws) => {
 });
 
 console.log("Server listening to localhost:", port);
+
+export * from "./adapters/index.js";
+export default wss;

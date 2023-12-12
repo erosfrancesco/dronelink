@@ -7,7 +7,10 @@ import {
   common,
   ardupilotmega,
 } from "node-mavlink";
-import { messageCommand } from "./utils.js";
+import {
+  sendMavlinkPacketCommandType,
+  messageCommand,
+} from "../../messages.js";
 
 //
 const Commands = {
@@ -50,7 +53,7 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
   return reader;
 };
 
-export const sendPacketCommand = (port, command, args = {}) => {
+export const sendPacket = (port, command, args = {}) => {
   const packet = new (Commands[command] ||
     Commands.RequestProtocolVersionCommand)();
 
@@ -66,31 +69,7 @@ export const sendPacketCommand = (port, command, args = {}) => {
   return send(port, packet, new MavLinkProtocolV2());
 };
 
-export const getAvailableCommands = () => Object.keys(Commands);
-
-// WS ADAPTER
-export const sendMavlinkPacketCommandType = "on_packet_send"; // THIS MUST BE EXPOSED
-
-export const sendMavlinkPacketCommand = ({ command, ...otherArgs }) => {
-  const res = JSON.stringify({
-    type: sendMavlinkPacketCommandType,
-    command,
-    ...otherArgs,
-  });
-
-  return res;
-};
-
-export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
-  if (type !== sendMavlinkPacketCommandType) {
-    return;
-  }
-
-  const { command, ...otherArgs } = args;
-  const port = ws.deviceConnected; //
-  const res = await sendPacketCommand(port, command, otherArgs);
-
-  ws.send(messageCommand({ message: "MAVLINK packet sent: " + res }));
-};
+// TODO: - MAKE ADAPTER
+export const getAvailableCommands = () => Object.keys(Commands); // UNUSED FOR NOW
 
 export default setupMavlinkReader;

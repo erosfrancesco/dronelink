@@ -1,25 +1,14 @@
-import { messageCommand } from "./utils.js";
-import { setupMavlinkReader } from "./mavlink.js";
-import openSerialConnection from "./serialport.js";
+import { setupMavlinkReader, sendPacket } from "./mavlink.js";
+import { openSerialConnection } from "./serialport.js";
 
-const handleParsedPackets = (ws) => (packetType, packetData) => {
-  const message = "Received MAVLINK Packet: " + packetType;
-  ws.send(messageCommand({ message, packetData, packetType }));
-};
+import {
+  messageCommand,
+  messageCommandType,
+  openDeviceConnectionCommandType,
+  sendMavlinkPacketCommandType,
+} from "../../messages.js";
 
-// WS ADAPTER
-export const openDeviceConnectionCommandType = "open_connection_to_device";
-
-export const openDeviceConnectionCommand = (args) => {
-  const { port, baudRate } = args || {};
-
-  return JSON.stringify({
-    type: openDeviceConnectionCommandType,
-    port,
-    baudRate,
-  });
-};
-
+// WS ADAPTERS
 export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
   if (type !== openDeviceConnectionCommandType) {
     return;
@@ -28,7 +17,10 @@ export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
   const { port, baudRate } = args;
 
   const serial = openSerialConnection(port, baudRate);
-  const reader = setupMavlinkReader(serial, handleParsedPackets(ws));
+  const reader = setupMavlinkReader(serial, (packetType, packetData) => {
+    const message = "Received MAVLINK Packet: " + packetType;
+    ws.send(messageCommand({ message, packetData, packetType }));
+  });
 
   //
   ws.deviceConnected = serial;
@@ -41,6 +33,28 @@ export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
   });
 
   ws.send(messageCommand({ message: "Device connected" }));
+};
+
+export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
+  if (type !== sendMavlinkPacketCommandType) {
+    return;
+  }
+
+  const { command, ...otherArgs } = args;
+  const port = ws.deviceConnected; //
+  const res = await sendPacket(port, command, otherArgs);
+
+  ws.send(messageCommand({ message: "MAVLINK packet sent: " + res }));
+};
+
+export const handleMessage = (ws, { type, ...args }) => {
+  if (type !== messageCommandType) {
+    return;
+  }
+
+  const { error, message } = args;
+  console.log("Got message from client:", message);
+  console.log("Got error from client:", error);
 };
 
 export default handleOpenDeviceConnectionCommand;

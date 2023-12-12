@@ -4,7 +4,7 @@ import Input from "./components/Input.js";
 
 import { colorState, textState, onclickState } from "./logic.js";
 
-// import './client.js'
+import './client.js'
 
 const { div } = van.tags;
 
