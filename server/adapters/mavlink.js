@@ -7,6 +7,7 @@ import {
   common,
   ardupilotmega,
 } from "node-mavlink";
+import { messageCommand } from "./utils.js";
 
 //
 const Commands = {
@@ -37,13 +38,19 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     const data = protocol.data(payload, packetClass);
     const packetType = packetClass.MSG_NAME;
 
-    onPacketReceived(data, packetType, packetClass, packet);
+    const packetData = JSON.stringify(
+      data,
+      // bigint and other values??
+      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+    );
+
+    onPacketReceived(packetType, packetData);
   });
 
   return reader;
 };
 
-export const sendPacketCommand = async (port, command, args = {}) => {
+export const sendPacketCommand = (port, command, args = {}) => {
   const packet = new (Commands[command] ||
     Commands.RequestProtocolVersionCommand)();
 
@@ -56,32 +63,34 @@ export const sendPacketCommand = async (port, command, args = {}) => {
   });
 
   // The default protocol is v1
-  return await send(port, packet, new MavLinkProtocolV2());
+  return send(port, packet, new MavLinkProtocolV2());
 };
 
 export const getAvailableCommands = () => Object.keys(Commands);
 
 // WS ADAPTER
-export const parseMavlinkPacketCommandType = "on_packet_read"; // THIS MUST BE EXPOSED
+export const sendMavlinkPacketCommandType = "on_packet_send"; // THIS MUST BE EXPOSED
 
-export const parseMavlinkPacketCommand = (data, packetType, packetClass) => {
-  return JSON.stringify(
-    { type: parseMavlinkPacketCommandType, data, packetType, packetClass },
-    // bigint and other values??
-    (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
-  );
+export const sendMavlinkPacketCommand = ({ command, ...otherArgs }) => {
+  const res = JSON.stringify({
+    type: sendMavlinkPacketCommandType,
+    command,
+    ...otherArgs,
+  });
+
+  return res;
 };
 
-export const handleMavlinkPacketRead = (ws, { type, ...args }) => {
-  if (type !== parseMavlinkPacketCommandType) {
+export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
+  if (type !== sendMavlinkPacketCommandType) {
     return;
   }
 
-  const { data, packetType } = args;
-  console.log("Got mavlink packet:", packetType, data);
-};
+  const { command, ...otherArgs } = args;
+  const port = ws.deviceConnected; //
+  const res = await sendPacketCommand(port, command, otherArgs);
 
-// TODO: -
-// send test packet
+  ws.send(messageCommand({ message: "MAVLINK packet sent: " + res }));
+};
 
 export default setupMavlinkReader;

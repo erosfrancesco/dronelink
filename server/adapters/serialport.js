@@ -1,5 +1,5 @@
 import { SerialPort } from "serialport";
-import { messageCommand } from "./WSActions.js";
+import { messageCommand } from "./utils.js";
 
 const ConnectedPorts = {}; // PORT ALREADY CONNECTED
 

@@ -1,11 +1,12 @@
 // WS ADAPTER
 export const messageCommandType = "server_message";
 
-export const messageCommand = ({ error, message }) => {
+export const messageCommand = ({ error, message, ...args }) => {
   const res = JSON.stringify({
     type: messageCommandType,
     error,
     message,
+    ...args
   });
 
   return res;
@@ -17,8 +18,8 @@ export const handleMessage = (ws, { type, ...args }) => {
   }
 
   const { error, message } = args;
-  console.log("Got message from server:", message);
-  console.log("Got error from server:", error);
+  console.log("Got message from client:", message);
+  console.log("Got error from client:", error);
 };
 
 export default handleMessage;
