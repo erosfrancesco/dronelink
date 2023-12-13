@@ -1,33 +1,14 @@
 import van from "vanjs-core";
-import Button from "./components/Button.js";
-import Input from "./components/Input.js";
+import AppShell from "./screens/index.js";
 
-import { colorState, textState, onclickState } from "./logic.js";
+import ws, { setOnMavlinkPacketReceived } from "./client.js";
 
-import displayCurrentRoute, { currentRoute, routes } from "./routings.js";
-
-import "./client.js";
-
-const { div } = van.tags;
+setOnMavlinkPacketReceived((packetType, packetData) => {
+  console.log("Got mavlink packet: ", packetType, packetData);
+});
 
 const App = () => {
-  setTimeout(() => {
-    currentRoute.val = Object.keys(routes)[1];
-    console.log("Setting up routes: ", currentRoute, routes);
-  }, 1000);
-
-  // TODO: - Make shell with links
-  return displayCurrentRoute();
-  /*
-    Button({
-      color: colorState,
-      text: "Click Me",
-      onclick: () => alert("Clicked"),
-    }),
-    " ",
-    Button({ color: colorState, text: textState, onclick: onclickState }),
-    Input({ color: colorState })
-    /** */
+  return AppShell();
 };
 
 export default App;

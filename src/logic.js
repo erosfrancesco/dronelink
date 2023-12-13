@@ -1,3 +1,5 @@
+// UNUSED. ONLY TESTS
+// and references
 import van from "vanjs-core";
 
 export const colorState = van.state("secondary");
@@ -14,4 +16,3 @@ export const turnGreen = () => {
   onclickState.val = turnRed;
 };
 export const onclickState = van.state(turnRed);
-

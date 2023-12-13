@@ -7,6 +7,11 @@ import {
 // THIS IS STILL A TEST CLIENT
 const ws = new WebSocket("ws://localhost:" + 5000);
 
+let onMavlinkPacketReceived = console.log;
+export const setOnMavlinkPacketReceived = (callback = () => {}) => {
+  onMavlinkPacketReceived = callback;
+};
+
 const onWSOpen = () => {
   console.log("Connection to server extabilished");
 
@@ -30,14 +35,15 @@ const onWSMessage = (buffer) => {
     }
 
     if (message === "Device connected") {
-      console.log("Device connected.");
-      ws.send(sendMavlinkPacketCommand({}));
+      // console.log("Device connected.");
+      // on device connected?
+      // ws.send(sendMavlinkPacketCommand({}));
       return;
     }
 
     console.log("Got server message: ", message);
     if (packetType) {
-      console.log("Got mavlink packet: ", packetType, packetData);
+      onMavlinkPacketReceived(packetType, packetData);
     }
   } catch (e) {
     console.log("Error parsing message: ", e);
@@ -47,3 +53,9 @@ const onWSMessage = (buffer) => {
 ws.onerror = console.error;
 ws.onopen = onWSOpen;
 ws.onmessage = onWSMessage;
+
+export const wsOpenDeviceConnection = (port) => {
+  ws.send(openDeviceConnectionCommand({ port }));
+};
+
+export default ws;
