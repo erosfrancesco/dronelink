@@ -1,4 +1,5 @@
 import van from "vanjs-core";
+import Button from "../components/Button.js";
 import { routes, currentRoute, goTo } from "./routings.js";
 import "./index.css";
 
@@ -9,14 +10,15 @@ const RoutesMenu = () =>
     { class: "mavlinkui routes-menu" },
     Object.keys(routes).map((route) => {
       const { linkLabel } = routes[route];
-      const classes =
-        "mavlinkui mavlinkui-button routes-menu-item " +
-        (route === currentRoute.val
-          ? "mavlinkui-primary"
-          : "mavlinkui-secondary");
       const onclick = () => goTo(route);
+      const color = route === currentRoute.val ? "primary" : "secondary";
 
-      return div({ class: () => classes, onclick }, span(linkLabel));
+      return Button({
+        class: "routes-menu-item",
+        color,
+        onclick,
+        text: linkLabel,
+      });
     })
   );
 

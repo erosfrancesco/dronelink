@@ -1,5 +1,9 @@
 @import url("../index.css");
 
 .mavlinkui-input {
-  margin-left: 0.25em
+  cursor: pointer;
+  height: 1.9em;
+  margin-top: 0.25em;
+  padding-left: 0.25em;
+  border-radius: 0.25em;
 }

@@ -3,14 +3,13 @@ import "./Input.css";
 
 const { input } = van.tags;
 
-export const Input = ({ color, text }) =>
-  input(
-    {
-      class: () =>
-        "mavlinkui" +
-        (" mavlinkui-" + (color.val || color) || "primary") +
-        " mavlinkui-input",
-    }
-  );
+export const Input = ({ color, text, ...args }) =>
+  input({
+    class: () =>
+      "mavlinkui" +
+      (" mavlinkui-" + (color?.val || color || "primary")) +
+      " mavlinkui-input",
+    ...args,
+  });
 
 export default Input;

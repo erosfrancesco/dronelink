@@ -7,7 +7,7 @@
   -webkit-font-smoothing: antialiased;
   -webkit-touch-callout: none;
   user-select: none;
-  cursor: pointer;
+  cursor: default;
   outline: 0;
 
   text-decoration: none;
@@ -17,14 +17,14 @@
 }
 
 .mavlinkui-button {
+  cursor: pointer;
   border-radius: 0.25em;
-  border: 0.125em solid;
   padding: 0.25em 0.5em;
   margin: 0.25em 0.5em;
 }
   
 .mavlinkui-primary {
-  border-color: #41addd;
+  border: 0.125em solid #41addd;
   background-color: white;
   color: #41addd;
 
@@ -35,7 +35,7 @@
 }
 
 .mavlinkui-secondary {
-  border-color: rgb(221, 179, 65);
+  border: 0.125em solid rgb(221, 179, 65);
   background-color: white;
   color: rgb(221, 179, 65);
 

@@ -1,6 +1,7 @@
 import van from "vanjs-core";
+import Home from "./Home.js";
 
-const { div, span } = van.tags;
+const { div } = van.tags;
 
 // Home (device connection and status)
 // Commands (available after connected?)
@@ -9,7 +10,7 @@ const { div, span } = van.tags;
 export const routes = {
   "/": {
     linkLabel: "Home",
-    content: () => div(),
+    content: Home,
   },
   "/logs": {
     linkLabel: "Logs",
