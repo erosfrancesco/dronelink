@@ -1,10 +1,11 @@
 import { setupMavlinkReader, sendPacket } from "./mavlink.js";
-import { openSerialConnection } from "./serialport.js";
+import { openSerialConnection, closeSerialConnection } from "./serialport.js";
 
 import {
   messageCommand,
   messageCommandType,
   openDeviceConnectionCommandType,
+  closeDeviceConnectionCommandType,
   sendMavlinkPacketCommandType,
 } from "../../messages.js";
 
@@ -35,6 +36,15 @@ export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
   ws.send(messageCommand({ message: "Device connected" }));
 };
 
+export const handleCloseDeviceConnectionCommand = (ws, { type, ...args }) => {
+  if (type !== closeDeviceConnectionCommandType) {
+    return;
+  }
+
+  const { port } = args;
+  closeSerialConnection(port);
+};
+
 export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
   if (type !== sendMavlinkPacketCommandType) {
     return;
@@ -57,4 +67,9 @@ export const handleMessage = (ws, { type, ...args }) => {
   console.log("Got error from client:", error);
 };
 
-export default handleOpenDeviceConnectionCommand;
+export default {
+  handleOpenDeviceConnectionCommand,
+  handleCloseDeviceConnectionCommand,
+  handleMavlinkPacketSend,
+  handleMessage,
+};

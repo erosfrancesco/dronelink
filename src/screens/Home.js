@@ -2,29 +2,44 @@ import van from "vanjs-core";
 import Button from "../components/Button.js";
 import Input from "../components/Input.js";
 
+import {
+  devicePath,
+  setDevicePath,
+  isConnected,
+  openDevicePath,
+  disconnectDevicePath,
+} from "./Home.logic.js";
+
 const { div } = van.tags;
 
-// TO BE MOVED IN A REDUX-LIKE SECTION
-export const portName = van.state("COM6");
+/* So far:
+TODO: - 
+  A connection to the ws is executed at app start.
+    -> Check the connection status
+  User connect to device
+    -> Check device connection status
+    -> Ask for device status
+    -> Display device status
+/**/
 
 // Sections
 const DeviceConnectionSection = () => {
   return div(
     { class: "mavlinkui", style: "flex-direction: row;" },
     Button({
-      text: "connect to:",
+      text: () => (isConnected.val ? "disconnect" : "connect to:"),
       style: "max-width: 7em;",
       onclick: () => {
-        console.log(portName);
+        isConnected.val ? disconnectDevicePath() : openDevicePath();
       },
     }),
     Input({
-      value: portName,
+      value: devicePath,
       color: "secondary",
       style: "max-width: 7em;",
       onkeyup: (e) => {
         const { value = "" } = e?.target || {};
-        portName.val = value;
+        setDevicePath(value);
       },
     })
   );

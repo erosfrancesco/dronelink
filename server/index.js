@@ -2,7 +2,8 @@ import { WebSocketServer } from "ws";
 import {
   handleMavlinkPacketSend,
   handleOpenDeviceConnectionCommand,
-  handleMessage
+  handleCloseDeviceConnectionCommand,
+  handleMessage,
 } from "./adapters/index.js";
 
 import { messageCommand } from "../messages.js";
@@ -17,6 +18,7 @@ wss.on("connection", (ws) => {
     try {
       const data = JSON.parse(buffer);
       handleOpenDeviceConnectionCommand(ws, data);
+      handleCloseDeviceConnectionCommand(ws, data);
       handleMessage(ws, data);
       handleMavlinkPacketSend(ws, data);
     } catch (error) {

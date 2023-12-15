@@ -1,6 +1,7 @@
 import {
   messageCommandType,
   openDeviceConnectionCommand,
+  closeDeviceConnectionCommand,
   sendMavlinkPacketCommand,
 } from "../messages.js";
 
@@ -12,10 +13,13 @@ export const setOnMavlinkPacketReceived = (callback = () => {}) => {
   onMavlinkPacketReceived = callback;
 };
 
+let onDeviceConnected = console.log;
+export const setOnDeviceConnected = (callback = () => {}) => {
+  onDeviceConnected = callback;
+};
+
 const onWSOpen = () => {
   console.log("Connection to server extabilished");
-
-  ws.send(openDeviceConnectionCommand({ port: "COM6" }));
 };
 
 const onWSMessage = (buffer) => {
@@ -35,13 +39,11 @@ const onWSMessage = (buffer) => {
     }
 
     if (message === "Device connected") {
-      // console.log("Device connected.");
-      // on device connected?
-      // ws.send(sendMavlinkPacketCommand({}));
+      onDeviceConnected();
       return;
     }
 
-    console.log("Got server message: ", message);
+    // console.log("Got server message: ", message);
     if (packetType) {
       onMavlinkPacketReceived(packetType, packetData);
     }
@@ -56,6 +58,10 @@ ws.onmessage = onWSMessage;
 
 export const wsOpenDeviceConnection = (port) => {
   ws.send(openDeviceConnectionCommand({ port }));
+};
+
+export const wsCloseDeviceConnection = (port) => {
+  ws.send(closeDeviceConnectionCommand({ port }));
 };
 
 export default ws;

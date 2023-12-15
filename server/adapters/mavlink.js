@@ -47,6 +47,7 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
     );
 
+    // TODO: - EMIT?
     onPacketReceived(packetType, packetData);
   });
 
