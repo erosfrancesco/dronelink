@@ -1,3 +1,18 @@
+:root {
+  --primary-color: rgb(57, 168, 142);
+  --primary-bg: rgb(26, 29, 29);
+  --secondary-color: crimson;
+  --secondary-bg: #d9b08c;
+
+  --shadow: 0.025em 0.025em 0.05em 0.025em;
+  --border-size: 0.025em;
+}
+
+body {
+  background: var(--primary-bg);
+  color: var(--primary-color);
+}
+
 .mavlinkui {
   display: flex;
   flex-direction: column;
@@ -15,32 +30,29 @@
   font-weight: bold;
   font-size: 1em;
 }
-
-.mavlinkui-button {
-  cursor: pointer;
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
-  margin: 0.25em 0.5em;
-}
   
 .mavlinkui-primary {
-  border: 0.125em solid #41addd;
-  background-color: white;
-  color: #41addd;
+  box-shadow: var(--shadow) var(--primary-color);
+
+  border: var(--border-size) solid var(--primary-color);
+  background-color: var(--primary-bg);
+  color:  var(--primary-color);
 
   &:active {
-    background-color: #41addd;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--primary-bg);
   }
 }
 
 .mavlinkui-secondary {
-  border: 0.125em solid rgb(221, 179, 65);
-  background-color: white;
-  color: rgb(221, 179, 65);
+  box-shadow: var(--shadow) var(--secondary-color);
+
+  border: var(--border-size) solid var(--secondary-color);
+  background-color: var(--secondary-bg);
+  color:  var(--secondary-color);
 
   &:active {
-    background-color: rgb(221, 179, 65);
-    color: white;
+    background-color: var(--secondary-color);
+    color: var(--secondary-bg);
   }
 }

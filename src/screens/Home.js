@@ -14,8 +14,6 @@ const { div } = van.tags;
 
 /* So far:
 TODO: - 
-  A connection to the ws is executed at app start.
-    -> Check the connection status
   User connect to device
     -> Check device connection status
     -> Ask for device status
