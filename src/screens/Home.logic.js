@@ -23,6 +23,18 @@ export const openDevicePath = () => {
     setIsConnected(true);
     setOnMavlinkPacketReceived((packetType, packetData) => {
       // mavlink packet event. Here the logic should manage the data
+
+      /**{"type":2,"autopilot":3,"baseMode":81,"customMode":0,"systemStatus":3,"mavlinkVersion":3} */
+      // Somewhere...
+      if (packetType === "HEARTBEAT") {
+        const timestamp = new Date().toLocaleString();
+        console.log("Setting up heartbeat: ", timestamp);
+        setLastHeartBeat({
+          timestamp,
+          ...packetData,
+        });
+      }
+
       console.log("Got mavlink packet: ", packetType, packetData);
     });
   });

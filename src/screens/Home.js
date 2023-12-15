@@ -6,11 +6,12 @@ import {
   devicePath,
   setDevicePath,
   isConnected,
+  lastHeartBeat,
   openDevicePath,
   disconnectDevicePath,
 } from "./Home.logic.js";
 
-const { div } = van.tags;
+const { div, span } = van.tags;
 
 /* So far:
 TODO: - 
@@ -43,12 +44,23 @@ const DeviceConnectionSection = () =>
   );
 
 const DeviceConnectionStatusSection = () =>
-  div({ class: "mavlinkui horizontal" });
+  div(
+    { class: "mavlinkui horizontal", style: "flex: 2;" },
+    span("Last Heartbeat : "),
+    span(
+      { style: "padding-left:1em;" },
+      () => lastHeartBeat.val?.timestamp || "Not connected"
+    )
+  );
 //
 
 // Home (device connection and status)
 export const Home = () => {
-  return div(DeviceConnectionSection);
+  return div(
+    { class: "mavlinkui horizontal" },
+    DeviceConnectionSection,
+    DeviceConnectionStatusSection
+  );
 };
 
 export default Home;
