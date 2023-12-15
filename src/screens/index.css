@@ -1,7 +1,6 @@
 @import url("../index.css");
 
 .routes-menu {
-    flex-direction: row !important;
     justify-content: space-evenly;
     align-items: center;
     border: none;

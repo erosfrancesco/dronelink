@@ -7,7 +7,7 @@ const { div, span } = van.tags;
 
 const RoutesMenu = () =>
   div(
-    { class: "mavlinkui routes-menu" },
+    { class: "mavlinkui horizontal routes-menu" },
     Object.keys(routes).map((route) => {
       const { linkLabel } = routes[route];
       const onclick = () => goTo(route);
@@ -24,19 +24,19 @@ const RoutesMenu = () =>
 
 export const AppShell = () => {
   return () =>
-    div({ class: "mavlinkui" }, RoutesMenu(), () => {
+    div({ class: "mavlinkui vertical" }, RoutesMenu(), () => {
       const route = routes[currentRoute.val];
 
       if (!route) {
         return div(
-          { class: "mavlinkui" },
+          { class: "mavlinkui vertical" },
           span(currentRoute.val + " not found")
         );
       }
 
       const { content, linkLabel } = route;
       return div(
-        { class: "mavlinkui" },
+        { class: "mavlinkui vertical" },
         span({ class: "mavlinkui" }, linkLabel),
         content()
       );

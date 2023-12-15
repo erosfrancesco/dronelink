@@ -21,9 +21,9 @@ TODO: -
 /**/
 
 // Sections
-const DeviceConnectionSection = () => {
-  return div(
-    { class: "mavlinkui", style: "flex-direction: row;" },
+const DeviceConnectionSection = () =>
+  div(
+    { class: "mavlinkui horizontal" },
     Button({
       text: () => (isConnected.val ? "disconnect" : "connect to:"),
       style: "max-width: 7em;",
@@ -41,7 +41,9 @@ const DeviceConnectionSection = () => {
       },
     })
   );
-};
+
+const DeviceConnectionStatusSection = () =>
+  div({ class: "mavlinkui horizontal" });
 //
 
 // Home (device connection and status)

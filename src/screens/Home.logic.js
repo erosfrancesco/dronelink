@@ -6,10 +6,16 @@ import ws, {
   wsCloseDeviceConnection,
 } from "../client.js";
 
+// STATE
 export const isConnected = van.state(false);
 export const setIsConnected = (value) => (isConnected.val = value);
 export const devicePath = van.state("COM6");
 export const setDevicePath = (value) => (devicePath.val = value);
+export const lastHeartBeat = van.state({});
+export const setLastHeartBeat = (value) => (lastHeartBeat.val = value);
+//
+
+// ACTIONS
 export const openDevicePath = () => {
   wsOpenDeviceConnection(devicePath.val);
 
@@ -26,5 +32,6 @@ export const disconnectDevicePath = () => {
   setIsConnected(false);
   wsCloseDeviceConnection(devicePath.val);
 };
+//
 
 export default ws;
