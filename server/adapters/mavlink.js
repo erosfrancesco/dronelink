@@ -47,6 +47,12 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
     );
 
+    /*
+    if (packetType !== "HEARTBEAT" && packetType !== "TIMESYNC") {
+      console.log("Packet info: ", packetType, packetData);
+    }
+    /** */
+
     // TODO: - EMIT?
     onPacketReceived(packetType, packetData);
   });
@@ -54,20 +60,21 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
   return reader;
 };
 
-export const sendPacket = (port, command, args = {}) => {
+export const sendPacket = async (port, command, args = {}) => {
   const packet = new (Commands[command] ||
     Commands.RequestProtocolVersionCommand)();
 
   // merge parameters
-  // spread operator gives some issues here. Better to it old style.
+  // spread operator gives some issues here. Better to do it old style.
   Object.keys(args).map((key) => {
     const value = args[key];
     packet[key] = value;
-    console.log("Set up param", key, value);
   });
 
   // The default protocol is v1
-  return send(port, packet, new MavLinkProtocolV2());
+  const res = await send(port, packet, new MavLinkProtocolV2());
+
+  return res;
 };
 
 // TODO: - MAKE ADAPTER

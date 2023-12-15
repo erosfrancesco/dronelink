@@ -1,5 +1,9 @@
 import WebSocket from "ws";
-import { messageCommandType, openDeviceConnectionCommand, sendMavlinkPacketCommand } from '../messages.js'
+import {
+  messageCommandType,
+  openDeviceConnectionCommand,
+  sendMavlinkPacketCommand,
+} from "../messages.js";
 
 const ws = new WebSocket("ws://localhost:" + (process.env.PORT || 5000));
 
@@ -19,16 +23,28 @@ ws.on("message", (buffer) => {
       return;
     }
 
-    const { error, message, packetType, data: packetData } = args;
+    const { error, message, packetType, packetData } = args;
 
     if (message === "Device connected") {
       console.log("Sending message");
-      ws.send(sendMavlinkPacketCommand({}));
+      ws.send(
+        sendMavlinkPacketCommand({
+          // MAV_CMD_RUN_PREARM_CHECKS // "RunPrearmChecksCommand"
+          // MAV_CMD_REQUEST_MESSAGE // "RequestMessageCommand"
+          command: "RequestMessageCommand",
+          messageId: 1,
+        })
+      );
     }
 
     if (message) {
-      console.log("Got server message: ", message);
+      // console.log("Got server message: ", message);
       if (packetType) {
+        // FILTER OUT HEARTBEAT. They are too many...
+        if (packetType === "HEARTBEAT") {
+          return;
+        }
+
         console.log("Got mavlink packet: ", packetType, packetData);
       }
       return;

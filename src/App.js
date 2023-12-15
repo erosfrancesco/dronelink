@@ -1,7 +1,7 @@
 import "vanjs-core";
 import AppShell from "./screens/index.js";
 
-import ws, { setOnMavlinkPacketReceived } from "./client.js";
+import ws from "./client.js";
 
 const App = () => {
   return AppShell();

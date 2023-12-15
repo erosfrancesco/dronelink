@@ -6,6 +6,8 @@ import ws, {
   wsCloseDeviceConnection,
 } from "../client.js";
 
+import { sendMavlinkPacketCommand } from "../../messages.js";
+
 // STATE
 export const isConnected = van.state(false);
 export const setIsConnected = (value) => (isConnected.val = value);
@@ -37,6 +39,15 @@ export const openDevicePath = () => {
 
       console.log("Got mavlink packet: ", packetType, packetData);
     });
+
+    // SEND PACKET
+    console.log("Requesting status");
+    ws.send(
+      sendMavlinkPacketCommand({
+        command: "RequestMessageCommand",
+        messageId: 1,
+      })
+    );
   });
 };
 

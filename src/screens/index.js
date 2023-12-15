@@ -22,25 +22,23 @@ const RoutesMenu = () =>
     })
   );
 
-export const AppShell = () => {
-  return () =>
-    div({ class: "mavlinkui vertical" }, RoutesMenu(), () => {
-      const route = routes[currentRoute.val];
+export const AppShell = () =>
+  div({ class: "mavlinkui vertical" }, RoutesMenu(), () => {
+    const route = routes[currentRoute.val];
 
-      if (!route) {
-        return div(
-          { class: "mavlinkui vertical" },
-          span(currentRoute.val + " not found")
-        );
-      }
-
-      const { content, linkLabel } = route;
+    if (!route) {
       return div(
         { class: "mavlinkui vertical" },
-        span({ class: "mavlinkui" }, linkLabel),
-        content()
+        span(currentRoute.val + " not found")
       );
-    });
-};
+    }
+
+    const { content, linkLabel } = route;
+    return div(
+      { class: "mavlinkui vertical" },
+      span({ class: "mavlinkui" }, linkLabel),
+      content()
+    );
+  });
 
 export default AppShell;
