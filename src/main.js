@@ -1,4 +1,6 @@
-import van from "vanjs-core"
-import App from './App'
+import van from "vanjs-core";
+import AppShell from "./screens/index.js";
 
-van.add(document.body, App())
+import ws from "./client.js";
+
+van.add(document.body, AppShell());
