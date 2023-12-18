@@ -5,9 +5,10 @@ import {
   sendMavlinkPacketCommand,
 } from "../messages.js";
 
-// THIS IS STILL A TEST CLIENT
 const ws = new WebSocket("ws://localhost:" + 5000);
 
+// TODO: - Emit and catch events
+// EVENTS
 let onMavlinkPacketReceived = console.log;
 export const setOnMavlinkPacketReceived = (callback = () => {}) => {
   onMavlinkPacketReceived = callback;
@@ -17,7 +18,9 @@ let onDeviceConnected = console.log;
 export const setOnDeviceConnected = (callback = () => {}) => {
   onDeviceConnected = callback;
 };
+//
 
+// HANDLERS
 const onWSOpen = () => {
   console.log("Connection to server extabilished");
 };
@@ -55,6 +58,7 @@ ws.onerror = console.error;
 ws.onopen = onWSOpen;
 ws.onmessage = onWSMessage;
 
+// COMMANDS
 export const wsOpenDeviceConnection = (port) => {
   ws.send(openDeviceConnectionCommand({ port }));
 };
