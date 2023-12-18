@@ -7,10 +7,6 @@ import {
   common,
   ardupilotmega,
 } from "node-mavlink";
-import {
-  sendMavlinkPacketCommandType,
-  messageCommand,
-} from "../../messages.js";
 
 //
 const Commands = {

@@ -64,27 +64,3 @@ export const wsCloseDeviceConnection = (port) => {
 };
 
 export default ws;
-
-// TODO: - Setup a parser for those numbers
-
-/*
- SYS_STATUS {
-  "onboardControlSensorsPresent":1467022383,
-  "onboardControlSensorsEnabled":1382030383,
-  "onboardControlSensorsHealth":1198562351,
-  "load":323,
-  "voltageBattery":26,
-  "currentBattery":6,
-  "batteryRemaining":99,
-  "dropRateComm":0,
-  "errorsComm":0,
-  "errorsCount1":0,
-  "errorsCount2":0,
-  "errorsCount3":0,
-  "errorsCount4":0,
-  "onboardControlSensorsPresentExtended":0,
-  "onboardControlSensorsEnabledExtended":0,
-  "onboardControlSensorsHealthExtended":0}
-
-  STATUSTEXT {"severity":2,"text":"PreArm: Hardware safety switch","id":0,"chunkSeq":0}
-*/
