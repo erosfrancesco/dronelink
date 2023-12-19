@@ -6,6 +6,7 @@
 
   --shadow: 0.025em 0.025em 0.05em 0.025em;
   --border-size: 0.025em;
+  --margins-standard: 0.25em 0.5em;
 }
 
 body {
@@ -13,16 +14,6 @@ body {
   color: var(--primary-color);
 }
 
-.horizontal {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.vertical {
-  display: flex;
-  flex-direction: column;
-}
 
 .mavlinkui {
   flex: 1;

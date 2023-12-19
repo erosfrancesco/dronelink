@@ -7,11 +7,14 @@ import {
   isConnected,
   openDevicePath,
   disconnectDevicePath,
-} from "./Home.logic.js";
+} from "./logic.js";
+import "./index.css";
 
-// Sections
+// TODO: - Display connection errors
+
 export const DeviceConnectionSection = () =>
   HorizontalLayout(
+    { class: "Home-Section" },
     Button({
       text: () => (isConnected.val ? "disconnect" : "connect to:"),
       style: "max-width: 7em;",
@@ -22,7 +25,7 @@ export const DeviceConnectionSection = () =>
     Input({
       value: devicePath,
       color: "secondary",
-      style: "max-width: 7em;",
+      style: "max-width: 7em;margin-left:0.5em;",
       onkeyup: (e) => {
         const { value = "" } = e?.target || {};
         setDevicePath(value);

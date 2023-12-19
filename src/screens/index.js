@@ -38,7 +38,10 @@ export const AppShell = () =>
       }
 
       const { content, linkLabel } = route;
-      return VerticalLayout(span(linkLabel), content());
+      return VerticalLayout(
+        // span(linkLabel),
+        content()
+      );
     }
   );
 

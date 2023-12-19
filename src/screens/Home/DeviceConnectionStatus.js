@@ -5,15 +5,19 @@ import {
   VerticalLayout,
 } from "../../components/index.js";
 
-import { isConnected, lastHeartBeat } from "./Home.logic.js";
+import { isConnected, lastHeartBeat } from "./logic.js";
+import "./index.css";
 
-const { div, span } = van.tags;
+const { span } = van.tags;
+
+// TODO: - Set up connection errors component
 
 export const DeviceConnectionStatusSection = () => {
   const { autopilot, baseMode, systemStatus, timestamp, type } =
     lastHeartBeat.val || {};
 
   return VerticalLayout(
+    { class: "Home-Section" },
     HorizontalLayout(
       span("Last Heartbeat : "),
       span({ style: "padding-left:1em;" }, () =>

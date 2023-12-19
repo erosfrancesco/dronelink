@@ -1,0 +1,5 @@
+@import url("../index.css");
+
+.Home-Section {
+    margin: var(--margins-standard);
+}

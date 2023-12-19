@@ -15,14 +15,6 @@ export const devicePath = van.state("COM6");
 export const setDevicePath = (value) => (devicePath.val = value);
 export const lastHeartBeat = van.state({});
 export const setLastHeartBeat = (value) => (lastHeartBeat.val = value);
-/*
-export const deviceType = van.state("");
-export const setDeviceType = (value) => (deviceType.val = value);
-export const deviceSystem = van.state("");
-export const setDevicePilot = (value) => (deviceSystem.val = value);
-export const deviceStatus = van.state("");
-export const setDeviceStatus = (value) => (deviceStatus.val = value);
-/** */
 //
 
 // ACTIONS
@@ -37,13 +29,13 @@ export const openDevicePath = () => {
       // {"autopilot":"ARDUPILOTMEGA","customMode":0,"mavlinkVersion":3,"systemStatus":"STANDBY","type":"QUADROTOR". baseMode: [...]}
       if (packetType === "HEARTBEAT") {
         const timestamp = new Date().toLocaleString();
-        console.log("Setting up heartbeat: ", timestamp);
+
         setLastHeartBeat({
           timestamp,
           ...packetData,
         });
 
-        // const { autopilot, mavlinkVersion, baseMode, systemStatus, type } = packetData;
+        return;
       }
 
       console.log("Got mavlink packet: ", packetType, packetData);

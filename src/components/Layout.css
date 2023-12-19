@@ -1,0 +1,16 @@
+@import url("../index.css");
+
+.horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    /* margin: 0.25em 0.5em; */
+}
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+
+    /* margin: 0.25em 0.5em; */
+}

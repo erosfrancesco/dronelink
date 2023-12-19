@@ -1,6 +1,6 @@
 import van from "vanjs-core";
 import VanComponentArgsParser from "./utils.js";
-import "../index.css";
+import "./Layout.css";
 
 const { div, span } = van.tags;
 
