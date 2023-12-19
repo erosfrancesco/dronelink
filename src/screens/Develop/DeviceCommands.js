@@ -1,5 +1,5 @@
 import van from "vanjs-core";
-import { Button, Input, VerticalLayout } from "../components/index.js";
+import { Button, Input, VerticalLayout } from "../../components/index.js";
 
 const { div, span } = van.tags;
 

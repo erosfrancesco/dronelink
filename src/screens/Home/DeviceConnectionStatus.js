@@ -11,7 +11,7 @@ import "./index.css";
 const { span } = van.tags;
 
 // TODO: - Set up connection errors component
-
+// TODO: - Component that displays Device status properly.
 export const DeviceConnectionStatusSection = () => {
   const { autopilot, baseMode, systemStatus, timestamp, type } =
     lastHeartBeat.val || {};

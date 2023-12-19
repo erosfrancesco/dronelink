@@ -1,8 +1,9 @@
 :root {
   --primary-color: rgb(57, 168, 142);
   --primary-bg: rgb(26, 29, 29);
+  /* Maybe error? */
   --secondary-color: crimson;
-  --secondary-bg: #d9b08c;
+  --secondary-bg: #2c0601; /*#d9b08c;*/
 
   --shadow: 0.025em 0.025em 0.05em 0.025em;
   --border-size: 0.025em;
