@@ -16,9 +16,11 @@ const { div, span } = van.tags;
 /* So far:
 TODO: - 
   User connect to device
-    -> Check device connection status
-    -> Ask for device status
-    -> Display device status
+    -> Check device connection status x
+    -> Ask for device status x
+    -> Display device status x
+    -> Display Flags with some proper component <-
+
 /**/
 
 // Sections
@@ -43,15 +45,30 @@ const DeviceConnectionSection = () =>
     })
   );
 
-const DeviceConnectionStatusSection = () =>
-  div(
+const DeviceConnectionStatusSection = () => {
+  const { autopilot, baseMode, systemStatus, timestamp, type } =
+    lastHeartBeat.val || {};
+
+  console.log(lastHeartBeat.val);
+
+  return div(
     { class: "mavlinkui horizontal", style: "flex: 2;" },
     span("Last Heartbeat : "),
-    span(
-      { style: "padding-left:1em;" },
-      () => lastHeartBeat.val?.timestamp || "Not connected"
-    )
+    span({ style: "padding-left:1em;" }, () =>
+      isConnected.val ? timestamp : "Not connected"
+    ),
+    () =>
+      isConnected.val
+        ? div(
+            { class: "mavlinkui" },
+            span(() => "Device type: " + type),
+            span(() => "System: " + autopilot),
+            span(() => "Status: " + systemStatus),
+            span(() => "Mode: " + baseMode)
+          )
+        : null
   );
+};
 
 const DeviceCommandSection = () =>
   div(

@@ -15,6 +15,14 @@ export const devicePath = van.state("COM6");
 export const setDevicePath = (value) => (devicePath.val = value);
 export const lastHeartBeat = van.state({});
 export const setLastHeartBeat = (value) => (lastHeartBeat.val = value);
+/*
+export const deviceType = van.state("");
+export const setDeviceType = (value) => (deviceType.val = value);
+export const deviceSystem = van.state("");
+export const setDevicePilot = (value) => (deviceSystem.val = value);
+export const deviceStatus = van.state("");
+export const setDeviceStatus = (value) => (deviceStatus.val = value);
+/** */
 //
 
 // ACTIONS
@@ -26,8 +34,7 @@ export const openDevicePath = () => {
     setOnMavlinkPacketReceived((packetType, packetData) => {
       // mavlink packet event. Here the logic should manage the data
 
-      /**{"type":2,"autopilot":3,"baseMode":81,"customMode":0,"systemStatus":3,"mavlinkVersion":3} */
-      // Somewhere...
+      // {"autopilot":"ARDUPILOTMEGA","customMode":0,"mavlinkVersion":3,"systemStatus":"STANDBY","type":"QUADROTOR". baseMode: [...]}
       if (packetType === "HEARTBEAT") {
         const timestamp = new Date().toLocaleString();
         console.log("Setting up heartbeat: ", timestamp);
@@ -35,6 +42,8 @@ export const openDevicePath = () => {
           timestamp,
           ...packetData,
         });
+
+        // const { autopilot, mavlinkVersion, baseMode, systemStatus, type } = packetData;
       }
 
       console.log("Got mavlink packet: ", packetType, packetData);

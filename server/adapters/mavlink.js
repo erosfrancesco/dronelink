@@ -8,6 +8,8 @@ import {
   ardupilotmega,
 } from "node-mavlink";
 
+import { HeartBeatParser, defaultDataParser } from "../parsers/index.js";
+
 //
 const Commands = {
   ...minimal,
@@ -27,6 +29,8 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     .pipe(new MavLinkPacketSplitter())
     .pipe(new MavLinkPacketParser());
 
+  // const a = minimal.MavType;
+
   reader.on("data", (packet) => {
     const packetClass = PacketClasses[packet.header.msgid];
     if (!packetClass) {
@@ -37,11 +41,13 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     const data = protocol.data(payload, packetClass);
     const packetType = packetClass.MSG_NAME;
 
-    const packetData = JSON.stringify(
-      data,
-      // bigint and other values??
-      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
-    );
+    // Packets parsers
+    // Check HeartBeat
+    if (packetType === "HEARTBEAT") {
+      const packetData = HeartBeatParser(data);
+      onPacketReceived(packetType, packetData);
+      return;
+    }
 
     /*
     if (packetType !== "HEARTBEAT" && packetType !== "TIMESYNC") {
@@ -49,7 +55,7 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     }
     /** */
 
-    // TODO: - EMIT?
+    const packetData = defaultDataParser(data);
     onPacketReceived(packetType, packetData);
   });
 
