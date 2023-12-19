@@ -1,13 +1,18 @@
 import van from "vanjs-core";
-import Button from "../components/Button.js";
+import {
+  Button,
+  VerticalLayout,
+  HorizontalLayout,
+} from "../components/index.js";
+
 import { routes, currentRoute, goTo } from "./routings.js";
 import "./index.css";
 
 const { div, span } = van.tags;
 
 const RoutesMenu = () =>
-  div(
-    { class: "mavlinkui horizontal routes-menu" },
+  HorizontalLayout(
+    { class: "routes-menu" },
     Object.keys(routes).map((route) => {
       const { linkLabel } = routes[route];
       const onclick = () => goTo(route);
@@ -23,22 +28,15 @@ const RoutesMenu = () =>
   );
 
 export const AppShell = () =>
-  div({ class: "mavlinkui vertical" }, RoutesMenu(), () => {
+  VerticalLayout(RoutesMenu(), () => {
     const route = routes[currentRoute.val];
 
     if (!route) {
-      return div(
-        { class: "mavlinkui vertical" },
-        span(currentRoute.val + " not found")
-      );
+      return VerticalLayout(span(currentRoute.val + " not found"));
     }
 
     const { content, linkLabel } = route;
-    return div(
-      { class: "mavlinkui vertical" },
-      span({ class: "mavlinkui" }, linkLabel),
-      content()
-    );
+    return VerticalLayout(span(linkLabel), content());
   });
 
 export default AppShell;

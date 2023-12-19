@@ -1,6 +1,10 @@
 import van from "vanjs-core";
-import Button from "../components/Button.js";
-import Input from "../components/Input.js";
+import {
+  Button,
+  Input,
+  FlagsDisplay,
+  HorizontalLayout,
+} from "../components/index.js";
 
 import {
   devicePath,
@@ -25,8 +29,7 @@ TODO: -
 
 // Sections
 const DeviceConnectionSection = () =>
-  div(
-    { class: "mavlinkui horizontal" },
+  HorizontalLayout(
     Button({
       text: () => (isConnected.val ? "disconnect" : "connect to:"),
       style: "max-width: 7em;",
@@ -49,22 +52,20 @@ const DeviceConnectionStatusSection = () => {
   const { autopilot, baseMode, systemStatus, timestamp, type } =
     lastHeartBeat.val || {};
 
-  console.log(lastHeartBeat.val);
-
-  return div(
-    { class: "mavlinkui horizontal", style: "flex: 2;" },
+  return HorizontalLayout(
+    { style: "flex: 2;" },
     span("Last Heartbeat : "),
     span({ style: "padding-left:1em;" }, () =>
       isConnected.val ? timestamp : "Not connected"
     ),
     () =>
       isConnected.val
-        ? div(
-            { class: "mavlinkui" },
+        ? HorizontalLayout(
             span(() => "Device type: " + type),
             span(() => "System: " + autopilot),
             span(() => "Status: " + systemStatus),
-            span(() => "Mode: " + baseMode)
+            span(() => "Mode: "),
+            FlagsDisplay({ flags: baseMode })
           )
         : null
   );
@@ -91,17 +92,8 @@ const DeviceCommandSection = () =>
 // Home Screen
 export const Home = () =>
   div(
-    div(
-      { class: "mavlinkui horizontal" },
-      DeviceConnectionSection,
-      DeviceConnectionStatusSection
-    ),
-    div(
-      {
-        class: "mavlinkui",
-      },
-      DeviceCommandSection
-    )
+    HorizontalLayout(DeviceConnectionSection, DeviceConnectionStatusSection),
+    HorizontalLayout(DeviceCommandSection)
   );
 
 export default Home;
