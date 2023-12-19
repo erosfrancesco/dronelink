@@ -28,15 +28,18 @@ const RoutesMenu = () =>
   );
 
 export const AppShell = () =>
-  VerticalLayout(RoutesMenu(), () => {
-    const route = routes[currentRoute.val];
+  VerticalLayout(
+    () => RoutesMenu(),
+    () => {
+      const route = routes[currentRoute.val];
 
-    if (!route) {
-      return VerticalLayout(span(currentRoute.val + " not found"));
+      if (!route) {
+        return VerticalLayout(span(currentRoute.val + " not found"));
+      }
+
+      const { content, linkLabel } = route;
+      return VerticalLayout(span(linkLabel), content());
     }
-
-    const { content, linkLabel } = route;
-    return VerticalLayout(span(linkLabel), content());
-  });
+  );
 
 export default AppShell;

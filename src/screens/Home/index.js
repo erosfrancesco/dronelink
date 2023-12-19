@@ -41,8 +41,8 @@ const DeviceCommandSection = () =>
 // Home Screen
 export const Home = () =>
   div(
-    HorizontalLayout(DeviceConnectionSection, DeviceConnectionStatusSection),
-    HorizontalLayout(DeviceCommandSection)
+    HorizontalLayout(DeviceConnectionSection, DeviceConnectionStatusSection)
+    // HorizontalLayout(DeviceCommandSection)
   );
 
 export default Home;
