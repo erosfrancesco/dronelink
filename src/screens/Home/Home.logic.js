@@ -4,9 +4,9 @@ import ws, {
   setOnMavlinkPacketReceived,
   wsOpenDeviceConnection,
   wsCloseDeviceConnection,
-} from "../client.js";
+} from "../../client.js";
 
-import { sendMavlinkPacketCommand } from "../../messages.js";
+import { sendMavlinkPacketCommand } from "../../../messages.js";
 
 // STATE
 export const isConnected = van.state(false);

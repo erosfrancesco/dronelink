@@ -1,5 +1,5 @@
 import van from "vanjs-core";
-import Home from "./Home.js";
+import Home from "./Home/index.js";
 
 const { div } = van.tags;
 
