@@ -1,6 +1,5 @@
-import van from "vanjs-core";
+import "vanjs-core";
 import { Button, Input, HorizontalLayout } from "../../components/index.js";
-
 import {
   devicePath,
   setDevicePath,
@@ -8,6 +7,7 @@ import {
   openDevicePath,
   disconnectDevicePath,
 } from "./logic.js";
+
 import "./index.css";
 
 // TODO: - Display connection errors

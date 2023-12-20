@@ -1,12 +1,13 @@
 import van from "vanjs-core";
-import ws, {
-  setOnDeviceConnected,
-  setOnMavlinkPacketReceived,
+import {
+  MAVLINK_PACKET_RECEIVED,
+  DEVICE_CONNECTED,
+  event,
   wsOpenDeviceConnection,
   wsCloseDeviceConnection,
 } from "../../client.js";
 
-import { sendMavlinkPacketCommand } from "../../../messages.js";
+// import { sendMavlinkPacketCommand } from "../../../messages.js";
 
 // STATE
 export const isConnected = van.state(false);
@@ -17,39 +18,43 @@ export const lastHeartBeat = van.state({});
 export const setLastHeartBeat = (value) => (lastHeartBeat.val = value);
 //
 
+// EVENTS
+event.on(DEVICE_CONNECTED, () => {
+  setIsConnected(true);
+
+  /*
+  // SEND PACKET
+  console.log("Requesting status");
+    wsSend(
+    sendMavlinkPacketCommand({
+      command: "RequestMessageCommand",
+      messageId: 1,
+    })
+  );
+  /** */
+});
+
+event.on(MAVLINK_PACKET_RECEIVED, ({ packetType, packetData }) => {
+  // mavlink packet event. Here the logic should manage the data
+
+  if (packetType === "HEARTBEAT") {
+    const timestamp = new Date().toLocaleString();
+
+    setLastHeartBeat({
+      timestamp,
+      ...packetData,
+    });
+
+    return;
+  }
+
+  console.log("Got mavlink packet: ", packetType, packetData);
+});
+//
+
 // ACTIONS
 export const openDevicePath = () => {
   wsOpenDeviceConnection(devicePath.val);
-
-  setOnDeviceConnected(() => {
-    setIsConnected(true);
-    setOnMavlinkPacketReceived((packetType, packetData) => {
-      // mavlink packet event. Here the logic should manage the data
-
-      // {"autopilot":"ARDUPILOTMEGA","customMode":0,"mavlinkVersion":3,"systemStatus":"STANDBY","type":"QUADROTOR". baseMode: [...]}
-      if (packetType === "HEARTBEAT") {
-        const timestamp = new Date().toLocaleString();
-
-        setLastHeartBeat({
-          timestamp,
-          ...packetData,
-        });
-
-        return;
-      }
-
-      console.log("Got mavlink packet: ", packetType, packetData);
-    });
-
-    // SEND PACKET
-    console.log("Requesting status");
-    ws.send(
-      sendMavlinkPacketCommand({
-        command: "RequestMessageCommand",
-        messageId: 1,
-      })
-    );
-  });
 };
 
 export const disconnectDevicePath = () => {
@@ -57,5 +62,3 @@ export const disconnectDevicePath = () => {
   wsCloseDeviceConnection(devicePath.val);
 };
 //
-
-export default ws;

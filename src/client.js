@@ -1,28 +1,27 @@
+import EventEmitter from "events";
+
 import {
   messageCommandType,
   openDeviceConnectionCommand,
   closeDeviceConnectionCommand,
-  sendMavlinkPacketCommand,
 } from "../messages.js";
 
 const ws = new WebSocket("ws://localhost:" + 5000);
 
-// TODO: - Emit and catch events
-// EVENTS
-let onMavlinkPacketReceived = console.log;
-export const setOnMavlinkPacketReceived = (callback = () => {}) => {
-  onMavlinkPacketReceived = callback;
-};
-
-let onDeviceConnected = console.log;
-export const setOnDeviceConnected = (callback = () => {}) => {
-  onDeviceConnected = callback;
-};
+// Event manager
+export const SERVER_ERROR = "ServerError";
+export const SERVER_CONNECTED = "ServerConnected";
+export const SERVER_MESSAGE_RECEIVED = "ServerMessageReceived";
+export const SERVER_ERROR_RECEIVED = "ServerErrorReceived";
+export const MAVLINK_PACKET_RECEIVED = "MavlinkPacketReceived";
+export const DEVICE_CONNECTED = "DeviceConnected";
+export const event = new EventEmitter();
 //
 
 // HANDLERS
 const onWSOpen = () => {
   console.log("Connection to server extabilished");
+  event.emit(SERVER_CONNECTED);
 };
 
 const onWSMessage = (buffer) => {
@@ -37,34 +36,43 @@ const onWSMessage = (buffer) => {
     const { error, message, packetType, packetData } = args;
 
     if (error) {
-      console.log("Got server error:", error);
+      // console.log("Got server error:", error);
+      event.emit(SERVER_ERROR_RECEIVED, error);
       return;
     }
 
     if (message === "Device connected") {
-      onDeviceConnected();
+      event.emit(DEVICE_CONNECTED);
       return;
     }
 
     if (packetType) {
-      onMavlinkPacketReceived(packetType, packetData);
+      event.emit(MAVLINK_PACKET_RECEIVED, { packetType, packetData });
+      return;
     }
+
+    event.emit(SERVER_MESSAGE_RECEIVED, args);
   } catch (e) {
     console.log("Error parsing message: ", e);
   }
 };
 
-ws.onerror = console.error;
+const onWSError = () => {
+  event.emit(SERVER_ERROR);
+  // console.error
+};
+
+ws.onerror = onWSError;
 ws.onopen = onWSOpen;
 ws.onmessage = onWSMessage;
 
 // COMMANDS
-export const wsOpenDeviceConnection = (port) => {
-  ws.send(openDeviceConnectionCommand({ port }));
-};
+export const wsSend = (args) => ws.send(args);
 
-export const wsCloseDeviceConnection = (port) => {
+export const wsOpenDeviceConnection = (port) =>
+  ws.send(openDeviceConnectionCommand({ port }));
+
+export const wsCloseDeviceConnection = (port) =>
   ws.send(closeDeviceConnectionCommand({ port }));
-};
 
 export default ws;

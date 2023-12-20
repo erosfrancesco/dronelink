@@ -16,6 +16,7 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "events": "^3.3.0",
     "vanjs-core": "^1.2.6"
   }
 }
