@@ -10,6 +10,7 @@ export const StatusDisplay = ({ values, minWidth = "20em" }) =>
 
       return HorizontalLayout(
         span(
+          // TODO: - Make variations of span
           { style: () => "min-width:" + minWidth + ";font-weight: 100;" },
           () => key + " :"
         ),

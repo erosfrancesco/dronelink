@@ -11,3 +11,42 @@ export const Heartbeat = {
     FOO_MODE: 0,
   },
 };
+
+// COMMAND_ACK
+export const CommandAck = {
+  command: 512,
+  result: 0,
+  progress: 0,
+  resultParam2: 0,
+  targetSystem: 254,
+  targetComponent: 1,
+};
+
+// SYS_STATUS
+export const SysStatus = {
+  onboardControlSensorsPresent: 1467022383,
+  onboardControlSensorsEnabled: 1382030383,
+  onboardControlSensorsHealth: 1198562351,
+  load: 328,
+  voltageBattery: 25,
+  currentBattery: 6,
+  batteryRemaining: 99,
+  dropRateComm: 0,
+  errorsComm: 0,
+  errorsCount1: 0,
+  errorsCount2: 0,
+  errorsCount3: 0,
+  errorsCount4: 0,
+  onboardControlSensorsPresentExtended: 0,
+  onboardControlSensorsEnabledExtended: 0,
+  onboardControlSensorsHealthExtended: 0,
+};
+
+// PARAM_VALUE
+export const ParamValue = {
+  paramId: "STAT_RUNTIME",
+  paramValue: 41203,
+  paramType: 6,
+  paramCount: 973,
+  paramIndex: 65535,
+};

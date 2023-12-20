@@ -6,6 +6,8 @@ import {
   StatusDisplay,
 } from "../../components/index.js";
 
+import DeviceCommands from "./DeviceCommands.js";
+
 import { Heartbeat } from "./mocks.js";
 const isConnected = { val: true };
 
@@ -26,7 +28,8 @@ export const Develop = () => {
     isConnected.val
       ? div(
           StatusDisplay({ values, minWidth: "10em" }),
-          FlagsDisplay({ flags: baseMode, style: "padding-left:1em;" })
+          FlagsDisplay({ flags: baseMode, style: "padding-left:1em;" }),
+          DeviceCommands()
         )
       : span("Not connected")
   );
