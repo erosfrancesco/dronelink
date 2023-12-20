@@ -37,6 +37,7 @@ event.on(DEVICE_CONNECTED, () => {
 event.on(MAVLINK_PACKET_RECEIVED, ({ packetType, packetData }) => {
   // mavlink packet event. Here the logic should manage the data
 
+  // PARSE HEARTBEAT PACKAGE
   if (packetType === "HEARTBEAT") {
     const timestamp = new Date().toLocaleString();
 
