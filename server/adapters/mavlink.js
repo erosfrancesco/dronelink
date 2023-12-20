@@ -29,8 +29,6 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     .pipe(new MavLinkPacketSplitter())
     .pipe(new MavLinkPacketParser());
 
-  // const a = minimal.MavType;
-
   reader.on("data", (packet) => {
     const packetClass = PacketClasses[packet.header.msgid];
     if (!packetClass) {

@@ -20,7 +20,6 @@ export const event = new EventEmitter();
 
 // HANDLERS
 const onWSOpen = () => {
-  console.log("Connection to server extabilished");
   event.emit(SERVER_CONNECTED);
 };
 
@@ -36,7 +35,6 @@ const onWSMessage = (buffer) => {
     const { error, message, packetType, packetData } = args;
 
     if (error) {
-      // console.log("Got server error:", error);
       event.emit(SERVER_ERROR_RECEIVED, error);
       return;
     }
@@ -51,7 +49,7 @@ const onWSMessage = (buffer) => {
       return;
     }
 
-    event.emit(SERVER_MESSAGE_RECEIVED, args);
+    event.emit(SERVER_MESSAGE_RECEIVED, message);
   } catch (e) {
     console.log("Error parsing message: ", e);
   }
@@ -59,7 +57,6 @@ const onWSMessage = (buffer) => {
 
 const onWSError = () => {
   event.emit(SERVER_ERROR);
-  // console.error
 };
 
 ws.onerror = onWSError;

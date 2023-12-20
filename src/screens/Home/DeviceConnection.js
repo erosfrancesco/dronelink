@@ -6,7 +6,7 @@ import {
   isConnected,
   openDevicePath,
   disconnectDevicePath,
-} from "./logic.js";
+} from "../../logic/index.js";
 
 import "./index.css";
 

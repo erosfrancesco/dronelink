@@ -4,8 +4,8 @@ import {
   HorizontalLayout,
   VerticalLayout,
 } from "../../components/index.js";
+import { isConnected, lastHeartBeat } from "../../logic/index.js";
 
-import { isConnected, lastHeartBeat } from "./logic.js";
 import "./index.css";
 
 const { span } = van.tags;

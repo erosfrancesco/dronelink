@@ -5,7 +5,7 @@ import {
   event,
   wsOpenDeviceConnection,
   wsCloseDeviceConnection,
-} from "../../client.js";
+} from "../client.js";
 
 // import { sendMavlinkPacketCommand } from "../../../messages.js";
 

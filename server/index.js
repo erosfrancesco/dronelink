@@ -12,7 +12,10 @@ const port = process.env.PORT || 5000;
 const wss = new WebSocketServer({ port });
 
 wss.on("connection", (ws) => {
-  ws.on("error", console.error);
+  ws.on("error", (e) => {
+    console.error(e);
+    ws.send(messageCommand({ error: e }));
+  });
 
   ws.on("message", (buffer) => {
     try {
@@ -22,8 +25,7 @@ wss.on("connection", (ws) => {
       handleMessage(ws, data);
       handleMavlinkPacketSend(ws, data);
     } catch (error) {
-      console.log("Error parsing message: ", buffer);
-      console.log(error);
+      console.log("Error parsing message: ", buffer, error);
       ws.send(messageCommand({ error }));
     }
   });

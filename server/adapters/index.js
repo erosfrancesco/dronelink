@@ -29,7 +29,6 @@ export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
   //
 
   serial.on("error", (e) => {
-    console.log("Error: ", e);
     ws.send(messageCommand({ error: e.message }));
   });
 
@@ -63,8 +62,7 @@ export const handleMessage = (ws, { type, ...args }) => {
   }
 
   const { error, message } = args;
-  console.log("Got message from client:", message);
-  console.log("Got error from client:", error);
+  ws.send(messageCommand({ error, message }));
 };
 
 export default {

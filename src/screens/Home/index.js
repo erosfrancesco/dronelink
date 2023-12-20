@@ -1,5 +1,10 @@
 import van from "vanjs-core";
-import { Button, Input, VerticalLayout } from "../../components/index.js";
+import {
+  Button,
+  Input,
+  VerticalLayout,
+  ConnectionStatus,
+} from "../../components/index.js";
 
 import DeviceConnectionSection from "./DeviceConnection.js";
 import DeviceConnectionStatusSection from "./DeviceConnectionStatus.js";
@@ -13,6 +18,10 @@ import DeviceConnectionStatusSection from "./DeviceConnectionStatus.js";
 
 // Home Screen
 export const Home = () =>
-  VerticalLayout(DeviceConnectionSection, DeviceConnectionStatusSection);
+  VerticalLayout(
+    DeviceConnectionSection,
+    DeviceConnectionStatusSection,
+    ConnectionStatus
+  );
 
 export default Home;

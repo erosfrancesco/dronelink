@@ -16,9 +16,7 @@ const RoutesMenu = () =>
     Object.keys(routes).map((route) => {
       const { linkLabel } = routes[route];
       const onclick = () => goTo(route);
-      const color = "primary"; //route === currentRoute.val ? "primary" : "secondary";
-
-      console.log(currentRoute.val, route);
+      const color = "primary";
 
       return Button({
         class:
