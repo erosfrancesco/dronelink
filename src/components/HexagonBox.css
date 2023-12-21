@@ -85,12 +85,8 @@
     height: auto !important;
 }
 
-.border-right {   
-    /*left: calc(100% - 2 * var(--border-deco-size)) !important;
-    top: calc(var(--border-deco-size) * -1) !important;
-    height: calc(100% - 2 * var(--border-deco-size)) !important;/**/
+.border-right {
     height: auto !important;
-    /**/
 }
 
 
@@ -139,4 +135,8 @@
 .deco-box-content {
     display: flex;
     flex: 0;
+}
+
+.deco-box-animation {
+    transition: width 0.5s, height 0.5s;
 }

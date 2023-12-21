@@ -26,7 +26,10 @@ export const Develop = () => {
     Status: systemStatus,
   };
 
-  return HexagonBox({ style: 'width: 20em; height: 10em;' }, span("Hello world"));
+  return HexagonBox(
+    { style: "width: 20em; height: 10em;" },
+    span("Hello world")
+  );
 
   /*
   return VerticalLayout({ class: "Home-Section" }, () =>
