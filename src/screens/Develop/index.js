@@ -6,6 +6,8 @@ import {
   StatusDisplay,
 } from "../../components/index.js";
 
+import { HexagonBox } from "../../components/HexagonBox.js";
+
 import DeviceCommands from "./DeviceCommands.js";
 
 import { Heartbeat } from "./mocks.js";
@@ -24,6 +26,9 @@ export const Develop = () => {
     Status: systemStatus,
   };
 
+  return HexagonBox(span("Hello world"));
+
+  /*
   return VerticalLayout({ class: "Home-Section" }, () =>
     isConnected.val
       ? div(
@@ -33,6 +38,7 @@ export const Develop = () => {
         )
       : span("Not connected")
   );
+  /** */
 };
 //
 

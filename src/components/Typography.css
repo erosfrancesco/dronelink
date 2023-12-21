@@ -1,0 +1,10 @@
+@import url("../index.css");
+
+.text-normal {
+  /* color: aliceblue; */
+  font-weight: 100;
+}
+
+.text-bold {
+  font-weight: bold;
+}

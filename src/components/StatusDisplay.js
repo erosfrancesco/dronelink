@@ -1,5 +1,6 @@
 import van from "vanjs-core";
 import { HorizontalLayout, VerticalLayout } from "./Layout.js";
+import { TextNormal, TextBold } from "./Typography.js";
 
 const { span } = van.tags;
 
@@ -9,12 +10,12 @@ export const StatusDisplay = ({ values, minWidth = "20em" }) =>
       const value = values[key];
 
       return HorizontalLayout(
-        span(
+        TextNormal(
           // TODO: - Make variations of span
-          { style: () => "min-width:" + minWidth + ";font-weight: 100;" },
+          { style: () => "min-width:" + minWidth + ";" },
           () => key + " :"
         ),
-        span(() => value)
+        TextBold(() => value)
       );
     })
   );

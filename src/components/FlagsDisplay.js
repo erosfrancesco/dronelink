@@ -1,12 +1,11 @@
 import van from "vanjs-core";
 import { VerticalLayout } from "./Layout.js";
-
-const { div, span } = van.tags;
+import { TextNormal } from "./Typography.js";
 
 const FlagValueDisplay = ({ flag, value }) => {
   const color = value ? "green" : "brown";
 
-  return span({ style: "color:" + color + ";" }, flag + " : " + value);
+  return TextNormal({ style: "color:" + color + ";" }, flag + " : " + value);
 };
 
 export const FlagsDisplay = ({
