@@ -75,7 +75,11 @@ export const HeartbeatWidget = (...args) => {
     ...args
   );
 
-  const { Heartbeat, ...props } = otherProps || {};
+  const { Heartbeat, isConnected, ...props } = otherProps || {};
+
+  if (!isConnected.val) {
+    isClosed.val = true;
+  }
 
   const toggleWidget = () => {
     if (isAnimating.val) {
@@ -101,8 +105,8 @@ export const HeartbeatWidget = (...args) => {
     },
     BorderBox(() =>
       isAnimating.val || isClosed.val
-        ? WidgetClose({ ...Heartbeat, isConnected: { val: true } })
-        : WidgetOpen({ ...Heartbeat, isConnected: { val: true } })
+        ? WidgetClose({ ...Heartbeat, isConnected })
+        : WidgetOpen({ ...Heartbeat, isConnected })
     )
   );
 };
