@@ -5,7 +5,7 @@ import "./BorderBox.css";
 const { div } = van.tags;
 
 export const BorderBox = (...args) => {
-  const { componentClass, childs, otherProps } = VanComponentArgsParser(
+  const { childs, otherProps } = VanComponentArgsParser(
     ...args
   );
 

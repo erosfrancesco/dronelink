@@ -38,11 +38,11 @@ const WidgetOpen = ({
     { style: "padding: 0.5em;" },
     StatusDisplay(
       TextBold("Last Heartbeat :"),
-      TextBold(() => (isConnected.val ? timestamp : "Not connected"))
+      TextBold(() => (isConnected?.val ? timestamp : "Not connected"))
     ),
 
     () =>
-      isConnected.val
+      isConnected?.val
         ? VerticalLayout(
             StatusDisplay(TextBold("Device type:"), TextBold(type)),
             StatusDisplay(TextBold("System:"), TextBold(autopilot)),
@@ -67,7 +67,7 @@ const WidgetClose = ({
   HorizontalLayout(
     { style: "justify-content: space-evenly;width: 100%;height: 100%;" },
     TextBold("Last Heartbeat : "),
-    TextBold(() => (isConnected.val ? timestamp : "Not connected"))
+    TextBold(() => (isConnected?.val ? timestamp : "Not connected"))
   );
 
 export const HeartbeatWidget = (...args) => {
@@ -77,14 +77,20 @@ export const HeartbeatWidget = (...args) => {
 
   const { Heartbeat, isConnected, ...props } = otherProps || {};
 
-  if (!isConnected.val) {
+  if (!isConnected?.val) {
+    console.log("Is closed", isConnected);
     isClosed.val = true;
   }
 
   const toggleWidget = () => {
+    if (!isConnected?.val) {
+      return;
+    }
+
     if (isAnimating.val) {
       return;
     }
+
     isAnimating.val = true;
     isClosed.val = !isClosed.val;
 
