@@ -1,4 +1,5 @@
 .heartbeat_widget {
+    justify-content: space-evenly;
     width: 20em !important;
     height: 10em !important;
     transition: height 0.5s;

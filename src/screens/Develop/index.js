@@ -19,14 +19,16 @@ export const Develop = () => {
   const { autopilot, baseMode, systemStatus, timestamp, type } =
     Heartbeat || {};
 
+  /*
   const values = {
     "Last Heartbeat": timestamp,
     System: autopilot,
     Device: type,
     Status: systemStatus,
   };
+  /** */
 
-  return HeartbeatWidget({ Heartbeat: values });
+  return HeartbeatWidget({ Heartbeat: { ...Heartbeat, timestamp } });
 
   /*
   return VerticalLayout({ class: "Home-Section" }, () =>

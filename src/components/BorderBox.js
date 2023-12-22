@@ -1,10 +1,10 @@
 import van from "vanjs-core";
 import VanComponentArgsParser from "./utils.js";
-import "./HexagonBox.css";
+import "./BorderBox.css";
 
 const { div } = van.tags;
 
-export const HexagonBox = (...args) => {
+export const BorderBox = (...args) => {
   const { componentClass, childs, otherProps } = VanComponentArgsParser(
     ...args
   );
@@ -43,7 +43,7 @@ export const HexagonBox = (...args) => {
         {
           class: "deco-border-content",
         },
-        div(...childs)
+        ...childs
       ),
       div({
         class: "deco-border border-right deco-gradient-hor", // right

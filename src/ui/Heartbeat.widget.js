@@ -1,7 +1,14 @@
 import van from "vanjs-core";
 import VanComponentArgsParser from "../components/utils.js";
-import { HexagonBox } from "../components/HexagonBox.js";
-import { TextNormal } from "../components/index.js";
+
+import {
+  TextNormal,
+  TextBold,
+  HorizontalLayout,
+  VerticalLayout,
+  FlagsDisplay,
+  BorderBox,
+} from "../components/index.js";
 
 import "./Heartbeat.widget.css";
 
@@ -9,6 +16,59 @@ const { div, span } = van.tags;
 
 const isAnimating = van.state(false);
 const isClosed = van.state(false);
+// text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.5), 1px -1px 0 rgba(255, 255, 255, 0.5), -1px 1px 0 rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(255, 255, 255, 0.5)
+
+const StatusDisplay = (...childs) =>
+  HorizontalLayout(
+    {
+      style: "justify-content: space-between;width: 100%;height: 100%;",
+    },
+    ...childs
+  );
+
+const WidgetOpen = ({
+  isConnected,
+  timestamp,
+  type,
+  autopilot,
+  systemStatus,
+  baseMode,
+}) =>
+  VerticalLayout(
+    { style: "padding: 0.5em;" },
+    StatusDisplay(
+      TextBold("Last Heartbeat :"),
+      TextBold(() => (isConnected.val ? timestamp : "Not connected"))
+    ),
+
+    () =>
+      isConnected.val
+        ? VerticalLayout(
+            StatusDisplay(TextBold("Device type:"), TextBold(type)),
+            StatusDisplay(TextBold("System:"), TextBold(autopilot)),
+            StatusDisplay(TextBold("Status:"), TextBold(systemStatus)),
+
+            StatusDisplay(
+              TextBold("Mode: "),
+              FlagsDisplay({ flags: baseMode, style: "padding-left:1em;" })
+            )
+          )
+        : null
+  );
+
+const WidgetClose = ({
+  isConnected,
+  timestamp,
+  type,
+  autopilot,
+  systemStatus,
+  baseMode,
+}) =>
+  HorizontalLayout(
+    { style: "justify-content: space-evenly;width: 100%;height: 100%;" },
+    TextBold("Last Heartbeat : "),
+    TextBold(() => (isConnected.val ? timestamp : "Not connected"))
+  );
 
 export const HeartbeatWidget = (...args) => {
   const { componentClass, childs, otherProps } = VanComponentArgsParser(
@@ -16,9 +76,11 @@ export const HeartbeatWidget = (...args) => {
   );
 
   const { Heartbeat, ...props } = otherProps || {};
-  console.log(Heartbeat);
 
   const toggleWidget = () => {
+    if (isAnimating.val) {
+      return;
+    }
     isAnimating.val = true;
     isClosed.val = !isClosed.val;
 
@@ -37,10 +99,10 @@ export const HeartbeatWidget = (...args) => {
       class: className,
       onclick: toggleWidget,
     },
-    HexagonBox(() =>
+    BorderBox(() =>
       isAnimating.val || isClosed.val
-        ? TextNormal("Clicked")
-        : TextNormal("Click me")
+        ? WidgetClose({ ...Heartbeat, isConnected: { val: true } })
+        : WidgetOpen({ ...Heartbeat, isConnected: { val: true } })
     )
   );
 };
