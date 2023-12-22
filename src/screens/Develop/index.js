@@ -6,7 +6,7 @@ import {
   StatusDisplay,
 } from "../../components/index.js";
 
-import { HexagonBox } from "../../components/HexagonBox.js";
+import { HeartbeatWidget } from "../../ui/Heartbeat.widget.js";
 
 import DeviceCommands from "./DeviceCommands.js";
 
@@ -26,10 +26,7 @@ export const Develop = () => {
     Status: systemStatus,
   };
 
-  return HexagonBox(
-    { style: "width: 20em; height: 10em;" },
-    span("Hello world")
-  );
+  return HeartbeatWidget({ Heartbeat: values });
 
   /*
   return VerticalLayout({ class: "Home-Section" }, () =>

@@ -1,0 +1,9 @@
+.heartbeat_widget {
+    width: 20em !important;
+    height: 10em !important;
+    transition: height 0.5s;
+}
+
+.heartbeat_widget_closed {
+    height: 2em !important;
+}

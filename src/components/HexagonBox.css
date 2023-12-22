@@ -73,15 +73,9 @@
 
 .border-bottom {
     flex: 1;
-    /*
-    top: calc(100% - 2 * var(--border-deco-size)) !important;
-    /*left: calc(var(--border-deco-size) * -1) !important;
-    width: calc(100% - 2 * var(--border-deco-size)) !important;
-    /**/
 }
 
 .border-left {
-    /*height: calc(100% - 2 * var(--border-deco-size)) !important;/**/
     height: auto !important;
 }
 
@@ -91,28 +85,14 @@
 
 
 .border-bottom-left {
-    /*
-    top: calc(100% - 2 * var(--border-deco-size)) !important;
-    /*left: calc(var(--border-deco-size) * -1) !important;*/
 }
 
 .border-bottom-right {
-    /*left: calc(100% - 3 * var(--border-deco-size)) !important;
-    top: calc(100% - 3 * var(--border-deco-size)) !important;
-    /**/
 }
 
 
 .deco-border-content {
     z-index: -1;
-    /*
-    position: relative;
-    top: calc(var(--border-deco-size) / 2);
-    left: calc(var(--border-deco-size) / 2);
-    width: calc(100% - var(--border-deco-size));
-    height: calc(100% - var(--border-deco-size));
-    /**/
-    
     flex: 1;
     background: repeating-linear-gradient(
         60deg,
@@ -130,13 +110,12 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+
+    height: 100%;
+    width: 100%;
 }
 
 .deco-box-content {
     display: flex;
     flex: 0;
-}
-
-.deco-box-animation {
-    transition: width 0.5s, height 0.5s;
 }
