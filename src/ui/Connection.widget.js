@@ -32,7 +32,7 @@ const ConnectionStatus = () =>
     {
       style: () =>
         "padding: 0.5em;flex:0;" +
-        (!lastServerError?.val ? "background-color:crimson;" : ""),
+        (lastServerError?.val ? "background-color:crimson;" : ""),
     },
     HorizontalLayout(
       TextNormal("Server is: "),
