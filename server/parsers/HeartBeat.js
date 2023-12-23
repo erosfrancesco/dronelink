@@ -1,6 +1,7 @@
-import { minimal, common, ardupilotmega } from "node-mavlink";
-
+import { minimal } from "node-mavlink";
 import { parseMavModeFlag } from "./MavModeFlag.js";
+
+const { MavAutopilot, MavState, MavType } = minimal;
 
 /**
  * Heartbeat {
@@ -24,12 +25,12 @@ export const HeartBeatParser = (data) => {
   } = data;
 
   const packetData = {
-    autopilot: minimal.MavAutopilot[autopilot],
+    autopilot: MavAutopilot[autopilot],
     baseMode: parseMavModeFlag(baseMode),
     customMode,
     mavlinkVersion,
-    systemStatus: minimal.MavState[systemStatus],
-    type: minimal.MavType[type],
+    systemStatus: MavState[systemStatus],
+    type: MavType[type],
   };
 
   return packetData;

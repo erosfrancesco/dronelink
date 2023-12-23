@@ -8,7 +8,11 @@ import {
   ardupilotmega,
 } from "node-mavlink";
 
-import { HeartBeatParser, defaultDataParser } from "../parsers/index.js";
+import {
+  HeartBeatParser,
+  CommandAckParser,
+  defaultDataParser,
+} from "../parsers/index.js";
 
 //
 const Commands = {
@@ -23,6 +27,24 @@ const PacketClasses = {
   ...ardupilotmega.REGISTRY,
 };
 //
+
+const mavlinkPacketDataParser = (packetType, data) => {
+  if (packetType === "HEARTBEAT") {
+    return HeartBeatParser(data);
+  }
+
+  if (packetType === "COMMAND_ACK") {
+    return CommandAckParser(data);
+  }
+
+  if (packetType === "TIMESYNC") {
+    return defaultDataParser(data);
+  }
+
+  console.log("Received", packetType, data);
+
+  return defaultDataParser(data);
+};
 
 export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
   const reader = port
@@ -40,20 +62,7 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     const packetType = packetClass.MSG_NAME;
 
     // Packets parsers
-    // Check HeartBeat
-    if (packetType === "HEARTBEAT") {
-      const packetData = HeartBeatParser(data);
-      onPacketReceived(packetType, packetData);
-      return;
-    }
-
-    /*
-    if (packetType !== "HEARTBEAT" && packetType !== "TIMESYNC") {
-      console.log("Packet info: ", packetType, packetData);
-    }
-    /** */
-
-    const packetData = defaultDataParser(data);
+    const packetData = mavlinkPacketDataParser(packetType, data);
     onPacketReceived(packetType, packetData);
   });
 

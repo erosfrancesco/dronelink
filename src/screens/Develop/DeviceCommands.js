@@ -69,7 +69,6 @@ const CommandResultsHelp = {
     "Command is invalid because a frame is required and the specified frame is not supported.",
 };
 
-// TODO: - Parse CommandAck and display status
 export const DeviceCommands = () => {
   const {
     result,
@@ -81,7 +80,7 @@ export const DeviceCommands = () => {
     ...params
   } = CommandAck;
 
-  const commandStatus = CommandResults[result];
+  const commandStatus = CommandResults[result]; // TODO: - Check with backend
   const commandStatusVerbose = CommandResultsHelp[commandStatus];
 
   return VerticalLayout(
@@ -101,7 +100,6 @@ export const DeviceCommands = () => {
       })
     ),
     VerticalLayout(
-      // TODO: - Make variations of span
       TextBold(() => "Command Id: " + command), // NAME OF THE COMMAND?
       TextBold(() => "Result: " + commandStatus),
       TextNormal(() => commandStatusVerbose),

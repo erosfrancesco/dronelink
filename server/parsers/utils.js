@@ -63,6 +63,30 @@ export const flagsParser = (n, flags) => {
  * ...
  * }
  */
+
+export const mapMavlinkEnum = (mavlinkEnum) => {
+  const keys = Object.keys(mavlinkEnum);
+
+  // get the first half of enumFlags
+  // they should already be sorted
+  const flags = keys
+    .map((key, i) => {
+      if (i > (keys.length - 1) / 2) {
+        return;
+      }
+      return { bitPosition: key, flag: mavlinkEnum[key] };
+    })
+    .filter((v) => v) // remove undefined
+    .sort((a, b) => {
+      const { bitPosition: v1 } = a;
+      const { bitPosition: v2 } = b;
+
+      return v1 - v2;
+    });
+
+  return flags;
+};
+
 export const flagsEnumParser = (n, enumFlags) => {
   const keys = Object.keys(enumFlags);
 
