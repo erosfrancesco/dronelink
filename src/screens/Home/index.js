@@ -1,12 +1,6 @@
 import van from "vanjs-core";
-import {
-  Button,
-  Input,
-  VerticalLayout,
-  ConnectionStatus,
-} from "../../components/index.js";
+import { HorizontalLayout } from "../../components/index.js";
 
-import DeviceConnectionSection from "./DeviceConnection.js";
 import DeviceConnectionStatusSection from "./DeviceConnectionStatus.js";
 
 /* So far:
@@ -17,11 +11,6 @@ import DeviceConnectionStatusSection from "./DeviceConnectionStatus.js";
 /**/
 
 // Home Screen
-export const Home = () =>
-  VerticalLayout(
-    DeviceConnectionSection,
-    DeviceConnectionStatusSection,
-    ConnectionStatus
-  );
+export const Home = () => DeviceConnectionStatusSection();
 
 export default Home;
