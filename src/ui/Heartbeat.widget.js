@@ -1,6 +1,4 @@
 import van from "vanjs-core";
-import VanComponentArgsParser from "../components/utils.js";
-
 import {
   TextNormal,
   TextBold,
@@ -8,11 +6,12 @@ import {
   VerticalLayout,
   FlagsDisplay,
   BorderBox,
+  VanComponentArgsParser,
 } from "../components/index.js";
 
 import "./Heartbeat.widget.css";
 
-const { div, span } = van.tags;
+const { div } = van.tags;
 
 const isAnimating = van.state(false);
 const isClosed = van.state(false);
