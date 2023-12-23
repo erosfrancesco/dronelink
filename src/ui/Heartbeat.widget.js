@@ -6,6 +6,7 @@ import {
   VerticalLayout,
   FlagsDisplay,
   BorderBox,
+  StatusDisplay,
   VanComponentArgsParser,
 } from "../components/index.js";
 
@@ -16,14 +17,6 @@ const { div } = van.tags;
 const isAnimating = van.state(false);
 const isClosed = van.state(false);
 // text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.5), 1px -1px 0 rgba(255, 255, 255, 0.5), -1px 1px 0 rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(255, 255, 255, 0.5)
-
-const StatusDisplay = (...childs) =>
-  HorizontalLayout(
-    {
-      style: "justify-content: space-between;width: 100%;height: 100%;",
-    },
-    ...childs
-  );
 
 const WidgetOpen = ({
   isConnected,
@@ -37,11 +30,11 @@ const WidgetOpen = ({
     { style: "padding: 0.5em;" },
     StatusDisplay(
       TextBold("Last Heartbeat :"),
-      TextBold(() => (isConnected?.val ? timestamp : "Not connected"))
+      TextBold(() => (isConnected ? timestamp : "Not connected"))
     ),
 
     () =>
-      isConnected?.val
+      isConnected
         ? VerticalLayout(
             StatusDisplay(TextBold("Device type:"), TextBold(type)),
             StatusDisplay(TextBold("System:"), TextBold(autopilot)),
@@ -66,7 +59,7 @@ const WidgetClose = ({
   HorizontalLayout(
     { style: "justify-content: space-evenly;width: 100%;height: 100%;" },
     TextBold("Last Heartbeat : "),
-    TextBold(() => (isConnected?.val ? timestamp : "Not connected"))
+    TextBold(() => (isConnected ? timestamp : "Not connected"))
   );
 
 export const HeartbeatWidget = (...args) => {
@@ -105,8 +98,8 @@ export const HeartbeatWidget = (...args) => {
     },
     BorderBox(() =>
       isAnimating.val || isClosed.val || !isConnected.val
-        ? WidgetClose({ ...Heartbeat, isConnected })
-        : WidgetOpen({ ...Heartbeat, isConnected })
+        ? WidgetClose({ ...Heartbeat?.val, isConnected: isConnected.val })
+        : WidgetOpen({ ...Heartbeat?.val, isConnected: isConnected.val })
     )
   );
 };

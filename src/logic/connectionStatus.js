@@ -20,10 +20,12 @@ event.on(SERVER_CONNECTED, () => {
 
 event.on(SERVER_ERROR, (e) => {
   setLastServerError(e);
+  setIsServerConnected = false;
 });
 
 event.on(SERVER_ERROR_RECEIVED, (e) => {
   setLastServerError(e);
+  setIsServerConnected = false;
 });
 
 event.on(SERVER_MESSAGE_RECEIVED, (e) => {

@@ -92,7 +92,6 @@
 
 
 .deco-border-content {
-    z-index: -1;
     flex: 1;
     background: repeating-linear-gradient(
         60deg,

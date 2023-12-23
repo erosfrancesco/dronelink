@@ -1,10 +1,23 @@
 import "vanjs-core";
-import { isConnected, lastHeartBeat } from "../../logic/index.js";
+import { VerticalLayout } from "../../components/index.js";
+import {
+  isConnected,
+  lastHeartBeat,
+  isServerConnected,
+  lastServerError,
+  lastServerMessage,
+} from "../../logic/index.js";
 import { HeartbeatWidget } from "../../ui/Heartbeat.widget.js";
-// TODO: - ConnectionWidget
+import { ConnectionWidget } from "../../ui/Connection.widget.js";
 
-// Heartbeat packet
 export const DeviceConnectionStatusSection = () =>
-  HeartbeatWidget({ Heartbeat: lastHeartBeat?.val, isConnected });
+  VerticalLayout(
+    ConnectionWidget({
+      isConnected: isServerConnected,
+      error: lastServerError,
+      message: lastServerMessage,
+    }),
+    HeartbeatWidget({ Heartbeat: lastHeartBeat, isConnected })
+  );
 
 export default DeviceConnectionStatusSection;
