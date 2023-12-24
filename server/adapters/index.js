@@ -53,7 +53,8 @@ export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
   const port = ws.deviceConnected; //
   const res = await sendPacket(port, command, otherArgs);
 
-  ws.send(messageCommand({ message: "MAVLINK packet sent: " + res }));
+  // Not required
+  // ws.send(messageCommand({ message: "MAVLINK packet sent: " + res }));
 };
 
 export const handleMessage = (ws, { type, ...args }) => {

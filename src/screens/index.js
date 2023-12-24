@@ -1,14 +1,13 @@
 import van from "vanjs-core";
 import {
+  TextNormal,
   Button,
   VerticalLayout,
   HorizontalLayout,
 } from "../components/index.js";
-
 import { routes, currentRoute, goTo } from "./routings.js";
-import "./index.css";
 
-const { div, span } = van.tags;
+import "./index.css";
 
 const RoutesMenu = () =>
   HorizontalLayout(
@@ -36,14 +35,11 @@ export const AppShell = () =>
       const route = routes[currentRoute.val];
 
       if (!route) {
-        return VerticalLayout(span(currentRoute.val + " not found"));
+        return VerticalLayout(TextNormal(currentRoute.val + " not found"));
       }
 
       const { content, linkLabel } = route;
-      return VerticalLayout(
-        // span(linkLabel),
-        content()
-      );
+      return VerticalLayout(content());
     }
   );
 

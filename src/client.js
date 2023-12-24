@@ -55,8 +55,8 @@ const onWSMessage = (buffer) => {
   }
 };
 
-const onWSError = () => {
-  event.emit(SERVER_ERROR);
+const onWSError = (e) => {
+  event.emit(SERVER_ERROR, "WS Connection failed");
 };
 
 ws.onerror = onWSError;

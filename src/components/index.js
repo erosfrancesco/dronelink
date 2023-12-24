@@ -5,4 +5,5 @@ export * from "./Typography.js";
 export * from "./FlagsDisplay.js";
 export * from "./StatusDisplay.js";
 export * from "./BorderBox.js";
+export * from "./SendDeviceCommand.js";
 export * from "./utils.js";

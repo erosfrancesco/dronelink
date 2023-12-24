@@ -19,13 +19,15 @@ event.on(SERVER_CONNECTED, () => {
 });
 
 event.on(SERVER_ERROR, (e) => {
+  console.log("Server error", e);
   setLastServerError(e);
-  setIsServerConnected = false;
+  setIsServerConnected(false);
 });
 
 event.on(SERVER_ERROR_RECEIVED, (e) => {
+  console.log("Server error re", e);
   setLastServerError(e);
-  setIsServerConnected = false;
+  setIsServerConnected(false);
 });
 
 event.on(SERVER_MESSAGE_RECEIVED, (e) => {

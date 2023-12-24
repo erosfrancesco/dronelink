@@ -5,24 +5,22 @@ import {
   VerticalLayout,
   HorizontalLayout,
   StatusDisplay,
+  SendDeviceCommand,
   TextNormal,
   TextBold,
-} from "../../components/index.js";
+  BorderBox,
+  VanComponentArgsParser,
+} from "../components/index.js";
+import "./Command.widget.css";
 
-import { sendMavlinkPacketCommand } from "../../../messages.js";
-import { wsSend } from "../../client.js";
+import { lastCommandAck } from "../logic/index.js";
 
-import { CommandAck } from "./mocks.js";
+// import { CommandAck } from "../screens/Develop/mocks.js";
+// const lastCommandAck = van.state(CommandAck);
 
-const lastCommandAck = van.state(CommandAck);
-
-const sendCommandToDevice = () =>
-  wsSend(
-    sendMavlinkPacketCommand({
-      command: "RequestMessageCommand",
-      // messageId: 1,
-    })
-  );
+const { div } = van.tags;
+const isAnimating = van.state(false);
+const isClosed = van.state(false);
 
 /**
   0	MAV_RESULT_ACCEPTED	Command is valid (is supported and has valid parameters), and was executed.
@@ -57,7 +55,18 @@ const CommandResultsHelp = {
     "Command is invalid because a frame is required and the specified frame is not supported.",
 };
 
-export const DeviceCommands = () => {
+const ResultLabel = ({ result }) =>
+  TextBold(
+    {
+      style: () =>
+        "color:" +
+        (result === Object.keys(CommandResultsHelp)[0] ? "green" : "crimson") +
+        ";",
+    },
+    () => result
+  );
+
+const WidgetOpen = ({ onclick }) => {
   const {
     result,
     command,
@@ -70,43 +79,17 @@ export const DeviceCommands = () => {
   const commandStatusVerbose = CommandResultsHelp[result];
 
   return VerticalLayout(
-    { style: "width: 20em;" },
-    /*
-    HorizontalLayout(
-      Input({
-        value: "Command",
-        color: "secondary",
-        onkeyup: (e) => {
-          const { value = "" } = e?.target || {};
-        },
-      }),
-      Button({
-        text: "Send command",
-        onclick: () => {
-          sendCommandToDevice();
-        },
-      })
-    ),
-    /** */
+    {
+      style: "width: 100%;height: 100%;",
+    },
+    SendDeviceCommand(),
     VerticalLayout(
+      { onclick },
       StatusDisplay(
         TextNormal("Command: "),
         TextBold(() => command)
       ),
-      StatusDisplay(
-        TextNormal("Result: "),
-        TextBold(
-          {
-            style: () =>
-              "color:" +
-              (result === Object.keys(CommandResultsHelp)[0]
-                ? "green"
-                : "crimson") +
-              ";",
-          },
-          () => result
-        )
-      ),
+      StatusDisplay(TextNormal("Result: "), ResultLabel({ result })),
       TextNormal(
         { style: "display: flex;justify-content: center;padding: 1em;" },
         () => commandStatusVerbose
@@ -123,6 +106,52 @@ export const DeviceCommands = () => {
   );
 };
 
-//
+const WidgetClose = ({ onclick }) => {
+  const { result, command } = lastCommandAck.val;
+  return div(
+    { onclick, style: "width: 100%;height: 100%;" },
+    StatusDisplay(
+      TextBold(() => command),
+      ResultLabel({ result })
+    )
+  );
+};
 
-export default DeviceCommands;
+//
+export const CommandWidget = (...args) => {
+  const { componentClass, childs, otherProps } = VanComponentArgsParser(
+    ...args
+  );
+
+  const { ...props } = otherProps || {};
+
+  const toggleWidget = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (isAnimating.val) {
+      return;
+    }
+
+    isAnimating.val = true;
+    isClosed.val = !isClosed.val;
+
+    setTimeout(() => {
+      isAnimating.val = false;
+    }, 500);
+  };
+
+  const className = () =>
+    isClosed.val ? "command_widget command_widget_closed" : "command_widget";
+
+  return div(
+    {
+      class: className,
+    },
+    BorderBox(() =>
+      isAnimating.val || isClosed.val
+        ? WidgetClose({ onclick: toggleWidget })
+        : WidgetOpen({ onclick: toggleWidget })
+    )
+  );
+};

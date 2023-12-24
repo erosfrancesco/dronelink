@@ -11,7 +11,7 @@ export const DeviceConnectionStatusSection = () =>
         "align-content: flex-start;align-items: flex-start;justify-content: flex-start;",
     },
     ConnectionWidget(),
-    HeartbeatWidget({ Heartbeat: lastHeartBeat, isConnected })
+    HeartbeatWidget()
   );
 
 export default DeviceConnectionStatusSection;

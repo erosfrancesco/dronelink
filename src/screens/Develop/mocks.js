@@ -14,12 +14,12 @@ export const Heartbeat = {
 
 // COMMAND_ACK
 export const CommandAck = {
-  command: 512,
-  result: 0,
+  command: "REQUEST_MESSAGE",
   progress: 0,
+  result: "ACCEPTED",
   resultParam2: 0,
-  targetSystem: 254,
   targetComponent: 1,
+  targetSystem: 254,
 };
 
 // SYS_STATUS
