@@ -26,7 +26,11 @@ export const SendDeviceCommand = () =>
       "Device commands"
     ),
     HorizontalLayout(
+      {
+        style: "margin-right: -3em;width: calc(100% - 1em);padding-left: 1em;",
+      },
       Input({
+        style: "min-width:0;margin-right:0.5em;",
         value: "Command",
         color: "secondary",
         onkeyup: (e) => {
@@ -36,6 +40,7 @@ export const SendDeviceCommand = () =>
         },
       }),
       Button({
+        style: "min-width:0;",
         text: "Send",
         onclick: (e) => {
           e.preventDefault();
