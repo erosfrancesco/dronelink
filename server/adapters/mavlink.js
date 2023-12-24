@@ -1,8 +1,8 @@
 import {
   MavLinkProtocolV2,
-  send,
   MavLinkPacketSplitter,
   MavLinkPacketParser,
+  send,
   minimal,
   common,
   ardupilotmega,
@@ -16,9 +16,9 @@ import {
 
 //
 const Commands = {
-  ...minimal,
-  ...common,
-  ...ardupilotmega,
+  ...minimal.COMMANDS,
+  ...common.COMMANDS,
+  ...ardupilotmega.COMMANDS,
 };
 
 const PacketClasses = {
@@ -70,23 +70,19 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
 };
 
 export const sendPacket = async (port, command, args = {}) => {
-  const packet = new (Commands[command] ||
-    Commands.RequestProtocolVersionCommand)();
+  const commandMap = { ...common.MavCmd, ...ardupilotmega.MavCmd };
+  const commandId = commandMap[command];
 
-  // merge parameters
-  // spread operator gives some issues here. Better to do it old style.
-  Object.keys(args).map((key) => {
-    const value = args[key];
-    packet[key] = value;
-  });
+  if (!commandId && commandId !== 0) {
+    // command not found...
+    // TODO: -
+    return 44;
+  }
 
-  // The default protocol is v1
+  const packet = new Commands[commandId](args);
   const res = await send(port, packet, new MavLinkProtocolV2());
 
   return res;
 };
-
-// TODO: - MAKE ADAPTER
-export const getAvailableCommands = () => Object.keys(Commands); // UNUSED FOR NOW
 
 export default setupMavlinkReader;

@@ -40,7 +40,8 @@ const onWSMessage = (buffer) => {
     }
 
     if (message === "Device connected") {
-      event.emit(DEVICE_CONNECTED);
+      const { commandList } = args;
+      event.emit(DEVICE_CONNECTED, commandList);
       return;
     }
 

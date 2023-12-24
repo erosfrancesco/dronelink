@@ -9,6 +9,8 @@ import {
   sendMavlinkPacketCommandType,
 } from "../../messages.js";
 
+import { getCommandList } from "../parsers/index.js";
+
 // WS ADAPTERS
 export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
   if (type !== openDeviceConnectionCommandType) {
@@ -32,7 +34,8 @@ export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
     ws.send(messageCommand({ error: e.message }));
   });
 
-  ws.send(messageCommand({ message: "Device connected" }));
+  const commandList = getCommandList();
+  ws.send(messageCommand({ message: "Device connected", commandList }));
 };
 
 export const handleCloseDeviceConnectionCommand = (ws, { type, ...args }) => {

@@ -31,7 +31,7 @@ ws.on("message", (buffer) => {
         sendMavlinkPacketCommand({
           // MAV_CMD_RUN_PREARM_CHECKS // "RunPrearmChecksCommand"
           // MAV_CMD_REQUEST_MESSAGE // "RequestMessageCommand"
-          command: "RequestMessageCommand",
+          command: "REQUEST_MESSAGE", // "RequestMessageCommand",
           messageId: 1,
         })
       );

@@ -1,6 +1,8 @@
 export * from "./utils.js";
 export * from "./HeartBeat.js";
 export * from "./CommandAck.js";
+export * from "./CommandList.js";
+
 // TODO: -
 /**
 // This one is not necessary...

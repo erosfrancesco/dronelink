@@ -8,6 +8,7 @@ import {
 } from "../client.js";
 
 import { sendMavlinkPacketCommand } from "../../messages.js";
+import { setCommandList } from "./commands.js";
 
 // STATE
 export const isConnected = van.state(false);
@@ -17,8 +18,10 @@ export const setDevicePath = (value) => (devicePath.val = value);
 //
 
 // EVENTS
-event.on(DEVICE_CONNECTED, () => {
+event.on(DEVICE_CONNECTED, (e) => {
   setIsConnected(true);
+  setCommandList(e);
+  console.log(e);
 
   /**
   // SEND PACKET

@@ -1,11 +1,9 @@
 import van from "vanjs-core";
 import { MAVLINK_PACKET_RECEIVED, event } from "../client.js";
+import { commandAckReceived } from "./commands.js";
 
 export const lastHeartBeat = van.state({});
 export const setLastHeartBeat = (value) => (lastHeartBeat.val = value);
-
-export const lastCommandAck = van.state({});
-export const seLastCommandAck = (value) => (lastCommandAck.val = value);
 
 event.on(MAVLINK_PACKET_RECEIVED, ({ packetType, packetData }) => {
   // mavlink packet event. Here the logic should manage the data
@@ -24,13 +22,7 @@ event.on(MAVLINK_PACKET_RECEIVED, ({ packetType, packetData }) => {
 
   // PARSE COMMAND_ACK PACKAGE
   if (packetType === "COMMAND_ACK") {
-    const timestamp = new Date().toLocaleString();
-
-    seLastCommandAck({
-      timestamp,
-      ...packetData,
-    });
-    
+    commandAckReceived(packetData);
     return;
   }
 
