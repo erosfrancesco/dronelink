@@ -21,8 +21,7 @@ export const event = new EventEmitter();
 //
 
 const handleCommandListReceived = (args) => {
-  const { commandList } = args;
-  event.emit(COMMANDLIST_RECEIVED, commandList);
+  event.emit(COMMANDLIST_RECEIVED, args);
 };
 
 // HANDLERS

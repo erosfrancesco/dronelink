@@ -2,6 +2,7 @@ import van from "vanjs-core";
 import { MAVLINK_PACKET_RECEIVED, event } from "../client.js";
 import { commandAckReceived } from "./commands.js";
 
+// TODO: - Rename this file
 export const lastHeartBeat = van.state({});
 export const setLastHeartBeat = (value) => (lastHeartBeat.val = value);
 

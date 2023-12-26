@@ -11,15 +11,19 @@ import {
 import { sendMavlinkPacketCommand } from "../../messages.js";
 import { wsSend } from "../client.js";
 
+//
 const sendCommandToDevice = () =>
   wsSend(
     sendMavlinkPacketCommand({
       command: "RequestMessageCommand",
     })
   );
+//
 
-export const SendDeviceCommand = () =>
-  VerticalLayout(
+export const SendDeviceCommand = () => {
+  console.log(commandMap);
+
+  return VerticalLayout(
     { style: "padding-bottom:0.5em;" },
     TextBold(
       { style: "display:flex;justify-content:center;padding-bottom:0.5em;" },
@@ -50,3 +54,4 @@ export const SendDeviceCommand = () =>
       })
     )
   );
+};

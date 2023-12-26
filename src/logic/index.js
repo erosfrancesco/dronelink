@@ -1,4 +1,4 @@
-export * from "./deviceStatus.js";
-export * from "./connectionStatus.js";
+export * from "./server.js";
+export * from "./device.js";
 export * from "./commands.js";
 export * from "./home.js";

@@ -11,13 +11,25 @@
   9	MAV_RESULT_COMMAND_UNSUPPORTED_MAV_FRAME	Command is invalid because a frame is required and the specified frame is not supported.
  */
 import van from "vanjs-core";
+import { COMMANDLIST_RECEIVED, event } from "../client.js";
 
 // {value: '16', flag: 'NAV_WAYPOINT'}
 export const commandList = van.state([]);
 export const setCommandList = (value) => (commandList.val = value);
 
+export const commandMap = van.state({});
+export const setCommandMap = (value) => (commandMap.val = value);
+
 export const lastCommandAck = van.state({});
 export const seLastCommandAck = (value) => (lastCommandAck.val = value);
+//
+
+// EVENTS
+event.on(COMMANDLIST_RECEIVED, (e) => {
+  const { commandList, commandMap } = e;
+  setCommandList(commandList);
+  setCommandMap(commandMap);
+});
 //
 
 export const CommandResultsHelp = {

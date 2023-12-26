@@ -13,7 +13,7 @@ import "./Command.widget.css";
 import {
   lastCommandAck,
   CommandResultsHelp,
-  commandList,
+  commandMap,
 } from "../logic/index.js";
 
 const { div } = van.tags;
@@ -23,10 +23,10 @@ const isClosed = van.state(false);
 const ResultLabel = ({ result }) =>
   TextBold(
     {
-      style: () =>
-        "color:" +
-        (result === Object.keys(CommandResultsHelp)[0] ? "green" : "crimson") +
-        ";",
+      class: () =>
+        result === Object.keys(CommandResultsHelp)[0]
+          ? "command_result_accepted"
+          : "command_result_rejected",
     },
     () => result
   );
@@ -108,8 +108,6 @@ export const CommandWidget = (...args) => {
 
   const className = () =>
     isClosed.val ? "command_widget command_widget_closed" : "command_widget";
-
-  console.log(commandList);
 
   return div(
     {

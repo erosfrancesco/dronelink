@@ -19,3 +19,15 @@
     justify-content: center;
     padding: 1em;
 }
+
+.command_result_accepted {
+    color: green;
+}
+
+.command_result_rejected {
+    color: crimson;
+}
+
+.command_result_warning {
+    color: orange;
+}

@@ -17,8 +17,14 @@ const handleRequestCommandListCommand = (ws, { type, ...args }) => {
     return;
   }
 
+  // [{value: '16', flag: 'NAV_WAYPOINT'}]
   const commandList = getCommandList();
-  ws.send(sendCommandListCommand({ commandList }));
+  const commandMap = {};
+  commandList.forEach(({ value, flag }) => {
+    commandMap[flag] = value;
+  });
+
+  ws.send(sendCommandListCommand({ commandList, commandMap }));
 };
 
 // WS ADAPTERS
