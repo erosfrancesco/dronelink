@@ -10,10 +10,11 @@ import {
 } from "../components/index.js";
 import "./Command.widget.css";
 
-import { lastCommandAck, CommandResultsHelp } from "../logic/index.js";
-
-// import { CommandAck } from "../screens/Develop/mocks.js";
-// const lastCommandAck = van.state(CommandAck);
+import {
+  lastCommandAck,
+  CommandResultsHelp,
+  commandList,
+} from "../logic/index.js";
 
 const { div } = van.tags;
 const isAnimating = van.state(false);
@@ -107,6 +108,8 @@ export const CommandWidget = (...args) => {
 
   const className = () =>
     isClosed.val ? "command_widget command_widget_closed" : "command_widget";
+
+  console.log(commandList);
 
   return div(
     {

@@ -2,6 +2,7 @@ import EventEmitter from "events";
 
 import {
   messageCommandType,
+  sendCommandListCommandType,
   openDeviceConnectionCommand,
   closeDeviceConnectionCommand,
 } from "../messages.js";
@@ -15,8 +16,14 @@ export const SERVER_MESSAGE_RECEIVED = "ServerMessageReceived";
 export const SERVER_ERROR_RECEIVED = "ServerErrorReceived";
 export const MAVLINK_PACKET_RECEIVED = "MavlinkPacketReceived";
 export const DEVICE_CONNECTED = "DeviceConnected";
+export const COMMANDLIST_RECEIVED = "CommandListReceived";
 export const event = new EventEmitter();
 //
+
+const handleCommandListReceived = (args) => {
+  const { commandList } = args;
+  event.emit(COMMANDLIST_RECEIVED, commandList);
+};
 
 // HANDLERS
 const onWSOpen = () => {
@@ -28,28 +35,37 @@ const onWSMessage = (buffer) => {
     const data = JSON.parse(buffer.data);
     const { type, ...args } = data;
 
+    // COMMAND LIST RECEIVED
+    if (type === sendCommandListCommandType) {
+      handleCommandListReceived(args);
+      return;
+    }
+
     if (type !== messageCommandType) {
       return;
     }
 
     const { error, message, packetType, packetData } = args;
 
+    // ERROR RECEIVED
     if (error) {
       event.emit(SERVER_ERROR_RECEIVED, error);
       return;
     }
 
+    // DEVICE CONNECTED
     if (message === "Device connected") {
-      const { commandList } = args;
-      event.emit(DEVICE_CONNECTED, commandList);
+      event.emit(DEVICE_CONNECTED);
       return;
     }
 
+    // MAVLINK PACKET RECEIVED
     if (packetType) {
       event.emit(MAVLINK_PACKET_RECEIVED, { packetType, packetData });
       return;
     }
 
+    // MESSAGE RECEIVED
     event.emit(SERVER_MESSAGE_RECEIVED, message);
   } catch (e) {
     console.log("Error parsing message: ", e);

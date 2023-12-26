@@ -41,8 +41,6 @@ const mavlinkPacketDataParser = (packetType, data) => {
     return defaultDataParser(data);
   }
 
-  console.log("Received", packetType, data);
-
   return defaultDataParser(data);
 };
 

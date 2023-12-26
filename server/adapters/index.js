@@ -1,5 +1,6 @@
 import { setupMavlinkReader, sendPacket } from "./mavlink.js";
 import { openSerialConnection, closeSerialConnection } from "./serialport.js";
+import { getCommandList } from "../parsers/index.js";
 
 import {
   messageCommand,
@@ -7,9 +8,18 @@ import {
   openDeviceConnectionCommandType,
   closeDeviceConnectionCommandType,
   sendMavlinkPacketCommandType,
+  sendCommandListCommandType,
+  sendCommandListCommand,
 } from "../../messages.js";
 
-import { getCommandList } from "../parsers/index.js";
+const handleRequestCommandListCommand = (ws, { type, ...args }) => {
+  if (type !== sendCommandListCommandType) {
+    return;
+  }
+
+  const commandList = getCommandList();
+  ws.send(sendCommandListCommand({ commandList }));
+};
 
 // WS ADAPTERS
 export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
@@ -36,6 +46,7 @@ export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
 
   const commandList = getCommandList();
   ws.send(messageCommand({ message: "Device connected", commandList }));
+  ws.send(sendCommandListCommand({ commandList }));
 };
 
 export const handleCloseDeviceConnectionCommand = (ws, { type, ...args }) => {

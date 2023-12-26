@@ -1,6 +1,7 @@
 import van from "vanjs-core";
 import {
   DEVICE_CONNECTED,
+  COMMANDLIST_RECEIVED,
   event,
   wsOpenDeviceConnection,
   wsCloseDeviceConnection,
@@ -18,14 +19,14 @@ export const setDevicePath = (value) => (devicePath.val = value);
 //
 
 // EVENTS
-event.on(DEVICE_CONNECTED, (e) => {
+event.on(COMMANDLIST_RECEIVED, (e) => setCommandList(e));
+event.on(DEVICE_CONNECTED, () => {
   setIsConnected(true);
-  setCommandList(e);
-  console.log(e);
+
+  // request command list?
 
   /**
   // SEND PACKET
-  console.log("Requesting status");
   wsSend(
     sendMavlinkPacketCommand({
       command: "RequestMessageCommand",

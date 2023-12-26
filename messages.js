@@ -1,14 +1,12 @@
 //
 export const messageCommandType = "server_message";
 export const messageCommand = ({ error, message, ...args }) => {
-  const res = JSON.stringify({
+  return JSON.stringify({
     type: messageCommandType,
     error,
     message,
     ...args,
   });
-
-  return res;
 };
 
 //
@@ -37,13 +35,20 @@ export const closeDeviceConnectionCommand = (args) => {
 //
 export const sendMavlinkPacketCommandType = "on_packet_send";
 export const sendMavlinkPacketCommand = ({ command, ...otherArgs }) => {
-  const res = JSON.stringify({
+  return JSON.stringify({
     type: sendMavlinkPacketCommandType,
     command,
     ...otherArgs,
   });
+};
 
-  return res;
+//
+export const sendCommandListCommandType = "on_commandlist_requested";
+export const sendCommandListCommand = (args) => {
+  return JSON.stringify({
+    type: sendCommandListCommandType,
+    ...args,
+  });
 };
 
 export default {
@@ -51,4 +56,5 @@ export default {
   openDeviceConnectionCommand,
   closeDeviceConnectionCommand,
   sendMavlinkPacketCommand,
+  sendCommandListCommand,
 };
