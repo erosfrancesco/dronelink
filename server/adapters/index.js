@@ -17,14 +17,7 @@ const handleRequestCommandListCommand = (ws, { type, ...args }) => {
     return;
   }
 
-  // [{value: '16', flag: 'NAV_WAYPOINT'}]
-  const commandList = getCommandList();
-  const commandMap = {};
-  commandList.forEach(({ value, flag }) => {
-    commandMap[flag] = value;
-  });
-
-  ws.send(sendCommandListCommand({ commandList, commandMap }));
+  ws.send(sendCommandListCommand(getCommandList()));
 };
 
 // WS ADAPTERS
@@ -50,9 +43,8 @@ export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
     ws.send(messageCommand({ error: e.message }));
   });
 
-  const commandList = getCommandList();
-  ws.send(messageCommand({ message: "Device connected", commandList }));
-  ws.send(sendCommandListCommand({ commandList }));
+  ws.send(messageCommand({ message: "Device connected" }));
+  ws.send(sendCommandListCommand(getCommandList()));
 };
 
 export const handleCloseDeviceConnectionCommand = (ws, { type, ...args }) => {

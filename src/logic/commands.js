@@ -11,12 +11,14 @@
   9	MAV_RESULT_COMMAND_UNSUPPORTED_MAV_FRAME	Command is invalid because a frame is required and the specified frame is not supported.
  */
 import van from "vanjs-core";
-import { COMMANDLIST_RECEIVED, event } from "../client.js";
+import { COMMANDLIST_RECEIVED, event, wsSend } from "../client.js";
+import { sendMavlinkPacketCommand } from "../../messages.js";
 
 // {value: '16', flag: 'NAV_WAYPOINT'}
 export const commandList = van.state([]);
 export const setCommandList = (value) => (commandList.val = value);
 
+// { NAV_WAYPOINT: '16' }
 export const commandMap = van.state({});
 export const setCommandMap = (value) => (commandMap.val = value);
 
@@ -59,4 +61,14 @@ export const commandAckReceived = (packetData) => {
     timestamp,
     ...packetData,
   });
+};
+
+//
+export const sendMavlinkCommand = ({ command, ...args }) => {
+  wsSend(
+    sendMavlinkPacketCommand({
+      command: command || "RequestMessageCommand",
+      ...args,
+    })
+  );
 };

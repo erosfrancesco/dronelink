@@ -8,20 +8,17 @@ import {
   TextBold,
 } from "../components/index.js";
 
-import { sendMavlinkPacketCommand } from "../../messages.js";
-import { wsSend } from "../client.js";
+import { commandMap, commandList, sendMavlinkCommand } from "../logic/index.js";
 
 //
 const sendCommandToDevice = () =>
-  wsSend(
-    sendMavlinkPacketCommand({
-      command: "RequestMessageCommand",
-    })
-  );
+  sendMavlinkCommand({
+    command: "REQUEST_MESSAGE",
+  });
 //
 
 export const SendDeviceCommand = () => {
-  console.log(commandMap);
+  console.log(commandMap, commandList);
 
   return VerticalLayout(
     { style: "padding-bottom:0.5em;" },
