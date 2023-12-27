@@ -1,12 +1,7 @@
-import van from "vanjs-core";
-
-import DeviceCommands from "./DeviceCommands.js";
-import { HeartbeatWidget } from "../../ui/Heartbeat.widget.js";
-import { CommandWidget } from "../../ui/Command.widget.js";
+import "vanjs-core";
 
 export const Develop = () => {
-  return CommandWidget();
+  return null;
 };
-//
 
 export default Develop;
