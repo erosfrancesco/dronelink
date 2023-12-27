@@ -9,7 +9,9 @@ import {
 } from "../components/index.js";
 import "./Command.widget.css";
 
-import DeviceCommands from './DeviceCommands.js';
+import DeviceCommands from "./DeviceCommands.js";
+
+// TODO: - Separate command result from command send
 
 import {
   lastCommandAck,
@@ -24,7 +26,7 @@ const isClosed = van.state(false);
 const ResultLabel = ({ result }) =>
   TextBold(
     {
-      class: () =>
+      class:
         result === Object.keys(CommandResultsHelp)[0]
           ? "command_result_accepted"
           : "command_result_rejected",
@@ -48,7 +50,6 @@ const WidgetOpen = ({ onclick }) => {
     {
       class: "command_widget_content",
     },
-    DeviceCommands(),
     VerticalLayout(
       { onclick },
       StatusDisplay(
@@ -114,6 +115,7 @@ export const CommandWidget = (...args) => {
     {
       class: className,
     },
+    DeviceCommands(),
     BorderBox(() =>
       isAnimating.val || isClosed.val
         ? WidgetClose({ onclick: toggleWidget })
