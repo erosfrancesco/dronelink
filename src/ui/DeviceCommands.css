@@ -1,0 +1,18 @@
+@import url("../index.css");
+
+.device-commands-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow: auto;
+}
+
+.device-command-item {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.device-command-item-selected {
+  background-color: var(--secondary-bg);
+  color: var(--secondary-color);
+}

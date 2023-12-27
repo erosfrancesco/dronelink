@@ -84,8 +84,9 @@ export const SelectionFiltrable = (...args) => {
   } = otherProps;
 
   return VerticalLayout(
-    {},
+    { class: componentClass, ...props },
     Input({
+      style: "flex:0;",
       value: filterValue,
       onkeyup: (e) => {
         const { value = "" } = e?.target || {};

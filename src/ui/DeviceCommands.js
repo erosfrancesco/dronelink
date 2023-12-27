@@ -9,6 +9,9 @@ import {
 } from "../components/index.js";
 
 import { commandMap, commandList, sendMavlinkCommand } from "../logic/index.js";
+import "./DeviceCommands.css";
+
+// TODO: - Params form?
 
 //
 const commandModalOpen = van.state(false);
@@ -22,45 +25,48 @@ const onSelected = (value) => {
 //
 
 //
-const CommandsModal = () => {
-  const items = Object.keys(commandMap.val);
+const DeviceCommandItem = ({ item }) => {
+  const isSelected = selectedCommand?.val === item;
 
-  return SelectionFiltrable({
-    items,
-    selected: selectedCommand,
-    onSelected,
-    ItemRender: ({ item }) => {
-      const isSelected = selectedCommand?.val === item;
-
-      return HorizontalLayout(
-        {
-          onclick: () => {
-            selectedCommand.val = item;
-          },
-          style: () =>
-            isSelected ? "background-color: green;" : "background-color: red;",
-        },
-        TextNormal({ style: "flex: 2;" }, item),
-        isSelected
-          ? Button(
-              {
-                style: "margin:0;",
-                onclick: () =>
-                  sendMavlinkCommand({
-                    command: item,
-                  }),
-              },
-              "Execute"
-            )
-          : null
-      );
+  return HorizontalLayout(
+    {
+      onclick: () => {
+        selectedCommand.val = item;
+      },
+      class:
+        "device-command-item" +
+        (isSelected ? " device-command-item-selected" : ""),
     },
-  });
+    TextNormal({ style: "flex: 2;" }, item),
+    isSelected
+      ? Button(
+          {
+            style: "margin:0;",
+            onclick: () =>
+              sendMavlinkCommand({
+                command: item,
+              }),
+          },
+          "Execute"
+        )
+      : null
+  );
 };
 //
 
 //
-export const SendDeviceCommand = () => {
+const DeviceCommandsModal = () =>
+  SelectionFiltrable({
+    class: "device-commands-modal",
+    items: Object.keys(commandMap.val),
+    selected: selectedCommand,
+    onSelected,
+    ItemRender: DeviceCommandItem,
+  });
+//
+
+//
+export const DeviceCommands = () => {
   return VerticalLayout(
     { style: "padding-bottom:0.5em;" },
     TextBold(
@@ -71,7 +77,7 @@ export const SendDeviceCommand = () => {
       {
         style: "margin-right: -3em;width: calc(100% - 1em);padding-left: 1em;",
       },
-      commandModalOpen.val ? CommandsModal() : null,
+      commandModalOpen.val ? DeviceCommandsModal() : null,
       Button(
         {
           style: "min-width:0;",
@@ -87,3 +93,5 @@ export const SendDeviceCommand = () => {
     )
   );
 };
+
+export default DeviceCommands;

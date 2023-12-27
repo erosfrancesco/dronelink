@@ -2,13 +2,14 @@ import van from "vanjs-core";
 import {
   VerticalLayout,
   StatusDisplay,
-  SendDeviceCommand,
   TextNormal,
   TextBold,
   BorderBox,
   VanComponentArgsParser,
 } from "../components/index.js";
 import "./Command.widget.css";
+
+import DeviceCommands from './DeviceCommands.js';
 
 import {
   lastCommandAck,
@@ -47,7 +48,7 @@ const WidgetOpen = ({ onclick }) => {
     {
       class: "command_widget_content",
     },
-    SendDeviceCommand(),
+    DeviceCommands(),
     VerticalLayout(
       { onclick },
       StatusDisplay(

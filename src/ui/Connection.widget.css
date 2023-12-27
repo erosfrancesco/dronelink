@@ -1,3 +1,5 @@
+@import url("../index.css");
+
 .connection_widget {
     justify-content: space-evenly;
     width: 16em !important;
