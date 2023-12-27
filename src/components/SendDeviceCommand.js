@@ -1,29 +1,67 @@
 import van from "vanjs-core";
 import {
   Button,
-  Input,
   VerticalLayout,
   HorizontalLayout,
   TextNormal,
   TextBold,
+  SelectionFiltrable,
 } from "../components/index.js";
-
-import { DropdownSearch } from "./DropdownSearch.js";
 
 import { commandMap, commandList, sendMavlinkCommand } from "../logic/index.js";
 
 //
-const sendCommandToDevice = () =>
-  sendMavlinkCommand({
-    command: "REQUEST_MESSAGE",
-  });
+const commandModalOpen = van.state(false);
+const toggleCommandModal = () => {
+  commandModalOpen.val = !commandModalOpen.val;
+};
+const selectedCommand = van.state();
+const onSelected = (value) => {
+  selectedCommand.val = value;
+};
 //
 
-export const SendDeviceCommand = () => {
-  console.log(commandMap, commandList);
-
+//
+const CommandsModal = () => {
   const items = Object.keys(commandMap.val);
 
+  return SelectionFiltrable({
+    items,
+    selected: selectedCommand,
+    onSelected,
+    ItemRender: ({ item }) => {
+      const isSelected = selectedCommand?.val === item;
+
+      return HorizontalLayout(
+        {
+          onclick: () => {
+            selectedCommand.val = item;
+          },
+          style: () =>
+            isSelected ? "background-color: green;" : "background-color: red;",
+        },
+        TextNormal({ style: "flex: 2;" }, item),
+        isSelected
+          ? Button(
+              {
+                style: "margin:0;",
+                onclick: () =>
+                  sendMavlinkCommand({
+                    command: item,
+                  }),
+                text: "Execute",
+              }
+              // "Execute"
+            )
+          : null
+      );
+    },
+  });
+};
+//
+
+//
+export const SendDeviceCommand = () => {
   return VerticalLayout(
     { style: "padding-bottom:0.5em;" },
     TextBold(
@@ -34,26 +72,14 @@ export const SendDeviceCommand = () => {
       {
         style: "margin-right: -3em;width: calc(100% - 1em);padding-left: 1em;",
       },
-      DropdownSearch({ items }),
-      /*
-      Input({
-        style: "min-width:0;margin-right:0.5em;",
-        value: "Command",
-        color: "secondary",
-        onkeyup: (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const { value = "" } = e?.target || {};
-        },
-      }),
-      /** */
+      commandModalOpen.val ? CommandsModal() : null,
       Button({
         style: "min-width:0;",
-        text: "Send",
+        text: () => (commandModalOpen.val ? "Close" : "Open"),
         onclick: (e) => {
           e.preventDefault();
           e.stopPropagation();
-          sendCommandToDevice();
+          toggleCommandModal();
         },
       })
     )

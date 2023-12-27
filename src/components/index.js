@@ -6,4 +6,5 @@ export * from "./FlagsDisplay.js";
 export * from "./StatusDisplay.js";
 export * from "./BorderBox.js";
 export * from "./SendDeviceCommand.js";
+export * from "./SelectionFiltrable.js";
 export * from "./utils.js";
