@@ -49,9 +49,8 @@ const CommandsModal = () => {
                   sendMavlinkCommand({
                     command: item,
                   }),
-                text: "Execute",
-              }
-              // "Execute"
+              },
+              "Execute"
             )
           : null
       );
@@ -73,15 +72,18 @@ export const SendDeviceCommand = () => {
         style: "margin-right: -3em;width: calc(100% - 1em);padding-left: 1em;",
       },
       commandModalOpen.val ? CommandsModal() : null,
-      Button({
-        style: "min-width:0;",
-        text: () => (commandModalOpen.val ? "Close" : "Open"),
-        onclick: (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleCommandModal();
+      Button(
+        {
+          style: "min-width:0;",
+
+          onclick: (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleCommandModal();
+          },
         },
-      })
+        () => (commandModalOpen.val ? "Close" : "Open")
+      )
     )
   );
 };

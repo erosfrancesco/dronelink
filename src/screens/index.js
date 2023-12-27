@@ -17,14 +17,16 @@ const RoutesMenu = () =>
       const onclick = () => goTo(route);
       const color = "primary";
 
-      return Button({
-        class:
-          "routes-menu-item" +
-          (currentRoute.val === route ? " current-route" : ""),
-        color,
-        onclick,
-        text: linkLabel,
-      });
+      return Button(
+        {
+          class: () =>
+            "routes-menu-item" +
+            (currentRoute.val === route ? " current-route" : ""),
+          color,
+          onclick,
+        },
+        () => linkLabel
+      );
     })
   );
 

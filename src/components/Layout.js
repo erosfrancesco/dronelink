@@ -26,7 +26,7 @@ export const VerticalLayout = (...args) => {
 
   return div(
     {
-      class:
+      class: () =>
         "mavlinkui vertical" + (componentClass ? " " + componentClass : ""),
       ...otherProps,
     },

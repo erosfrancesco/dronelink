@@ -1,3 +1,4 @@
+// UNUSED
 import van from "vanjs-core";
 import {
   Button,
@@ -71,23 +72,6 @@ export const DeviceCommands = () => {
 
   return VerticalLayout(
     { style: "width: 20em;" },
-    /*
-    HorizontalLayout(
-      Input({
-        value: "Command",
-        color: "secondary",
-        onkeyup: (e) => {
-          const { value = "" } = e?.target || {};
-        },
-      }),
-      Button({
-        text: "Send command",
-        onclick: () => {
-          sendCommandToDevice();
-        },
-      })
-    ),
-    /** */
     VerticalLayout(
       StatusDisplay(
         TextNormal("Command: "),

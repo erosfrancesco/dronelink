@@ -1,19 +1,27 @@
 import van from "vanjs-core";
 import "./Button.css";
+import VanComponentArgsParser from "./utils.js";
 
 const { button } = van.tags;
 
-export const Button = ({ color, text, class: buttonClass = "", ...args }) =>
-  button(
+export const Button = (...args) => {
+  const { componentClass, childs, otherProps } = VanComponentArgsParser(
+    ...args
+  );
+
+  const { color, ...props } = otherProps;
+
+  return button(
     {
       class: () =>
         "mavlinkui" +
         (" mavlinkui-" + (color?.val || color || "primary")) +
         " mavlinkui-button" +
-        (buttonClass ? " " + buttonClass : ""),
-      ...args,
+        (componentClass ? " " + componentClass : ""),
+      ...props,
     },
-    text
+    ...childs
   );
+};
 
 export default Button;

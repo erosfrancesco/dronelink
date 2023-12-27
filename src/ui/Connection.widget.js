@@ -56,15 +56,17 @@ const WidgetOpen = () =>
     VerticalLayout(
       HorizontalLayout(
         { style: "flex:0;display: flex;justify-content: space-evenly;" },
-        Button({
-          style: "min-width:0;max-width: 7em;",
-          text: () => (isConnected.val ? "disconnect" : "connect"),
-          onclick: (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            isConnected.val ? disconnectDevicePath() : openDevicePath();
+        Button(
+          {
+            style: "min-width:0;max-width: 7em;",
+            onclick: (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              isConnected.val ? disconnectDevicePath() : openDevicePath();
+            },
           },
-        }),
+          () => (isConnected.val ? "disconnect" : "connect")
+        ),
         Input({
           value: devicePath,
           color: "secondary",
