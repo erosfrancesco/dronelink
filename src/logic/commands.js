@@ -22,8 +22,10 @@ export const setCommandList = (value) => (commandList.val = value);
 export const commandMap = van.state({});
 export const setCommandMap = (value) => (commandMap.val = value);
 
+/*
 export const lastCommandAck = van.state({});
 export const seLastCommandAck = (value) => (lastCommandAck.val = value);
+/** */
 //
 
 // EVENTS
@@ -54,6 +56,7 @@ export const CommandResultsHelp = {
     "Command is invalid because a frame is required and the specified frame is not supported.",
 };
 
+/*
 export const commandAckReceived = (packetData) => {
   const timestamp = new Date().toLocaleString();
 
@@ -62,6 +65,7 @@ export const commandAckReceived = (packetData) => {
     ...packetData,
   });
 };
+/** */
 
 //
 export const sendMavlinkCommand = ({ command, ...args }) => {

@@ -9,7 +9,7 @@ import {
 // STATE
 export const isConnected = van.state(false);
 export const setIsConnected = (value) => (isConnected.val = value);
-export const devicePath = van.state("COM6");
+export const devicePath = van.state("COM4");
 export const setDevicePath = (value) => (devicePath.val = value);
 //
 

@@ -71,6 +71,10 @@ const WidgetOpen = () =>
           value: devicePath,
           color: "secondary",
           style: "min-width:0;max-width: 7em;",
+          onclick: (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          },
           onkeyup: (e) => {
             const { value = "" } = e?.target || {};
             setDevicePath(value);

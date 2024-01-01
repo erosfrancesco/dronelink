@@ -14,7 +14,7 @@ import DeviceCommands from "./DeviceCommands.js";
 // TODO: - Separate command result from command send
 
 import {
-  lastCommandAck,
+  mavlinkPackets,
   CommandResultsHelp,
   commandMap,
 } from "../logic/index.js";
@@ -35,6 +35,8 @@ const ResultLabel = ({ result }) =>
   );
 
 const WidgetOpen = ({ onclick }) => {
+  const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
+
   const {
     result,
     command,
@@ -42,7 +44,7 @@ const WidgetOpen = ({ onclick }) => {
     resultParam2,
     targetSystem,
     targetComponent,
-  } = lastCommandAck.val;
+  } = lastReceivedPacket || {};
 
   const commandStatusVerbose = CommandResultsHelp[result];
 
@@ -74,7 +76,9 @@ const WidgetOpen = ({ onclick }) => {
 };
 
 const WidgetClose = ({ onclick }) => {
-  const { result, command } = lastCommandAck.val;
+  const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
+  const { result, command } = lastReceivedPacket || {};
+
   return div(
     { onclick, class: "command_widget_content" },
     StatusDisplay(

@@ -9,7 +9,7 @@ import {
   VanComponentArgsParser,
 } from "../components/index.js";
 
-import { isConnected, lastHeartBeat } from "../logic/index.js";
+import { isConnected, mavlinkPackets } from "../logic/index.js";
 
 import "./Heartbeat.widget.css";
 
@@ -19,12 +19,16 @@ const isAnimating = van.state(false);
 const isClosed = van.state(false);
 // text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.5), 1px -1px 0 rgba(255, 255, 255, 0.5), -1px 1px 0 rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(255, 255, 255, 0.5)
 
-const WidgetOpen = ({ timestamp, type, autopilot, systemStatus, baseMode }) =>
-  VerticalLayout(
+const WidgetOpen = () => {
+  const { lastReceivedPacket, receivedOn } =
+    mavlinkPackets["HEARTBEAT"]?.val || {};
+  const { type, autopilot, systemStatus, baseMode } = lastReceivedPacket || {};
+
+  return VerticalLayout(
     { style: "padding: 0.5em;" },
     StatusDisplay(
       TextBold("Last Heartbeat :"),
-      TextBold(() => (isConnected?.val ? timestamp : "Not connected"))
+      TextBold(() => (isConnected?.val ? receivedOn?.val : "Not connected"))
     ),
 
     () =>
@@ -41,13 +45,18 @@ const WidgetOpen = ({ timestamp, type, autopilot, systemStatus, baseMode }) =>
           )
         : null
   );
+};
 
-const WidgetClose = ({ timestamp, type, autopilot, systemStatus, baseMode }) =>
-  HorizontalLayout(
+const WidgetClose = () => {
+  const { receivedOn } = mavlinkPackets["HEARTBEAT"]?.val || {};
+  // const { type, autopilot, systemStatus, baseMode } = lastReceivedPacket?.val;
+
+  return HorizontalLayout(
     { style: "justify-content: space-evenly;width: 100%;height: 100%;" },
     TextBold("Last Heartbeat : "),
-    TextBold(() => (isConnected?.val ? timestamp : "Not connected"))
+    TextBold(() => (isConnected?.val ? receivedOn?.val : "Not connected"))
   );
+};
 
 export const HeartbeatWidget = (...args) => {
   const { componentClass, childs, otherProps } = VanComponentArgsParser(
@@ -83,8 +92,8 @@ export const HeartbeatWidget = (...args) => {
     },
     BorderBox(() =>
       isAnimating.val || isClosed.val || !isConnected?.val
-        ? WidgetClose({ ...lastHeartBeat?.val })
-        : WidgetOpen({ ...lastHeartBeat?.val })
+        ? WidgetClose()
+        : WidgetOpen()
     )
   );
 };
