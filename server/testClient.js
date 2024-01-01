@@ -1,7 +1,9 @@
 import WebSocket from "ws";
 import {
   messageCommandType,
+  sendCommandListCommandType,
   openDeviceConnectionCommand,
+  // sendPortListCommand,
   sendMavlinkPacketCommand,
 } from "../messages.js";
 
@@ -11,13 +13,19 @@ ws.on("error", console.error);
 
 ws.on("open", () => {
   console.log("Connection to server extabilished");
-  ws.send(openDeviceConnectionCommand({ port: "COM6" }));
+  // ws.send(sendPortListCommand());
+  ws.send(openDeviceConnectionCommand({ port: "COM4" }));
 });
 
 ws.on("message", (buffer) => {
   try {
     const data = JSON.parse(buffer);
     const { type, ...args } = data;
+
+    if (type === sendCommandListCommandType) {
+      console.log("Available commands received");
+      return;
+    }
 
     if (type !== messageCommandType) {
       return;
@@ -27,14 +35,17 @@ ws.on("message", (buffer) => {
 
     if (message === "Device connected") {
       console.log("Sending message");
+      /** */
       ws.send(
         sendMavlinkPacketCommand({
           // MAV_CMD_RUN_PREARM_CHECKS // "RunPrearmChecksCommand"
           // MAV_CMD_REQUEST_MESSAGE // "RequestMessageCommand"
-          command: "REQUEST_MESSAGE", // "RequestMessageCommand",
-          messageId: 1,
+          command: "REQUEST_MESSAGE", // "RUN_PREARM_CHECKS", // "RequestMessageCommand",
+          // messageId: 1,
         })
       );
+      return;
+      /** */
     }
 
     if (message) {
@@ -42,6 +53,7 @@ ws.on("message", (buffer) => {
       if (packetType) {
         // FILTER OUT HEARTBEAT. They are too many...
         if (packetType === "HEARTBEAT") {
+          console.log("HeartBeat: ", packetData);
           return;
         }
 
@@ -55,6 +67,7 @@ ws.on("message", (buffer) => {
     }
 
     // handle messages
+    console.log("Unrecognized packet: ", data);
   } catch (e) {
     console.log("Error parsing message: ", e);
   }

@@ -1,5 +1,9 @@
 import { setupMavlinkReader, sendPacket } from "./mavlink.js";
-import { openSerialConnection, closeSerialConnection } from "./serialport.js";
+import {
+  openSerialConnection,
+  closeSerialConnection,
+  listSerialConnections,
+} from "./serialport.js";
 import { getCommandList } from "../parsers/index.js";
 
 import {
@@ -10,9 +14,12 @@ import {
   sendMavlinkPacketCommandType,
   sendCommandListCommandType,
   sendCommandListCommand,
+  sendPortListCommandType,
+  sendPortListCommand,
 } from "../../messages.js";
 
-const handleRequestCommandListCommand = (ws, { type, ...args }) => {
+// WS ADAPTERS
+export const handleRequestCommandListCommand = (ws, { type, ...args }) => {
   if (type !== sendCommandListCommandType) {
     return;
   }
@@ -20,7 +27,16 @@ const handleRequestCommandListCommand = (ws, { type, ...args }) => {
   ws.send(sendCommandListCommand(getCommandList()));
 };
 
-// WS ADAPTERS
+export const handleRequestPortListCommand = (ws, { type, ...args }) => {
+  if (type !== sendPortListCommandType) {
+    return;
+  }
+
+  listSerialConnections().then((ports) =>
+    ws.send(sendPortListCommand({ ports }))
+  );
+};
+
 export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
   if (type !== openDeviceConnectionCommandType) {
     return;
@@ -63,7 +79,8 @@ export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
 
   const { command, ...otherArgs } = args;
   const port = ws.deviceConnected; //
-  const res = await sendPacket(port, command, otherArgs);
+  // const res =
+  await sendPacket(port, command, otherArgs);
 
   // Not required
   // ws.send(messageCommand({ message: "MAVLINK packet sent: " + res }));
@@ -82,5 +99,7 @@ export default {
   handleOpenDeviceConnectionCommand,
   handleCloseDeviceConnectionCommand,
   handleMavlinkPacketSend,
+  handleRequestCommandListCommand,
+  handleRequestPortListCommand,
   handleMessage,
 };

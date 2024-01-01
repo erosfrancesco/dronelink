@@ -51,10 +51,11 @@ export const sendCommandListCommand = (args) => {
   });
 };
 
-export default {
-  messageCommand,
-  openDeviceConnectionCommand,
-  closeDeviceConnectionCommand,
-  sendMavlinkPacketCommand,
-  sendCommandListCommand,
+//
+export const sendPortListCommandType = "on_portlist_requested";
+export const sendPortListCommand = (args) => {
+  return JSON.stringify({
+    type: sendPortListCommandType,
+    ...args,
+  });
 };

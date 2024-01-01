@@ -3,7 +3,9 @@ import {
   handleMavlinkPacketSend,
   handleOpenDeviceConnectionCommand,
   handleCloseDeviceConnectionCommand,
+  handleRequestCommandListCommand,
   handleMessage,
+  handleRequestPortListCommand,
 } from "./adapters/index.js";
 
 import { messageCommand } from "../messages.js";
@@ -24,6 +26,8 @@ wss.on("connection", (ws) => {
       handleCloseDeviceConnectionCommand(ws, data);
       handleMessage(ws, data);
       handleMavlinkPacketSend(ws, data);
+      handleRequestCommandListCommand(ws, data);
+      handleRequestPortListCommand(ws, data);
     } catch (error) {
       console.log("Error parsing message: ", buffer, error);
       ws.send(messageCommand({ error }));
@@ -34,4 +38,3 @@ wss.on("connection", (ws) => {
 console.log("Server listening to localhost:", port);
 
 export * from "./adapters/index.js";
-export default wss;

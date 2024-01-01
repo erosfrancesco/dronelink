@@ -20,4 +20,15 @@ export const closeSerialConnection = (path) => {
   delete ConnectedPorts[path];
 };
 
-export default { openSerialConnection, closeSerialConnection };
+export const listSerialConnections = () => {
+  return SerialPort.list().then((ports) => {
+    // console.log("Port: ", ports);
+    return ports;
+  });
+};
+
+export default {
+  openSerialConnection,
+  closeSerialConnection,
+  listSerialConnections,
+};

@@ -12,6 +12,7 @@ import { commandMap, commandList, sendMavlinkCommand } from "../logic/index.js";
 import "./DeviceCommands.css";
 
 // TODO: - Params form?
+// TODO: - Command section. This can't be a single widget
 
 //
 const commandModalOpen = van.state(false);
