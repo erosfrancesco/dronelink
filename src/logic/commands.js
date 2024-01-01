@@ -22,12 +22,6 @@ export const setCommandList = (value) => (commandList.val = value);
 export const commandMap = van.state({});
 export const setCommandMap = (value) => (commandMap.val = value);
 
-/*
-export const lastCommandAck = van.state({});
-export const seLastCommandAck = (value) => (lastCommandAck.val = value);
-/** */
-//
-
 // EVENTS
 event.on(COMMANDLIST_RECEIVED, (e) => {
   const { commandList, commandMap } = e;
@@ -55,17 +49,6 @@ export const CommandResultsHelp = {
   COMMAND_UNSUPPORTED_MAV_FRAME:
     "Command is invalid because a frame is required and the specified frame is not supported.",
 };
-
-/*
-export const commandAckReceived = (packetData) => {
-  const timestamp = new Date().toLocaleString();
-
-  seLastCommandAck({
-    timestamp,
-    ...packetData,
-  });
-};
-/** */
 
 //
 export const sendMavlinkCommand = ({ command, ...args }) => {
