@@ -19,16 +19,14 @@ const isAnimating = van.state(false);
 const isClosed = van.state(false);
 // text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.5), 1px -1px 0 rgba(255, 255, 255, 0.5), -1px 1px 0 rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(255, 255, 255, 0.5)
 
-const WidgetOpen = () => {
-  const { lastReceivedPacket, receivedOn } =
-    mavlinkPackets["HEARTBEAT"]?.val || {};
+const WidgetOpen = ({ lastReceivedPacket, receivedOn }) => {
   const { type, autopilot, systemStatus, baseMode } = lastReceivedPacket || {};
 
   return VerticalLayout(
     { style: "padding: 0.5em;" },
     StatusDisplay(
       TextBold("Last Heartbeat :"),
-      TextBold(() => (isConnected?.val ? receivedOn?.val : "Not connected"))
+      TextBold(() => (isConnected?.val ? receivedOn : "Not connected"))
     ),
 
     () =>
@@ -47,14 +45,11 @@ const WidgetOpen = () => {
   );
 };
 
-const WidgetClose = () => {
-  const { receivedOn } = mavlinkPackets["HEARTBEAT"]?.val || {};
-  // const { type, autopilot, systemStatus, baseMode } = lastReceivedPacket?.val;
-
+const WidgetClose = ({ receivedOn }) => {
   return HorizontalLayout(
     { style: "justify-content: space-evenly;width: 100%;height: 100%;" },
     TextBold("Last Heartbeat : "),
-    TextBold(() => (isConnected?.val ? receivedOn?.val : "Not connected"))
+    TextBold(() => (isConnected?.val ? receivedOn : "Not connected"))
   );
 };
 
@@ -85,15 +80,17 @@ export const HeartbeatWidget = (...args) => {
       ? "heartbeat_widget heartbeat_widget_closed"
       : "heartbeat_widget";
 
-  return div(
-    {
-      class: className,
-      onclick: toggleWidget,
-    },
-    BorderBox(() =>
-      isAnimating.val || isClosed.val || !isConnected?.val
-        ? WidgetClose()
-        : WidgetOpen()
+  return van.derive(() =>
+    div(
+      {
+        class: className,
+        onclick: toggleWidget,
+      },
+      BorderBox(() =>
+        isAnimating.val || isClosed.val || !isConnected?.val
+          ? WidgetClose({ ...mavlinkPackets.val["HEARTBEAT"] })
+          : WidgetOpen({ ...mavlinkPackets.val["HEARTBEAT"] })
+      )
     )
   );
 };

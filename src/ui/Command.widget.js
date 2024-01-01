@@ -34,8 +34,8 @@ const ResultLabel = ({ result }) =>
     () => result
   );
 
-const WidgetOpen = ({ onclick }) => {
-  const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
+const WidgetOpen = ({ onclick, lastReceivedPacket }) => {
+  // const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
 
   const {
     result,
@@ -75,8 +75,8 @@ const WidgetOpen = ({ onclick }) => {
   );
 };
 
-const WidgetClose = ({ onclick }) => {
-  const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
+const WidgetClose = ({ onclick, lastReceivedPacket }) => {
+  // const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
   const { result, command } = lastReceivedPacket || {};
 
   return div(
@@ -115,15 +115,23 @@ export const CommandWidget = (...args) => {
   const className = () =>
     isClosed.val ? "command_widget command_widget_closed" : "command_widget";
 
-  return div(
-    {
-      class: className,
-    },
-    DeviceCommands(),
-    BorderBox(() =>
-      isAnimating.val || isClosed.val
-        ? WidgetClose({ onclick: toggleWidget })
-        : WidgetOpen({ onclick: toggleWidget })
+  return van.derive(() =>
+    div(
+      {
+        class: className,
+      },
+      DeviceCommands(),
+      BorderBox(() =>
+        isAnimating.val || isClosed.val
+          ? WidgetClose({
+              onclick: toggleWidget,
+              ...mavlinkPackets.val["COMMAND_ACK"],
+            })
+          : WidgetOpen({
+              onclick: toggleWidget,
+              ...mavlinkPackets.val["COMMAND_ACK"],
+            })
+      )
     )
   );
 };
