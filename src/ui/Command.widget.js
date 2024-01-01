@@ -35,8 +35,6 @@ const ResultLabel = ({ result }) =>
   );
 
 const WidgetOpen = ({ onclick, lastReceivedPacket }) => {
-  // const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
-
   const {
     result,
     command,
@@ -76,7 +74,6 @@ const WidgetOpen = ({ onclick, lastReceivedPacket }) => {
 };
 
 const WidgetClose = ({ onclick, lastReceivedPacket }) => {
-  // const { lastReceivedPacket } = mavlinkPackets["COMMAND_ACK"]?.val || {};
   const { result, command } = lastReceivedPacket || {};
 
   return div(

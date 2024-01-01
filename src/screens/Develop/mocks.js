@@ -4,11 +4,15 @@ export const Heartbeat = {
   mavlinkVersion: 3,
   systemStatus: "STANDBY",
   type: "QUADROTOR",
-  timestamp: "12/02/23, 17:34",
   baseMode: {
-    CUSTOM_MODE: 1,
-    ARM_MODE: 0,
-    FOO_MODE: 0,
+    AUTO_ENABLED: 0,
+    CUSTOM_MODE_ENABLED: 1,
+    GUIDED_ENABLED: 0,
+    HIL_ENABLED: 0,
+    MANUAL_INPUT_ENABLED: 1,
+    SAFETY_ARMED: 0,
+    STABILIZE_ENABLED: 1,
+    TEST_ENABLED: 0,
   },
 };
 
