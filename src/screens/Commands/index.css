@@ -1,0 +1,8 @@
+@import url("../index.css");
+
+.Commands-Section {
+    align-content: flex-start;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: var(--margins-standard);
+}

@@ -3,9 +3,6 @@ import { flagsEnumParser, mapMavlinkEnum } from "./utils.js";
 
 const { MavCmd, MavResult } = common;
 
-// TODO: - Next
-//  STATUSTEXT {"severity":2,"text":"PreArm: Hardware safety switch","id":0,"chunkSeq":0}
-
 export const CommandAckParser = (data) => {
   const {
     command,

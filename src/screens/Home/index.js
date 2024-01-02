@@ -12,7 +12,6 @@ import { HorizontalLayout } from "../../components/index.js";
 
 import { HeartbeatWidget } from "../../ui/Heartbeat.widget.js";
 import { ConnectionWidget } from "../../ui/Connection.widget.js";
-import { CommandWidget } from "../../ui/Command.widget.js";
 
 export const Home = () =>
   HorizontalLayout(
@@ -20,8 +19,7 @@ export const Home = () =>
       class: "Home-Section",
     },
     ConnectionWidget(),
-    HeartbeatWidget(),
-    CommandWidget()
+    HeartbeatWidget()
   );
 
 export default Home;
