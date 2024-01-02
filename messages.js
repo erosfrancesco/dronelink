@@ -9,6 +9,9 @@ export const messageCommand = ({ error, message, ...args }) => {
   });
 };
 
+export const MessageDeviceConnected = "Device connected";
+export const MessagePacketNamesList = "Mavlink packet names";
+
 //
 export const openDeviceConnectionCommandType = "open_device_connection";
 export const openDeviceConnectionCommand = (args) => {

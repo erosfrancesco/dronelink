@@ -5,6 +5,8 @@ import {
   sendCommandListCommandType,
   openDeviceConnectionCommand,
   closeDeviceConnectionCommand,
+  MessageDeviceConnected,
+  MessagePacketNamesList,
 } from "../messages.js";
 
 const ws = new WebSocket("ws://localhost:" + 5000);
@@ -17,6 +19,7 @@ export const SERVER_ERROR_RECEIVED = "ServerErrorReceived";
 export const MAVLINK_PACKET_RECEIVED = "MavlinkPacketReceived";
 export const DEVICE_CONNECTED = "DeviceConnected";
 export const COMMANDLIST_RECEIVED = "CommandListReceived";
+export const PACKET_CLASSES_RECEIVED = "PacketClassesReceived";
 export const event = new EventEmitter();
 //
 
@@ -44,7 +47,7 @@ const onWSMessage = (buffer) => {
       return;
     }
 
-    const { error, message, packetType, packetData } = args;
+    const { error, message, packetType, packetData, ...otherArgs } = args;
 
     // ERROR RECEIVED
     if (error) {
@@ -53,8 +56,15 @@ const onWSMessage = (buffer) => {
     }
 
     // DEVICE CONNECTED
-    if (message === "Device connected") {
+    if (message === MessageDeviceConnected) {
       event.emit(DEVICE_CONNECTED);
+      return;
+    }
+
+    // MAVLINK CLASSES ENUM RECEIVED
+    if (message === MessagePacketNamesList) {
+      const { MavlinkPacketClassNames } = otherArgs;
+      event.emit(PACKET_CLASSES_RECEIVED, MavlinkPacketClassNames);
       return;
     }
 

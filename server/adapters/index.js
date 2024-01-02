@@ -17,6 +17,8 @@ import {
   sendCommandListCommand,
   sendPortListCommandType,
   sendPortListCommand,
+  MessageDeviceConnected,
+  MessagePacketNamesList,
 } from "../../messages.js";
 
 // WS ADAPTERS
@@ -64,10 +66,10 @@ export const handleOpenDeviceConnectionCommand = async (
       ws.send(messageCommand({ error: e.message }));
     });
 
-    ws.send(messageCommand({ message: "Device connected" }));
+    ws.send(messageCommand({ message: MessageDeviceConnected }));
     ws.send(
       messageCommand({
-        message: "Mavlink packet names",
+        message: MessagePacketNamesList,
         MavlinkPacketClassNames,
       })
     );

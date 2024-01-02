@@ -5,6 +5,7 @@ import {
   openDeviceConnectionCommand,
   // sendPortListCommand,
   sendMavlinkPacketCommand,
+  MessageDeviceConnected,
 } from "../messages.js";
 
 const ws = new WebSocket("ws://localhost:" + (process.env.PORT || 5000));
@@ -33,7 +34,7 @@ ws.on("message", (buffer) => {
 
     const { error, message, packetType, packetData, ...otherArgs } = args;
 
-    if (message === "Device connected") {
+    if (message === MessageDeviceConnected) {
       console.log("Device connected. Sending message");
       /** 
       ws.send(
