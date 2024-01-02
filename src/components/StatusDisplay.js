@@ -17,20 +17,3 @@ export const StatusDisplay = (...args) => {
     ...childs
   );
 };
-
-/*
-export const StatusDisplayMultiple = ({ values, minWidth = "20em" }) =>
-  VerticalLayout(
-    ...Object.keys(values).map((key) => {
-      const value = values[key];
-
-      return HorizontalLayout(
-        TextNormal(
-          { style: () => "min-width:" + minWidth + ";" },
-          () => key + " :"
-        ),
-        TextBold(() => value)
-      );
-    })
-  );
-/** */

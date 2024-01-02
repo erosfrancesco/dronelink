@@ -58,7 +58,7 @@ const WidgetOpen = () =>
         { style: "flex:0;display: flex;justify-content: space-evenly;" },
         Button(
           {
-            style: "min-width:0;max-width: 7em;",
+            style: "max-width: 7em;",
             onclick: (e) => {
               e.stopPropagation();
               e.preventDefault();
@@ -70,7 +70,7 @@ const WidgetOpen = () =>
         Input({
           value: devicePath,
           color: "secondary",
-          style: "min-width:0;max-width: 7em;",
+          style: "max-width: 7em;",
           onclick: (e) => {
             e.stopPropagation();
             e.preventDefault();

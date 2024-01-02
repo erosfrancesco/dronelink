@@ -81,8 +81,6 @@ export const DeviceCommands = () => {
       commandModalOpen.val ? DeviceCommandsModal() : null,
       Button(
         {
-          style: "min-width:0;",
-
           onclick: (e) => {
             e.preventDefault();
             e.stopPropagation();

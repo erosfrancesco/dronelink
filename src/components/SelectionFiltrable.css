@@ -1,27 +1,5 @@
 @import url("../index.css");
 
-/*
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  /*
-  display: none;
-  background-color: #f6f6f6;
-  min-width: 230px;
-  overflow: auto;
-  /**//*
-  border: 1px solid #ddd;
-  z-index: 1;
-}
-/**/
-
 .filtrable-selection-wrapper {
   overflow: auto;
 }
