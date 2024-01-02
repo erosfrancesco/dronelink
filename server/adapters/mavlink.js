@@ -43,7 +43,7 @@ const mavlinkPacketDataParser = (packetType, data) => {
     return defaultDataParser(data);
   }
 
-  if (packetType === "STATUS_TEXT") {
+  if (packetType === "STATUSTEXT") {
     return parseStatusText(data);
   }
 
@@ -87,10 +87,16 @@ export const sendPacket = async (port, command, args = {}) => {
     return 44;
   }
 
-  const packet = new Commands[commandId](args);
-  const res = await send(port, packet, new MavLinkProtocolV2());
+  const packet = new Commands[commandId](args.targetSystem);
+  packet._param1 = args.param1;
+  packet._param2 = args.param2;
+  packet._param3 = args.param3;
+  packet._param4 = args.param4;
+  packet._param5 = args.param5;
+  packet._param6 = args.param6;
+  packet._param7 = args.param7;
 
-  return res;
+  return await send(port, packet, new MavLinkProtocolV2());
 };
 
 export default setupMavlinkReader;
