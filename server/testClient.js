@@ -53,7 +53,7 @@ ws.on("message", (buffer) => {
       if (packetType) {
         // FILTER OUT HEARTBEAT. They are too many...
         if (packetType === "HEARTBEAT") {
-          console.log("HeartBeat: ", packetData);
+          // console.log("HeartBeat: ", packetData);
           return;
         }
 

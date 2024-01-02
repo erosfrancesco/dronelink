@@ -12,6 +12,8 @@ import {
   HeartBeatParser,
   CommandAckParser,
   defaultDataParser,
+  parseStatusText,
+  parseSysStatus,
 } from "../parsers/index.js";
 
 //
@@ -39,6 +41,14 @@ const mavlinkPacketDataParser = (packetType, data) => {
 
   if (packetType === "TIMESYNC") {
     return defaultDataParser(data);
+  }
+
+  if (packetType === "STATUS_TEXT") {
+    return parseStatusText(data);
+  }
+
+  if (packetType === "SYS_STATUS") {
+    return parseSysStatus(data);
   }
 
   return defaultDataParser(data);
