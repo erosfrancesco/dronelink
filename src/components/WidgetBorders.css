@@ -7,8 +7,8 @@
   --stripe-color-1: rgba(0, 0, 0, 0.85);
   --stripe-color-2: rgba(25, 25, 25, 0.85);
 
-  --deco-gradient-1: #00000000 0%, var(--primary-color) 50%, #00000000 100%;
-  --deco-gradient-2: #00000000 0%, var(--primary-color) 23%, var(--primary-color) 26%, #00000000 50%;
+  --deco-gradient-1: #00000000 0%, var(--primary-color) 40%, white 45%, var(--primary-color) 50%, #00000000 100%;
+  --deco-gradient-2: #00000000 0%, var(--primary-color) 12%, var(--primary-color) 22%, white 24%, var(--primary-color) 26%, var(--primary-color) 32%, #00000000 50%;
   --deco-gradient-radial: #00000000 0%, var(--primary-color) 35%, #00000000 70%;
 }
 /**/
@@ -35,6 +35,10 @@
   background-color: var(--primary-color);
 
   text-shadow: 0px 0px 0.1em black;
+  padding: 0.5em;
+}
+.widget-border-content:first-child {
+  padding: 0;
 }
 /**/
 

@@ -36,7 +36,7 @@ export const WidgetBorders = (...args) => {
     div(
       { class: "widget-border-middle" },
       BorderVertical("widget-gradient-ver"),
-      div({ class: "widget-border-content" }, ...childs),
+      div({ class: "widget-border-content" }, div(...childs)),
       BorderVertical("widget-gradient-ver")
     ),
     div(
