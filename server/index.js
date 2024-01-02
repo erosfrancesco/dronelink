@@ -19,10 +19,10 @@ wss.on("connection", (ws) => {
     ws.send(messageCommand({ error: e }));
   });
 
-  ws.on("message", (buffer) => {
+  ws.on("message", async (buffer) => {
     try {
       const data = JSON.parse(buffer);
-      handleOpenDeviceConnectionCommand(ws, data);
+      await handleOpenDeviceConnectionCommand(ws, data);
       handleCloseDeviceConnectionCommand(ws, data);
       handleMessage(ws, data);
       handleMavlinkPacketSend(ws, data);

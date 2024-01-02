@@ -1,58 +1,10 @@
-import {
-  MavLinkProtocolV2,
-  MavLinkPacketSplitter,
-  MavLinkPacketParser,
-  send,
-  minimal,
-  common,
-  ardupilotmega,
-} from "node-mavlink";
+import { MavLinkPacketSplitter, MavLinkPacketParser } from "node-mavlink";
 
 import {
-  HeartBeatParser,
-  CommandAckParser,
-  defaultDataParser,
-  parseStatusText,
-  parseSysStatus,
-} from "../parsers/index.js";
-
-//
-const Commands = {
-  ...minimal.COMMANDS,
-  ...common.COMMANDS,
-  ...ardupilotmega.COMMANDS,
-};
-
-const PacketClasses = {
-  ...minimal.REGISTRY,
-  ...common.REGISTRY,
-  ...ardupilotmega.REGISTRY,
-};
-//
-
-const mavlinkPacketDataParser = (packetType, data) => {
-  if (packetType === "HEARTBEAT") {
-    return HeartBeatParser(data);
-  }
-
-  if (packetType === "COMMAND_ACK") {
-    return CommandAckParser(data);
-  }
-
-  if (packetType === "TIMESYNC") {
-    return defaultDataParser(data);
-  }
-
-  if (packetType === "STATUSTEXT") {
-    return parseStatusText(data);
-  }
-
-  if (packetType === "SYS_STATUS") {
-    return parseSysStatus(data);
-  }
-
-  return defaultDataParser(data);
-};
+  mavlinkPacketDataParser,
+  MavlinkPacketClasses,
+  MavlinkPacketClassNames,
+} from "./mavlinkParser.js";
 
 export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
   const reader = port
@@ -60,7 +12,7 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     .pipe(new MavLinkPacketParser());
 
   reader.on("data", (packet) => {
-    const packetClass = PacketClasses[packet.header.msgid];
+    const packetClass = MavlinkPacketClasses[packet.header.msgid];
     if (!packetClass) {
       return;
     }
@@ -68,35 +20,14 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
     const { protocol, payload } = packet;
     const data = protocol.data(payload, packetClass);
     const packetType = packetClass.MSG_NAME;
-
-    // Packets parsers
     const packetData = mavlinkPacketDataParser(packetType, data);
+
     onPacketReceived(packetType, packetData);
   });
 
   return reader;
 };
 
-export const sendPacket = async (port, command, args = {}) => {
-  const commandMap = { ...common.MavCmd, ...ardupilotmega.MavCmd };
-  const commandId = commandMap[command];
-
-  if (!commandId && commandId !== 0) {
-    // command not found...
-    // TODO: -
-    return 44;
-  }
-
-  const packet = new Commands[commandId](args.targetSystem);
-  packet._param1 = args.param1;
-  packet._param2 = args.param2;
-  packet._param3 = args.param3;
-  packet._param4 = args.param4;
-  packet._param5 = args.param5;
-  packet._param6 = args.param6;
-  packet._param7 = args.param7;
-
-  return await send(port, packet, new MavLinkProtocolV2());
-};
+export { MavlinkPacketClassNames };
 
 export default setupMavlinkReader;

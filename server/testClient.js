@@ -31,16 +31,16 @@ ws.on("message", (buffer) => {
       return;
     }
 
-    const { error, message, packetType, packetData } = args;
+    const { error, message, packetType, packetData, ...otherArgs } = args;
 
     if (message === "Device connected") {
-      console.log("Sending message");
-      /** */
+      console.log("Device connected. Sending message");
+      /** 
       ws.send(
         sendMavlinkPacketCommand({
           // MAV_CMD_REQUEST_MESSAGE
           command: "REQUEST_MESSAGE",
-          param1: 1,
+          param1: 26,
         })
       );
 
@@ -65,6 +65,8 @@ ws.on("message", (buffer) => {
 
         console.log("Got mavlink packet: ", packetType, packetData);
       }
+
+      console.log("Got server message:", message, otherArgs);
       return;
     }
 

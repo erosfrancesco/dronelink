@@ -1,4 +1,5 @@
-import { setupMavlinkReader, sendPacket } from "./mavlink.js";
+import { setupMavlinkReader, MavlinkPacketClassNames } from "./mavlink.js";
+import { sendMavlinkCommandPacket } from "./mavlinkCommands.js";
 import {
   openSerialConnection,
   closeSerialConnection,
@@ -37,30 +38,43 @@ export const handleRequestPortListCommand = (ws, { type, ...args }) => {
   );
 };
 
-export const handleOpenDeviceConnectionCommand = (ws, { type, ...args }) => {
+export const handleOpenDeviceConnectionCommand = async (
+  ws,
+  { type, ...args }
+) => {
   if (type !== openDeviceConnectionCommandType) {
     return;
   }
 
   const { port, baudRate } = args;
 
-  const serial = openSerialConnection(port, baudRate);
-  const reader = setupMavlinkReader(serial, (packetType, packetData) => {
-    const message = "Received MAVLINK Packet: " + packetType;
-    ws.send(messageCommand({ message, packetData, packetType }));
-  });
+  try {
+    const serial = await openSerialConnection(port, baudRate);
+    const reader = setupMavlinkReader(serial, (packetType, packetData) => {
+      const message = "Received MAVLINK Packet: " + packetType;
+      ws.send(messageCommand({ message, packetData, packetType }));
+    });
 
-  //
-  ws.deviceConnected = serial;
-  ws.mavlinkReader = reader;
-  //
+    //
+    ws.deviceConnected = serial;
+    ws.mavlinkReader = reader;
+    //
 
-  serial.on("error", (e) => {
-    ws.send(messageCommand({ error: e.message }));
-  });
+    serial.on("error", (e) => {
+      ws.send(messageCommand({ error: e.message }));
+    });
 
-  ws.send(messageCommand({ message: "Device connected" }));
-  ws.send(sendCommandListCommand(getCommandList()));
+    ws.send(messageCommand({ message: "Device connected" }));
+    ws.send(
+      messageCommand({
+        message: "Mavlink packet names",
+        MavlinkPacketClassNames,
+      })
+    );
+    ws.send(sendCommandListCommand(getCommandList()));
+  } catch (error) {
+    ws.send(messageCommand({ error }));
+  }
 };
 
 export const handleCloseDeviceConnectionCommand = (ws, { type, ...args }) => {
@@ -79,11 +93,7 @@ export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
 
   const { command, ...otherArgs } = args;
   const port = ws.deviceConnected; //
-  // const res =
-  await sendPacket(port, command, otherArgs);
-
-  // Not required
-  // ws.send(messageCommand({ message: "MAVLINK packet sent: " + res }));
+  await sendMavlinkCommandPacket(port, command, otherArgs);
 };
 
 export const handleMessage = (ws, { type, ...args }) => {

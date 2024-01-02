@@ -24,4 +24,22 @@ ParamValue {
   paramCount: 973,
   paramIndex: 65535
 }
+
+// 26 ScaledImu
+SCALED_IMU {
+  "xacc":9,
+  "yacc":23,
+  "zacc":-1005,
+  
+  "xgyro":-9,
+  "ygyro":2,
+  "zgyro":0,
+
+  "xmag":505,
+  "ymag":70,
+  "zmag":430,
+
+  "timeBootMs":58007,
+  "temperature":4340
+}
 */
