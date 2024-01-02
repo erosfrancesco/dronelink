@@ -11,31 +11,10 @@
     justify-content: center;
     opacity: 0.5;
     
-    margin: var(--margins-standard);
+    margin: 0.25em;
 }
 
 .current-route {
     opacity: 1;
     box-sizing: border-box;
-
-    /*
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-
-    border-image-slice: 1;
-    border-width: 0.5em;
-    border-bottom-left-radius: 0.2em;
-    border-bottom-right-radius: 0.2em;
-    border-image-source: linear-gradient(to top, var(--secondary-color), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 3% 100%);
-    /**/
 }
-
-/*
-.current-route:after {
-    border-image-slice: 1;
-    border-width: 0.5em;
-    border-bottom-left-radius: 0.2em;
-    border-bottom-right-radius: 0.2em;
-}
-/**/

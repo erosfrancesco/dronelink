@@ -1,0 +1,99 @@
+@import url("../index.css");
+
+/**/
+:root {
+  --border-deco-size: 0.25em;
+
+  --stripe-color-1: rgba(0, 0, 0, 0.85);
+  --stripe-color-2: rgba(25, 25, 25, 0.85);
+
+  --deco-gradient-1: #00000000 0%, var(--primary-color) 50%, #00000000 100%;
+  --deco-gradient-2: #00000000 0%, var(--primary-color) 23%, var(--primary-color) 26%, #00000000 50%;
+  --deco-gradient-radial: #00000000 0%, var(--primary-color) 35%, #00000000 70%;
+}
+/**/
+
+/**/
+.widget-border-wrapper {
+  display: flex;
+}
+
+.widget-border-middle {
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-border-content {
+  flex: 1;
+  background: repeating-linear-gradient(
+      60deg,
+      var(--stripe-color-1),
+      var(--stripe-color-1) 10px,
+      var(--stripe-color-2) 10px,
+      var(--stripe-color-2) 20px
+  );
+  background-color: var(--primary-color);
+
+  text-shadow: 0px 0px 0.1em black;
+}
+/**/
+
+/**/
+.widget-border-corner {
+  width: var(--border-deco-size);
+  height: var(--border-deco-size);
+}
+
+.widget-border-horizontal {
+  width: var(--border-deco-size);
+  flex: 1;
+}
+    
+.widget-border-vertical {
+  height: var(--border-deco-size);
+}
+/**/
+
+/**/
+.widget-gradient-hor {
+  background: #00000000;
+  background: -moz-linear-gradient(left, var(--deco-gradient-1));
+  background: -webkit-linear-gradient(left, var(--deco-gradient-1));
+  background: linear-gradient(to right, var(--deco-gradient-1));
+}
+
+.widget-gradient-ver {
+  background: #00000000;
+  background: -moz-linear-gradient(top, var(--deco-gradient-1));
+  background: -webkit-linear-gradient(top, var(--deco-gradient-1));
+  background: linear-gradient(to top, var(--deco-gradient-1));
+}
+
+.widget-gradient-corner-1 {
+  background: #00000000;
+  background: -moz-linear-gradient(top left, var(--deco-gradient-2));
+  background: -webkit-linear-gradient(top left, var(--deco-gradient-2));
+  background: linear-gradient(to top left, var(--deco-gradient-2));
+}
+
+.widget-gradient-corner-2 {
+  background: #00000000;
+  background: -moz-linear-gradient(top right, var(--deco-gradient-2));
+  background: -webkit-linear-gradient(top right, var(--deco-gradient-2));
+  background: linear-gradient(to top right, var(--deco-gradient-2));
+}
+
+.widget-gradient-corner-3 {
+  background: #00000000;
+  background: -moz-linear-gradient(bottom left, var(--deco-gradient-2));
+  background: -webkit-linear-gradient(bottom left, var(--deco-gradient-2));
+  background: linear-gradient(to bottom left, var(--deco-gradient-2));
+}
+
+.widget-gradient-corner-4 {
+  background: #00000000;
+  background: -moz-linear-gradient(bottom right, var(--deco-gradient-2));
+  background: -webkit-linear-gradient(bottom right, var(--deco-gradient-2));
+  background: linear-gradient(to bottom right, var(--deco-gradient-2));
+}
+/**/

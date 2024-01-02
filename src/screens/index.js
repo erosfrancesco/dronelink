@@ -12,22 +12,18 @@ import "./index.css";
 const RoutesMenu = () =>
   HorizontalLayout(
     { class: "routes-menu" },
-    Object.keys(routes).map((route) => {
-      const { linkLabel } = routes[route];
-      const onclick = () => goTo(route);
-      const color = "primary";
-
-      return Button(
+    Object.keys(routes).map((route) =>
+      Button(
         {
-          class: () =>
+          class:
             "routes-menu-item" +
             (currentRoute.val === route ? " current-route" : ""),
-          color,
-          onclick,
+          color: "primary",
+          onclick: () => goTo(route),
         },
-        () => linkLabel
-      );
-    })
+        () => routes[route].linkLabel
+      )
+    )
   );
 
 export const AppShell = () =>
