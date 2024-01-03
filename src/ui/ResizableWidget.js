@@ -32,6 +32,7 @@ export const ResizableWidget = ({
     div(
       {
         class: () => classOpen + (isClosed.val ? " " + classClose : ""),
+        style: 'transition: height 0.5s, width 0.5s;',
         onclick: toggleWidget(isAnimating, isClosed),
       },
       () => (isAnimating.val || isClosed.val ? WidgetClose() : WidgetOpen())

@@ -4,7 +4,6 @@
     justify-content: space-evenly;
     width: 16em !important;
     height: 16em !important;
-    transition: height 0.5s;
 }
 
 .connection_widget_closed {
