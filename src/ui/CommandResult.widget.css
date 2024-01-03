@@ -2,8 +2,8 @@
 
 .command_widget {
     justify-content: space-evenly;
-    width: 18em !important;
-    height: 16em !important;
+    width: 24em;
+    height: 20em;
     transition: height 0.5s;
 }
 
@@ -17,17 +17,16 @@
     min-width: 10em;
     min-height: 2em;
     
-    /**/
     display: flex;
     align-items: center;
     justify-content: center;
-    /**/
 }
 
 .command_result_description {
     display: flex;
     justify-content: center;
     padding: 1em;
+    max-width: 16em;
 }
 
 .command_result_accepted {

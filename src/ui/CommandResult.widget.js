@@ -62,7 +62,6 @@ const WidgetOpen = ({ lastReceivedPacket }) => {
           ? TextNormal("No command response yet.")
           : VerticalLayout(
               StatusDisplay(
-                TextNormal("Command: "),
                 TextBold(() => command)
               ),
               StatusDisplay(
