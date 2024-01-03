@@ -1,4 +1,6 @@
 import van from "vanjs-core";
+import "./CommandSend.widget.css";
+
 import {
   Button,
   Input,
@@ -10,34 +12,31 @@ import {
   WidgetBorders,
 } from "../components/index.js";
 
-import { commandMap, commandList, sendMavlinkCommand } from "../logic/index.js";
-import "./CommandSend.widget.css";
-
-// TODO: - Set the logic
-
-//
-const commandModalOpen = van.state(false);
-const selectedCommand = van.state();
-const setSelectedCommand = (v) => (selectedCommand.val = v);
-
-const param1 = van.state();
-const setParam1 = (v) => (param1.val = v);
-const param2 = van.state();
-const setParam2 = (v) => (param2.val = v);
-const param3 = van.state();
-const setParam3 = (v) => (param3.val = v);
-const param4 = van.state();
-const setParam4 = (v) => (param4.val = v);
-const param5 = van.state();
-const setParam5 = (v) => (param5.val = v);
-const param6 = van.state();
-const setParam6 = (v) => (param6.val = v);
-const param7 = van.state();
-const setParam7 = (v) => (param7.val = v);
-//
+import {
+  commandMap,
+  commandList,
+  sendMavlinkCommand,
+  commandModalOpen,
+  toggleCommandModal,
+  selectedCommand,
+  setSelectedCommand,
+  param1,
+  setParam1,
+  param2,
+  setParam2,
+  param3,
+  setParam3,
+  param4,
+  setParam4,
+  param5,
+  setParam5,
+  param6,
+  setParam6,
+  param7,
+  setParam7,
+} from "../logic/index.js";
 
 //
-const toggleCommandModal = () => (commandModalOpen.val = !commandModalOpen.val);
 const onSelected = (value) => setSelectedCommand(value);
 
 const sendCommand = () =>
@@ -97,7 +96,7 @@ export const CommandSendWidget = () =>
           commandModalOpen.val ? DeviceCommandsModal() : null,
           Button(
             {
-              class: 'send-command-select',
+              class: "send-command-select",
               onclick: (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -110,9 +109,16 @@ export const CommandSendWidget = () =>
           selectedCommand.val
             ? VerticalLayout(
                 TextNormal(selectedCommand.val),
-                Button({ color: "secondary", onclick: sendCommand, class: 'send-command-send' }, "Send"),
+                Button(
+                  {
+                    color: "secondary",
+                    onclick: sendCommand,
+                    class: "send-command-send",
+                  },
+                  "Send"
+                ),
                 VerticalLayout(
-                  { class: 'send-command-parameter-wrapper' },
+                  { class: "send-command-parameter-wrapper" },
                   TextNormal("Param1"),
                   Input({
                     value: param1,
@@ -127,7 +133,7 @@ export const CommandSendWidget = () =>
                   })
                 ),
                 VerticalLayout(
-                  { class: 'send-command-parameter-wrapper' },
+                  { class: "send-command-parameter-wrapper" },
                   TextNormal("Param2"),
                   Input({
                     value: param2,
@@ -142,7 +148,7 @@ export const CommandSendWidget = () =>
                   })
                 ),
                 VerticalLayout(
-                  { class: 'send-command-parameter-wrapper' },
+                  { class: "send-command-parameter-wrapper" },
                   TextNormal("Param3"),
                   Input({
                     value: param3,
@@ -157,7 +163,7 @@ export const CommandSendWidget = () =>
                   })
                 ),
                 VerticalLayout(
-                  { class: 'send-command-parameter-wrapper' },
+                  { class: "send-command-parameter-wrapper" },
                   TextNormal("Param4"),
                   Input({
                     value: param4,
@@ -172,7 +178,7 @@ export const CommandSendWidget = () =>
                   })
                 ),
                 VerticalLayout(
-                  { class: 'send-command-parameter-wrapper' },
+                  { class: "send-command-parameter-wrapper" },
                   TextNormal("Param5"),
                   Input({
                     value: param5,
@@ -187,7 +193,7 @@ export const CommandSendWidget = () =>
                   })
                 ),
                 VerticalLayout(
-                  { class: 'send-command-parameter-wrapper' },
+                  { class: "send-command-parameter-wrapper" },
                   TextNormal("Param6"),
                   Input({
                     value: param6,
@@ -202,7 +208,7 @@ export const CommandSendWidget = () =>
                   })
                 ),
                 VerticalLayout(
-                  { class: 'send-command-parameter-wrapper' },
+                  { class: "send-command-parameter-wrapper" },
                   TextNormal("Param7"),
                   Input({
                     value: param7,
