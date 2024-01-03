@@ -24,28 +24,73 @@ import {
 import "./Connection.widget.css";
 
 const { div } = van.tags;
+// This must become a service
 const isAnimating = van.state(false);
 const isClosed = van.state(false);
+const toggleWidget = (e) => {
+  e.stopPropagation();
+  e.preventDefault();
+
+  if (isAnimating.val) {
+    return;
+  }
+
+  isAnimating.val = true;
+  isClosed.val = !isClosed.val;
+
+  setTimeout(() => {
+    isAnimating.val = false;
+  }, 500);
+};
+//
+
 
 const ConnectionStatus = () =>
   VerticalLayout(
     {
-      style: () =>
-        "padding: 0.5em;flex:0;" +
-        (lastServerError?.val ? "background-color:crimson;" : ""),
+      class: () =>
+        "connection_status_wrapper" +
+        (lastServerError?.val ? " connection_status_wrapper_error" : ""),
     },
     HorizontalLayout(
+      { class: "connection_status_text_wrapper" },
       TextNormal("Server is: "),
-      TextBold({ style: "padding-left:1em;" }, () =>
-        isServerConnected?.val ? "connected" : "disconnected"
-      )
+      TextBold(() => (isServerConnected?.val ? "connected" : "disconnected"))
     ),
     HorizontalLayout(
+      { class: "connection_status_text_wrapper" },
       TextNormal("Device is: "),
-      TextBold({ style: "padding-left:1em;" }, () =>
-        isConnected?.val ? "connected" : "disconnected"
-      )
+      TextBold(() => (isConnected?.val ? "connected" : "disconnected"))
     )
+  );
+
+const WidgetOpenInputs = () =>
+  HorizontalLayout(
+    { class: "conenction_widget_inputs_wrapper" },
+    Button(
+      {
+        class: "connection_widget_inputs",
+        onclick: (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          isConnected.val ? disconnectDevicePath() : openDevicePath();
+        },
+      },
+      () => (isConnected.val ? "disconnect" : "connect")
+    ),
+    Input({
+      value: devicePath,
+      color: "secondary",
+      class: "connection_widget_inputs",
+      onclick: (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      },
+      onkeyup: (e) => {
+        const { value = "" } = e?.target || {};
+        setDevicePath(value);
+      },
+    })
   );
 
 //
@@ -53,49 +98,13 @@ const WidgetOpen = () =>
   VerticalLayout(
     ConnectionStatus(),
     VerticalLayout(
-      HorizontalLayout(
-        {
-          style:
-            "flex:0; display:flex; justify-content:space-evenly; padding: 0.25em;",
-        },
-        Button(
-          {
-            style: "max-width: 7em;",
-            onclick: (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              isConnected.val ? disconnectDevicePath() : openDevicePath();
-            },
-          },
-          () => (isConnected.val ? "disconnect" : "connect")
-        ),
-        Input({
-          value: devicePath,
-          color: "secondary",
-          style: "max-width: 7em;",
-          onclick: (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          },
-          onkeyup: (e) => {
-            const { value = "" } = e?.target || {};
-            setDevicePath(value);
-          },
-        })
-      ),
-      // TODO: - These should be set up indipendently
+      WidgetOpenInputs(),
       TextNormal(
-        {
-          style:
-            "flex: 1;display: flex;align-items: center;padding-left: 0.5em;",
-        },
+        { class: "connection_widget_messages" },
         () => "Message: " + (lastServerMessage?.val || "None")
       ),
       TextNormal(
-        {
-          style:
-            "flex: 1;display: flex;align-items: center;padding-left: 0.5em;",
-        },
+        { class: "connection_widget_messages" },
         () => "Error: " + (lastServerError?.val || "None")
       )
     )
@@ -105,29 +114,7 @@ const WidgetClose = () => ConnectionStatus();
 
 //
 
-export const ConnectionWidget = (...args) => {
-  const { componentClass, childs, otherProps } = VanComponentArgsParser(
-    ...args
-  );
-
-  const { ...props } = otherProps || {};
-
-  const toggleWidget = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (isAnimating.val) {
-      return;
-    }
-
-    isAnimating.val = true;
-    isClosed.val = !isClosed.val;
-
-    setTimeout(() => {
-      isAnimating.val = false;
-    }, 500);
-  };
-
+export const ConnectionWidget = () => {
   const className = () =>
     isClosed.val
       ? "connection_widget connection_widget_closed"

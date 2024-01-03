@@ -8,5 +8,39 @@
 }
 
 .connection_widget_closed {
-    height: 3.8em !important;
+    height: 2.5em !important;
 }
+
+.connection_status_text_wrapper {
+    justify-content: space-between;
+}
+
+.conenction_widget_inputs_wrapper {
+    flex:0; 
+    display:flex; 
+    justify-content:space-evenly;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.connection_widget_inputs {
+    max-width: 7em;
+}
+
+.connection_widget_messages {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-left: 0.5em;
+}
+
+/**/
+.connection_status_wrapper {
+    padding: 0.5em;
+    flex:0;
+}
+
+.connection_status_wrapper_error {
+    background-color: crimson;
+}
+/**/
