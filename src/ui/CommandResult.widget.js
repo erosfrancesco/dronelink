@@ -51,29 +51,37 @@ const WidgetOpen = ({ lastReceivedPacket }) => {
     },
     VerticalLayout(
       TextBold(
-        { style: "display: flex;justify-content: center;" },
+        {
+          style: "margin-bottom: 1em;",
+        },
         "Command Result"
       ),
-      StatusDisplay(
-        TextNormal("Command: "),
-        TextBold(() => command)
-      ),
-      StatusDisplay(
-        TextNormal("Result: "),
-        ResultLabel({ result, label: result })
-      ),
-      TextNormal(
-        { class: "command_result_description" },
-        () => commandStatusVerbose
-      ),
-      StatusDisplay(
-        TextNormal("Progress: "),
-        TextBold(() => progress)
-      ),
-      StatusDisplay(
-        TextNormal("Result param: "),
-        TextBold(() => resultParam2)
-      )
+
+      () =>
+        !command
+          ? TextNormal("No command response yet.")
+          : VerticalLayout(
+              StatusDisplay(
+                TextNormal("Command: "),
+                TextBold(() => command)
+              ),
+              StatusDisplay(
+                TextNormal("Result: "),
+                ResultLabel({ result, label: result })
+              ),
+              TextNormal(
+                { class: "command_result_description" },
+                () => commandStatusVerbose
+              ),
+              StatusDisplay(
+                TextNormal("Progress: "),
+                TextBold(() => progress)
+              ),
+              StatusDisplay(
+                TextNormal("Result param: "),
+                TextBold(() => resultParam2)
+              )
+            )
     )
   );
 };
@@ -124,19 +132,20 @@ export const CommandResultWidget = (...args) => {
     });
   }
 
-  return div(
-    {
-      class: className,
-      onclick: toggleWidget,
-    },
-    WidgetBorders(() =>
-      isAnimating.val || isClosed.val
-        ? WidgetClose({
-            ...data.val,
-          })
-        : WidgetOpen({
-            ...data.val,
-          })
+  return WidgetBorders(
+    div(
+      {
+        class: className,
+        onclick: toggleWidget,
+      },
+      () =>
+        isAnimating.val || isClosed.val
+          ? WidgetClose({
+              ...data.val,
+            })
+          : WidgetOpen({
+              ...data.val,
+            })
     )
   );
 };
