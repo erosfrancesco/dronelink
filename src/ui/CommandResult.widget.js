@@ -4,8 +4,6 @@ import {
   DisplayStatus,
   TextNormal,
   TextBold,
-  WidgetBorders,
-  VanComponentArgsParser,
 } from "../components/index.js";
 import "./CommandResult.widget.css";
 
@@ -18,9 +16,9 @@ import {
   commandMap,
 } from "../logic/index.js";
 
+import { ResizableWidget } from "./ResizableWidget.js";
+
 const { div } = van.tags;
-const isAnimating = van.state(false);
-const isClosed = van.state(false);
 
 const ResultLabel = ({ result, label }) =>
   TextBold(
@@ -61,9 +59,7 @@ const WidgetOpen = ({ lastReceivedPacket }) => {
         !command
           ? TextNormal("No command response yet.")
           : VerticalLayout(
-              DisplayStatus(
-                TextBold(() => command)
-              ),
+              DisplayStatus(TextBold(() => command)),
               DisplayStatus(
                 TextNormal("Result: "),
                 ResultLabel({ result, label: result })
@@ -97,32 +93,7 @@ const WidgetClose = ({ lastReceivedPacket }) => {
 };
 
 //
-export const CommandResultWidget = (...args) => {
-  const { componentClass, childs, otherProps } = VanComponentArgsParser(
-    ...args
-  );
-
-  const { ...props } = otherProps || {};
-
-  const toggleWidget = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (isAnimating.val) {
-      return;
-    }
-
-    isAnimating.val = true;
-    isClosed.val = !isClosed.val;
-
-    setTimeout(() => {
-      isAnimating.val = false;
-    }, 500);
-  };
-
-  const className = () =>
-    isClosed.val ? "command_widget command_widget_closed" : "command_widget";
-
+export const CommandResultWidget = () => {
   const packetType = mavlinkClasses.val?.COMMAND_ACK;
   const data = van.state(mavlinkPackets[packetType] || {});
   if (packetType) {
@@ -131,20 +102,16 @@ export const CommandResultWidget = (...args) => {
     });
   }
 
-  return WidgetBorders(
-    div(
-      {
-        class: className,
-        onclick: toggleWidget,
-      },
-      () =>
-        isAnimating.val || isClosed.val
-          ? WidgetClose({
-              ...data.val,
-            })
-          : WidgetOpen({
-              ...data.val,
-            })
-    )
-  );
+  return ResizableWidget({
+    WidgetClose: () =>
+      WidgetClose({
+        ...data.val,
+      }),
+    WidgetOpen: () =>
+      WidgetOpen({
+        ...data.val,
+      }),
+    classOpen: "command_widget",
+    classClose: "command_widget_closed",
+  });
 };
