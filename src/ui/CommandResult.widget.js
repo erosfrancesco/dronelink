@@ -7,9 +7,9 @@ import {
   WidgetBorders,
   VanComponentArgsParser,
 } from "../components/index.js";
-import "./Command.widget.css";
+import "./CommandResult.widget.css";
 
-import DeviceCommands from "./DeviceCommands.js";
+// import DeviceCommands from "./DeviceCommands.js";
 
 // TODO: - Separate command result from command send
 
@@ -25,7 +25,7 @@ const { div } = van.tags;
 const isAnimating = van.state(false);
 const isClosed = van.state(false);
 
-const ResultLabel = ({ result }) =>
+const ResultLabel = ({ result, label }) =>
   TextBold(
     {
       class:
@@ -33,10 +33,10 @@ const ResultLabel = ({ result }) =>
           ? "command_result_accepted"
           : "command_result_rejected",
     },
-    () => result
+    () => label
   );
 
-const WidgetOpen = ({ onclick, lastReceivedPacket }) => {
+const WidgetOpen = ({ lastReceivedPacket }) => {
   const {
     result,
     command,
@@ -53,12 +53,18 @@ const WidgetOpen = ({ onclick, lastReceivedPacket }) => {
       class: "command_widget_content",
     },
     VerticalLayout(
-      { onclick },
+      TextBold(
+        { style: "display: flex;justify-content: center;" },
+        "Command Result"
+      ),
       StatusDisplay(
         TextNormal("Command: "),
         TextBold(() => command)
       ),
-      StatusDisplay(TextNormal("Result: "), ResultLabel({ result })),
+      StatusDisplay(
+        TextNormal("Result: "),
+        ResultLabel({ result, label: result })
+      ),
       TextNormal(
         { class: "command_result_description" },
         () => commandStatusVerbose
@@ -75,20 +81,19 @@ const WidgetOpen = ({ onclick, lastReceivedPacket }) => {
   );
 };
 
-const WidgetClose = ({ onclick, lastReceivedPacket }) => {
+const WidgetClose = ({ lastReceivedPacket }) => {
   const { result, command } = lastReceivedPacket || {};
 
   return div(
-    { onclick, class: "command_widget_content" },
-    StatusDisplay(
-      TextBold(() => command),
-      ResultLabel({ result })
-    )
+    { class: "command_widget_content" },
+    lastReceivedPacket
+      ? ResultLabel({ result, label: "Command Result" })
+      : TextBold("Command Result")
   );
 };
 
 //
-export const CommandWidget = (...args) => {
+export const CommandResultWidget = (...args) => {
   const { componentClass, childs, otherProps } = VanComponentArgsParser(
     ...args
   );
@@ -125,16 +130,15 @@ export const CommandWidget = (...args) => {
   return div(
     {
       class: className,
+      onclick: toggleWidget,
     },
-    DeviceCommands(),
+    // DeviceCommands(),
     WidgetBorders(() =>
       isAnimating.val || isClosed.val
         ? WidgetClose({
-            onclick: toggleWidget,
             ...data.val,
           })
         : WidgetOpen({
-            onclick: toggleWidget,
             ...data.val,
           })
     )

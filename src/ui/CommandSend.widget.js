@@ -5,14 +5,17 @@ import {
   HorizontalLayout,
   TextNormal,
   TextBold,
-  SelectionFiltrable,
+  FiltrableSelection,
+  WidgetBorders,
 } from "../components/index.js";
 
 import { commandMap, commandList, sendMavlinkCommand } from "../logic/index.js";
-import "./DeviceCommands.css";
+import "./CommandSend.widget.css";
 
-// TODO: - Close button. Rework this one.
-// Three section: Command list popup, command result and command parameters form
+// TODO: - Three section: 
+// x Command list popup, 
+// x command result and 
+// (command parameters form)
 
 //
 const commandModalOpen = van.state(false);
@@ -57,40 +60,38 @@ const DeviceCommandItem = ({ item }) => {
 
 //
 const DeviceCommandsModal = () =>
-  SelectionFiltrable({
+  FiltrableSelection({
     class: "device-commands-modal",
     items: Object.keys(commandMap.val),
     selected: selectedCommand,
     onSelected,
+    onCloseClicked: toggleCommandModal,
     ItemRender: DeviceCommandItem,
   });
 //
 
 //
-export const DeviceCommands = () => {
-  return VerticalLayout(
-    { style: "padding-bottom:0.5em;" },
-    TextBold(
-      { style: "display:flex;justify-content:center;padding-bottom:0.5em;" },
-      "Device commands"
-    ),
-    HorizontalLayout(
+export const CommandSendWidget = () => {
+  // TODO: - Check command list
+  return WidgetBorders(
+    VerticalLayout(
       {
-        style: "margin-right: -3em;width: calc(100% - 1em);padding-left: 1em;",
+        class: "send-command-wrapper",
       },
-      commandModalOpen.val ? DeviceCommandsModal() : null,
-      Button(
-        {
-          onclick: (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleCommandModal();
+      TextBold({ class: "send-command-title" }, "Send command"),
+      HorizontalLayout(
+        commandModalOpen.val ? DeviceCommandsModal() : null,
+        Button(
+          {
+            onclick: (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleCommandModal();
+            },
           },
-        },
-        () => (commandModalOpen.val ? "Close" : "Open")
+          "Select command"
+        )
       )
     )
   );
 };
-
-export default DeviceCommands;

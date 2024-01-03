@@ -12,3 +12,9 @@
   background-color:black;
   color:white;
 }
+
+.filtrable-selection-close {
+  flex: 0 !important;
+  padding-right: 1em;
+  margin-left: 0.5em;
+}

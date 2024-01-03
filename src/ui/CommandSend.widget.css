@@ -1,9 +1,20 @@
 @import url("../index.css");
 
+.send-command-wrapper {
+  min-width: 10em;
+  min-height: 10em;
+}
+
+.send-command-title {
+  display:flex;
+  justify-content:center;
+  padding-bottom:0.5em;
+}
+
 .device-commands-modal {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   height: 100vh;
   overflow: auto;
 }

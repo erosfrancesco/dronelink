@@ -33,7 +33,6 @@ import { common } from "node-mavlink";
 
 export const parseStatusText = (data) => {
   const { severity: severityValue, text, id, chunkSeq } = data;
-  // console.log(severityValue, Object.keys(common.MavSeverity));
   const severity = Object.keys(common.MavSeverity).find(
     (key) => common.MavSeverity[key] === severityValue
   );

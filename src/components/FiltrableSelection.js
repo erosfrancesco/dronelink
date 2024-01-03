@@ -1,8 +1,10 @@
 import van from "vanjs-core";
-import "./SelectionFiltrable.css";
+import "./FiltrableSelection.css";
 
 import {
   Input,
+  Button,
+  HorizontalLayout,
   VerticalLayout,
   TextNormal,
   VanComponentArgsParser,
@@ -18,6 +20,7 @@ const defaultFilter = (items, filterStr) =>
 const defaultOnSelected = (item) => {
   defaultSelected.val = item;
 };
+const defaultOnCloseClicked = () => {}
 //
 
 //
@@ -29,7 +32,6 @@ const DefaultDropdownItem = (...args) => {
   const { item = "", selected, onSelected, ...props } = otherProps;
 
   const onclick = () => {
-    console.log("Clicked", item);
     onSelected(item);
   };
 
@@ -38,8 +40,6 @@ const DefaultDropdownItem = (...args) => {
     (selected?.val === item
       ? " filtrable-selection-default-item-selected"
       : "");
-
-  console.log(className());
 
   return () => TextNormal({ onclick, class: className }, item);
 };
@@ -66,7 +66,7 @@ const Options = ({
 };
 //
 
-export const SelectionFiltrable = (...args) => {
+export const FiltrableSelection = (...args) => {
   const { componentClass, childs, otherProps } = VanComponentArgsParser(
     ...args
   );
@@ -78,6 +78,7 @@ export const SelectionFiltrable = (...args) => {
     items = [],
     ItemRender = DefaultDropdownItem,
     onSelected = defaultOnSelected,
+    onCloseClicked = defaultOnCloseClicked,
     selected = defaultSelected,
 
     ...props
@@ -85,14 +86,23 @@ export const SelectionFiltrable = (...args) => {
 
   return VerticalLayout(
     { class: componentClass, ...props },
-    Input({
-      style: "flex:0;",
-      value: filterValue,
-      onkeyup: (e) => {
-        const { value = "" } = e?.target || {};
-        filterValue.val = value;
-      },
-    }),
+    HorizontalLayout(
+      Input({
+        value: filterValue,
+        onkeyup: (e) => {
+          const { value = "" } = e?.target || {};
+          filterValue.val = value;
+        },
+      }),
+      Button(
+        {
+          class: "filtrable-selection-close",
+          color: "secondary",
+          onclick: onCloseClicked
+        },
+        "x"
+      )
+    ),
     () =>
       Options({
         filter,

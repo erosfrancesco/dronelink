@@ -3,14 +3,16 @@ import "./index.css";
 
 import { HorizontalLayout } from "../../components/index.js";
 
-import { CommandWidget } from "../../ui/Command.widget.js";
+import { CommandResultWidget } from "../../ui/CommandResult.widget.js";
+import { CommandSendWidget } from "../../ui/CommandSend.widget.js";
 
 export const Commands = () =>
   HorizontalLayout(
     {
       class: "Commands-Section",
     },
-    CommandWidget()
+    CommandResultWidget(),
+    CommandSendWidget()
   );
 
 export default Commands;
