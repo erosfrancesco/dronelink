@@ -8,5 +8,19 @@
 }
 
 .heartbeat_widget_closed {
-    height: 2em !important;
+    height: 2.5em !important;
+    display: flex;
+}
+
+.heartbeat_status_text_wrapper {
+    height: 2.5em;
+    justify-content: space-between;
+}
+
+.heartbeat_widget_info_wrapper {
+    margin-bottom: 0.5em;
+}
+
+.heartbeat_widget_flag_wrapper {
+    margin-left: 1em !important;
 }

@@ -8,7 +8,8 @@ const FlagValueDisplay = ({ flag, value }) => {
   return TextNormal({ style: "color:" + color + ";" }, flag + " : " + value);
 };
 
-export const FlagsDisplay = ({
+// TODO: - Van Args parser?
+export const DisplayFlags = ({
   flags = {},
   class: componentClass = "",
   ...args
@@ -25,4 +26,4 @@ export const FlagsDisplay = ({
     })
   );
 
-export default FlagsDisplay;
+export default DisplayFlags;

@@ -11,10 +11,6 @@
     height: 2.5em !important;
 }
 
-.connection_status_text_wrapper {
-    justify-content: space-between;
-}
-
 .conenction_widget_inputs_wrapper {
     flex:0; 
     display:flex; 
@@ -38,6 +34,10 @@
 .connection_status_wrapper {
     padding: 0.5em;
     flex:0;
+}
+
+.connection_status_text_wrapper {
+    justify-content: space-between;
 }
 
 .connection_status_wrapper_error {

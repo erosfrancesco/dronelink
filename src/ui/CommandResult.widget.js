@@ -1,7 +1,7 @@
 import van from "vanjs-core";
 import {
   VerticalLayout,
-  StatusDisplay,
+  DisplayStatus,
   TextNormal,
   TextBold,
   WidgetBorders,
@@ -61,10 +61,10 @@ const WidgetOpen = ({ lastReceivedPacket }) => {
         !command
           ? TextNormal("No command response yet.")
           : VerticalLayout(
-              StatusDisplay(
+              DisplayStatus(
                 TextBold(() => command)
               ),
-              StatusDisplay(
+              DisplayStatus(
                 TextNormal("Result: "),
                 ResultLabel({ result, label: result })
               ),
@@ -72,11 +72,11 @@ const WidgetOpen = ({ lastReceivedPacket }) => {
                 { class: "command_result_description" },
                 () => commandStatusVerbose
               ),
-              StatusDisplay(
+              DisplayStatus(
                 TextNormal("Progress: "),
                 TextBold(() => progress)
               ),
-              StatusDisplay(
+              DisplayStatus(
                 TextNormal("Result param: "),
                 TextBold(() => resultParam2)
               )

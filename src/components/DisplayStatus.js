@@ -5,14 +5,16 @@ import VanComponentArgsParser from "./utils.js";
 
 const { span } = van.tags;
 
-export const StatusDisplay = (...args) => {
+export const DisplayStatus = (...args) => {
   const { componentClass, childs, otherProps } = VanComponentArgsParser(
     ...args
   );
 
   return HorizontalLayout(
     {
+      class: componentClass,
       style: "justify-content: space-between;width: 100%;height: 100%;",
+      ...otherProps,
     },
     ...childs
   );

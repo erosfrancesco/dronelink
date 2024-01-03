@@ -1,13 +1,13 @@
-import van from "vanjs-core";
+import "vanjs-core";
+import "./Connection.widget.css";
+
 import {
   TextNormal,
   TextBold,
   HorizontalLayout,
   VerticalLayout,
-  WidgetBorders,
   Button,
   Input,
-  VanComponentArgsParser,
 } from "../components/index.js";
 
 import {
@@ -21,28 +21,7 @@ import {
   lastServerMessage,
 } from "../logic/index.js";
 
-import "./Connection.widget.css";
-
-const { div } = van.tags;
-// This must become a service
-const isAnimating = van.state(false);
-const isClosed = van.state(false);
-const toggleWidget = (e) => {
-  e.stopPropagation();
-  e.preventDefault();
-
-  if (isAnimating.val) {
-    return;
-  }
-
-  isAnimating.val = true;
-  isClosed.val = !isClosed.val;
-
-  setTimeout(() => {
-    isAnimating.val = false;
-  }, 500);
-};
-//
+import { ResizableWidget } from "./ResizableWidget.js";
 
 
 const ConnectionStatus = () =>
@@ -114,19 +93,10 @@ const WidgetClose = () => ConnectionStatus();
 
 //
 
-export const ConnectionWidget = () => {
-  const className = () =>
-    isClosed.val
-      ? "connection_widget connection_widget_closed"
-      : "connection_widget";
-
-  return WidgetBorders(
-    div(
-      {
-        class: className,
-        onclick: toggleWidget,
-      },
-      () => (isAnimating.val || isClosed.val ? WidgetClose() : WidgetOpen())
-    )
-  );
-};
+export const ConnectionWidget = () =>
+  ResizableWidget({
+    WidgetClose,
+    WidgetOpen,
+    classClose: "connection_widget_closed",
+    classOpen: "connection_widget",
+  });
