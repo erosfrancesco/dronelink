@@ -1,5 +1,5 @@
 export * from "./Button.js";
-export * from "./BorderBox.js";
+export * from "./WidgetBorders.js";
 export * from "./FlagsDisplay.js";
 export * from "./Input.js";
 export * from "./Layout.js";

@@ -4,12 +4,17 @@ import {
   HorizontalLayout,
   VerticalLayout,
   FlagsDisplay,
-  BorderBox,
+  WidgetBorders,
   StatusDisplay,
   VanComponentArgsParser,
 } from "../components/index.js";
 
-import { isConnected, mavlinkPackets } from "../logic/index.js";
+import {
+  isConnected,
+  mavlinkClasses,
+  MAVLINK_PACKET_RECEIVED,
+  event,
+} from "../logic/index.js";
 
 import "./Heartbeat.widget.css";
 
@@ -17,13 +22,11 @@ const { div } = van.tags;
 
 const isAnimating = van.state(false);
 const isClosed = van.state(false);
-// text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.5), 1px -1px 0 rgba(255, 255, 255, 0.5), -1px 1px 0 rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(255, 255, 255, 0.5)
 
 const WidgetOpen = ({ lastReceivedPacket, receivedOn }) => {
   const { type, autopilot, systemStatus, baseMode } = lastReceivedPacket || {};
 
   return VerticalLayout(
-    { style: "padding: 0.5em;" },
     StatusDisplay(
       TextBold("Last Heartbeat :"),
       TextBold(() => (isConnected?.val ? receivedOn : "Not connected"))
@@ -38,7 +41,10 @@ const WidgetOpen = ({ lastReceivedPacket, receivedOn }) => {
 
             StatusDisplay(
               TextBold("Mode: "),
-              FlagsDisplay({ flags: baseMode, style: "padding-left:1em;" })
+              FlagsDisplay({
+                flags: baseMode,
+                style: "padding-left:1em; margin-top: 1em;",
+              })
             )
           )
         : null
@@ -80,17 +86,25 @@ export const HeartbeatWidget = (...args) => {
       ? "heartbeat_widget heartbeat_widget_closed"
       : "heartbeat_widget";
 
-  return van.derive(() =>
+  const packetType = mavlinkClasses.val?.HEARTBEAT;
+  const data = van.state({});
+  if (packetType) {
+    event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
+      data.val = e;
+    });
+  }
+
+  return WidgetBorders(
     div(
       {
         class: className,
         onclick: toggleWidget,
       },
-      BorderBox(() =>
+      () =>
         isAnimating.val || isClosed.val || !isConnected?.val
-          ? WidgetClose({ ...mavlinkPackets.val["HEARTBEAT"] })
-          : WidgetOpen({ ...mavlinkPackets.val["HEARTBEAT"] })
-      )
+          ? WidgetClose({ ...data.val })
+          : WidgetOpen({ ...data.val })
     )
   );
+  // });
 };

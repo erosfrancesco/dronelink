@@ -5,8 +5,10 @@ import {
   event,
 } from "../client.js";
 
+export { MAVLINK_PACKET_RECEIVED, event };
+
 /**
-  mavlinkPackets.val = {
+  mavlinkPackets = {
     ...
     HEARTBEAT: {
       receivedOn: date,
@@ -16,10 +18,8 @@ import {
     ...
   }
  */
-export const mavlinkPackets = van.state({});
-export const setMavlinkPackets = (v) => {
-  mavlinkPackets.val = v;
-};
+export const mavlinkPackets = {};
+
 export const mavlinkClasses = van.state({});
 export const setMavlinkClasses = (v) => {
   mavlinkClasses.val = v;
@@ -27,24 +27,22 @@ export const setMavlinkClasses = (v) => {
 
 event.on(PACKET_CLASSES_RECEIVED, (classes) => setMavlinkClasses(classes));
 
-event.on(MAVLINK_PACKET_RECEIVED, ({ packetType, packetData }) => {
-  const receivedOn = new Date().toLocaleString();
-  const { packetsReceived } = mavlinkPackets.val[packetType]?.val || {};
+event.on(
+  MAVLINK_PACKET_RECEIVED,
+  ({ packetType, packetData: lastReceivedPacket }) => {
+    const receivedOn = new Date().toLocaleString();
+    const { packetsReceived: oldReceived } = mavlinkPackets[packetType] || {};
+    const packetsReceived = (oldReceived || 0) + 1;
 
-  setMavlinkPackets(
-    van.derive(() => {
-      mavlinkPackets.val[packetType] = packetsReceived
-        ? {
-            receivedOn,
-            lastReceivedPacket: packetData,
-            packetsReceived: packetsReceived + 1,
-          }
-        : {
-            receivedOn,
-            lastReceivedPacket: packetData,
-            packetsReceived: 1,
-          };
-      return mavlinkPackets.val;
-    })
-  );
-});
+    mavlinkPackets[packetType] = {
+      lastReceivedPacket,
+      packetsReceived,
+      receivedOn,
+    };
+
+    event.emit(
+      MAVLINK_PACKET_RECEIVED + "-" + packetType,
+      mavlinkPackets[packetType]
+    );
+  }
+);

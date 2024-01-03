@@ -4,7 +4,7 @@ import {
   StatusDisplay,
   TextNormal,
   TextBold,
-  BorderBox,
+  WidgetBorders,
   VanComponentArgsParser,
 } from "../components/index.js";
 import "./Command.widget.css";
@@ -14,7 +14,9 @@ import DeviceCommands from "./DeviceCommands.js";
 // TODO: - Separate command result from command send
 
 import {
-  mavlinkPackets,
+  mavlinkClasses,
+  event,
+  MAVLINK_PACKET_RECEIVED,
   CommandResultsHelp,
   commandMap,
 } from "../logic/index.js";
@@ -112,23 +114,29 @@ export const CommandWidget = (...args) => {
   const className = () =>
     isClosed.val ? "command_widget command_widget_closed" : "command_widget";
 
-  return van.derive(() =>
-    div(
-      {
-        class: className,
-      },
-      DeviceCommands(),
-      BorderBox(() =>
-        isAnimating.val || isClosed.val
-          ? WidgetClose({
-              onclick: toggleWidget,
-              ...mavlinkPackets.val["COMMAND_ACK"],
-            })
-          : WidgetOpen({
-              onclick: toggleWidget,
-              ...mavlinkPackets.val["COMMAND_ACK"],
-            })
-      )
+  const packetType = mavlinkClasses.val?.COMMAND_ACK;
+  const data = van.state({});
+  if (packetType) {
+    event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
+      data.val = e;
+    });
+  }
+
+  return div(
+    {
+      class: className,
+    },
+    DeviceCommands(),
+    WidgetBorders(() =>
+      isAnimating.val || isClosed.val
+        ? WidgetClose({
+            onclick: toggleWidget,
+            ...data.val,
+          })
+        : WidgetOpen({
+            onclick: toggleWidget,
+            ...data.val,
+          })
     )
   );
 };

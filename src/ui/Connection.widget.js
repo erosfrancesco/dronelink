@@ -4,7 +4,7 @@ import {
   TextBold,
   HorizontalLayout,
   VerticalLayout,
-  BorderBox,
+  WidgetBorders,
   Button,
   Input,
   VanComponentArgsParser,
@@ -51,11 +51,13 @@ const ConnectionStatus = () =>
 //
 const WidgetOpen = () =>
   VerticalLayout(
-    { style: "height:100%;" },
     ConnectionStatus(),
     VerticalLayout(
       HorizontalLayout(
-        { style: "flex:0;display: flex;justify-content: space-evenly;" },
+        {
+          style:
+            "flex:0; display:flex; justify-content:space-evenly; padding: 0.25em;",
+        },
         Button(
           {
             style: "max-width: 7em;",
@@ -81,6 +83,7 @@ const WidgetOpen = () =>
           },
         })
       ),
+      // TODO: - These should be set up indipendently
       TextNormal(
         {
           style:
@@ -130,13 +133,13 @@ export const ConnectionWidget = (...args) => {
       ? "connection_widget connection_widget_closed"
       : "connection_widget";
 
-  return div(
-    {
-      class: className,
-      onclick: toggleWidget,
-    },
-    BorderBox(() =>
-      isAnimating.val || isClosed.val ? WidgetClose() : WidgetOpen()
+  return WidgetBorders(
+    div(
+      {
+        class: className,
+        onclick: toggleWidget,
+      },
+      () => (isAnimating.val || isClosed.val ? WidgetClose() : WidgetOpen())
     )
   );
 };
