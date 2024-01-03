@@ -12,6 +12,7 @@ import {
 import {
   isConnected,
   mavlinkClasses,
+  mavlinkPackets,
   MAVLINK_PACKET_RECEIVED,
   event,
 } from "../logic/index.js";
@@ -87,7 +88,7 @@ export const HeartbeatWidget = (...args) => {
       : "heartbeat_widget";
 
   const packetType = mavlinkClasses.val?.HEARTBEAT;
-  const data = van.state({});
+  const data = van.state(mavlinkPackets[packetType] || {});
   if (packetType) {
     event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
       data.val = e;

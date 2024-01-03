@@ -9,12 +9,9 @@ import {
 } from "../components/index.js";
 import "./CommandResult.widget.css";
 
-// import DeviceCommands from "./DeviceCommands.js";
-
-// TODO: - Separate command result from command send
-
 import {
   mavlinkClasses,
+  mavlinkPackets,
   event,
   MAVLINK_PACKET_RECEIVED,
   CommandResultsHelp,
@@ -120,7 +117,7 @@ export const CommandResultWidget = (...args) => {
     isClosed.val ? "command_widget command_widget_closed" : "command_widget";
 
   const packetType = mavlinkClasses.val?.COMMAND_ACK;
-  const data = van.state({});
+  const data = van.state(mavlinkPackets[packetType] || {});
   if (packetType) {
     event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
       data.val = e;
@@ -132,7 +129,6 @@ export const CommandResultWidget = (...args) => {
       class: className,
       onclick: toggleWidget,
     },
-    // DeviceCommands(),
     WidgetBorders(() =>
       isAnimating.val || isClosed.val
         ? WidgetClose({
