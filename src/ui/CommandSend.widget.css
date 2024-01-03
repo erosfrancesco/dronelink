@@ -1,5 +1,6 @@
 @import url("../index.css");
 
+/**/
 .send-command-wrapper {
   min-width: 10em;
   min-height: 10em;
@@ -11,19 +12,39 @@
   padding-bottom:0.5em;
 }
 
+.send-command-select {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  max-height:2em;
+}
+
+.send-command-send {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.send-command-parameter-wrapper {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+/**/
+
+/**/
 .device-commands-modal {
   position: absolute;
   top: 0;
   left: 0;
   height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
   overflow: auto;
 }
 
 .device-command-item {
-  background-color: rgba(0, 0, 0, 0.75);
+  max-height: 1.5em;
 }
 
 .device-command-item-selected {
   background-color: var(--secondary-bg);
   color: var(--secondary-color);
 }
+/**/
