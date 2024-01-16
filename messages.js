@@ -13,7 +13,7 @@ export const MessageDeviceConnected = "Device connected";
 export const MessagePacketNamesList = "Mavlink packet names";
 
 //
-export const openDeviceConnectionCommandType = "open_device_connection";
+export const openDeviceConnectionCommandType = "device/open";
 export const openDeviceConnectionCommand = (args) => {
   const { port, baudRate } = args || {};
 
@@ -24,8 +24,7 @@ export const openDeviceConnectionCommand = (args) => {
   });
 };
 
-//
-export const closeDeviceConnectionCommandType = "close_device_connection";
+export const closeDeviceConnectionCommandType = "device/close";
 export const closeDeviceConnectionCommand = (args) => {
   const { port } = args || {};
 
@@ -35,8 +34,16 @@ export const closeDeviceConnectionCommand = (args) => {
   });
 };
 
+export const sendPortListCommandType = "device/available";
+export const sendPortListCommand = (args) => {
+  return JSON.stringify({
+    type: sendPortListCommandType,
+    ...args,
+  });
+};
+
 //
-export const sendMavlinkPacketCommandType = "on_packet_send";
+export const sendMavlinkPacketCommandType = "commands/send";
 export const sendMavlinkPacketCommand = ({ command, ...otherArgs }) => {
   return JSON.stringify({
     type: sendMavlinkPacketCommandType,
@@ -46,19 +53,28 @@ export const sendMavlinkPacketCommand = ({ command, ...otherArgs }) => {
 };
 
 //
-export const sendCommandListCommandType = "on_commandlist_requested";
+export const sendCommandListCommandType = "commands/list";
 export const sendCommandListCommand = (args) => {
   return JSON.stringify({
     type: sendCommandListCommandType,
     ...args,
   });
 };
+//
 
 //
-export const sendPortListCommandType = "on_portlist_requested";
-export const sendPortListCommand = (args) => {
+export const sendParameterReadCommandType = "mavlink/parameters/read";
+export const sendParameterReadCommand = (args) => {
   return JSON.stringify({
-    type: sendPortListCommandType,
+    type: sendParameterReadCommandType,
+    ...args,
+  });
+};
+
+export const sendParameterWriteCommandType = "mavlink/parameters/write";
+export const sendParameterWriteCommand = (args) => {
+  return JSON.stringify({
+    type: sendParameterWriteCommandType,
     ...args,
   });
 };

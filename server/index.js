@@ -1,12 +1,13 @@
 import { WebSocketServer } from "ws";
 import {
   handleMavlinkPacketSend,
-  handleOpenDeviceConnectionCommand,
-  handleCloseDeviceConnectionCommand,
+  // handleOpenDeviceConnectionCommand,
+  // handleCloseDeviceConnectionCommand,
   handleRequestCommandListCommand,
   handleMessage,
-  handleRequestPortListCommand,
+  // handleRequestPortListCommand,
   handleMavlinkParameters,
+  handleDeviceConnection,
 } from "./adapters/index.js";
 
 import { messageCommand } from "../messages.js";
@@ -23,12 +24,13 @@ wss.on("connection", (ws) => {
   ws.on("message", async (buffer) => {
     try {
       const data = JSON.parse(buffer);
-      await handleOpenDeviceConnectionCommand(ws, data);
-      handleCloseDeviceConnectionCommand(ws, data);
+      await handleDeviceConnection(ws, data);
+      // await handleOpenDeviceConnectionCommand(ws, data);
+      // handleCloseDeviceConnectionCommand(ws, data);
       handleMessage(ws, data);
       handleMavlinkPacketSend(ws, data);
       handleRequestCommandListCommand(ws, data);
-      handleRequestPortListCommand(ws, data);
+      // handleRequestPortListCommand(ws, data);
       handleMavlinkParameters(ws, data);
     } catch (error) {
       console.log("Error parsing message: ", buffer, error);

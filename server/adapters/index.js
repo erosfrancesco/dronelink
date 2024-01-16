@@ -1,95 +1,35 @@
 import { setupMavlinkReader, MavlinkPacketClassNames } from "./mavlink.js";
 import { sendMavlinkCommandPacket } from "./protocols/commands.js";
-import requestParamRead from "./protocols/parameters.js";
-
-import {
-  openSerialConnection,
-  closeSerialConnection,
-  listSerialConnections,
-} from "./serialport.js";
+import { requestParamRead, requestParamWrite } from "./protocols/parameters.js";
 import { getCommandList } from "../parsers/index.js";
 
 import {
   messageCommand,
   messageCommandType,
-  openDeviceConnectionCommandType,
-  closeDeviceConnectionCommandType,
   sendMavlinkPacketCommandType,
   sendCommandListCommandType,
   sendCommandListCommand,
-  sendPortListCommandType,
-  sendPortListCommand,
-  MessageDeviceConnected,
-  MessagePacketNamesList,
+  sendParameterWriteCommandType,
+  sendParameterReadCommandType,
 } from "../../messages.js";
 
 // WS ADAPTERS
+export const handleMessage = (ws, { type, ...args }) => {
+  if (type !== messageCommandType) {
+    return;
+  }
+
+  const { error, message } = args;
+  ws.send(messageCommand({ error, message }));
+};
+
+// commands
 export const handleRequestCommandListCommand = (ws, { type, ...args }) => {
   if (type !== sendCommandListCommandType) {
     return;
   }
 
   ws.send(sendCommandListCommand(getCommandList()));
-};
-
-export const handleRequestPortListCommand = (ws, { type, ...args }) => {
-  if (type !== sendPortListCommandType) {
-    return;
-  }
-
-  listSerialConnections().then((ports) =>
-    ws.send(sendPortListCommand({ ports }))
-  );
-};
-
-export const handleOpenDeviceConnectionCommand = async (
-  ws,
-  { type, ...args }
-) => {
-  if (type !== openDeviceConnectionCommandType) {
-    return;
-  }
-
-  const { port, baudRate } = args;
-
-  try {
-    const serial = await openSerialConnection(port, baudRate);
-    const reader = setupMavlinkReader(serial, (packetType, packetData) => {
-      const message = "Received MAVLINK Packet: " + packetType;
-      ws.send(messageCommand({ message, packetData, packetType }));
-    });
-
-    //
-    ws.deviceConnected = serial;
-    ws.mavlinkReader = reader;
-    //
-
-    serial.on("error", (e) => {
-      ws.send(messageCommand({ error: e.message }));
-    });
-
-    ws.send(messageCommand({ message: MessageDeviceConnected }));
-    /*
-    ws.send(
-      messageCommand({
-        message: MessagePacketNamesList,
-        MavlinkPacketClassNames,
-      })
-    );
-    ws.send(sendCommandListCommand(getCommandList()));
-    /** */
-  } catch (error) {
-    ws.send(messageCommand({ error }));
-  }
-};
-
-export const handleCloseDeviceConnectionCommand = (ws, { type, ...args }) => {
-  if (type !== closeDeviceConnectionCommandType) {
-    return;
-  }
-
-  const { port } = args;
-  closeSerialConnection(port);
 };
 
 export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
@@ -101,34 +41,33 @@ export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
   const port = ws.deviceConnected; //
   await sendMavlinkCommandPacket(port, command, otherArgs);
 };
-
-export const handleMessage = (ws, { type, ...args }) => {
-  if (type !== messageCommandType) {
-    return;
-  }
-
-  const { error, message } = args;
-  ws.send(messageCommand({ error, message }));
-};
+//
 
 export const handleMavlinkParameters = async (ws, { type, ...args }) => {
-  if (type !== "MavlinkParameters") {
+  if (type === sendParameterWriteCommandType) {
+    const { ...otherArgs } = args;
+    const port = ws.deviceConnected; //
+    await requestParamWrite(port, otherArgs);
+
     return;
   }
 
-  console.log('Hello other args', args)
+  if (type === sendParameterReadCommandType) {
+    const { ...otherArgs } = args;
+    const port = ws.deviceConnected; //
+    await requestParamRead(port, otherArgs);
 
-  const { ...otherArgs } = args;
-  const port = ws.deviceConnected; //
-  await requestParamRead(port, otherArgs);
+    return;
+  }
+
+  return;
 };
 
+export * from "./device.js";
+
 export default {
-  handleOpenDeviceConnectionCommand,
-  handleCloseDeviceConnectionCommand,
   handleMavlinkPacketSend,
   handleRequestCommandListCommand,
-  handleRequestPortListCommand,
   handleMavlinkParameters,
   handleMessage,
 };
