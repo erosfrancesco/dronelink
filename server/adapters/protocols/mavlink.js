@@ -3,10 +3,10 @@ import { MavLinkPacketSplitter, MavLinkPacketParser } from "node-mavlink";
 import {
   mavlinkMessageParser,
   MavlinkPacketClasses,
-} from "./protocols/messages.js";
+} from "../protocols/messages.js";
 
-// MavLinkPacketParser has many options.
-// Maybe some higher-order setup options?
+
+// MavLinkPacketParser has many options. Some tests are required. Need some high level setup
 
 export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
   const reader = port
@@ -29,5 +29,6 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
 
   return reader;
 };
+
 
 export default setupMavlinkReader;

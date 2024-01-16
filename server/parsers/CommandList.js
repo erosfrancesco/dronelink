@@ -1,4 +1,4 @@
-import { ardupilotmega, common, minimal } from "node-mavlink";
+import { ardupilotmega, common } from "node-mavlink";
 import { mapMavlinkEnum } from "./utils.js";
 
 const getAvailableCommands = () => {

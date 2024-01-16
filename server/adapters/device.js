@@ -1,4 +1,4 @@
-import { setupMavlinkReader, MavlinkPacketClassNames } from "./mavlink.js";
+import { setupMavlinkReader } from "./mavlink.js";
 
 import {
   openSerialConnection,

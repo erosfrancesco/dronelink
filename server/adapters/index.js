@@ -1,4 +1,3 @@
-import { setupMavlinkReader, MavlinkPacketClassNames } from "./mavlink.js";
 import { sendMavlinkCommandPacket } from "./protocols/commands.js";
 import { requestParamRead, requestParamWrite } from "./protocols/parameters.js";
 import { getCommandList } from "../parsers/index.js";
@@ -24,25 +23,22 @@ export const handleMessage = (ws, { type, ...args }) => {
 };
 
 // commands
-export const handleRequestCommandListCommand = (ws, { type, ...args }) => {
-  if (type !== sendCommandListCommandType) {
+export const handleMavlinkCommands = async (ws, { type, ...args }) => {
+  if (type === sendCommandListCommandType) {
+    ws.send(sendCommandListCommand(getCommandList()));
     return;
   }
 
-  ws.send(sendCommandListCommand(getCommandList()));
-};
-
-export const handleMavlinkPacketSend = async (ws, { type, ...args }) => {
-  if (type !== sendMavlinkPacketCommandType) {
+  if (type === sendMavlinkPacketCommandType) {
+    const { command, ...otherArgs } = args;
+    const port = ws.deviceConnected; //
+    await sendMavlinkCommandPacket(port, command, otherArgs);
     return;
   }
-
-  const { command, ...otherArgs } = args;
-  const port = ws.deviceConnected; //
-  await sendMavlinkCommandPacket(port, command, otherArgs);
+  return;
 };
-//
 
+// parameters
 export const handleMavlinkParameters = async (ws, { type, ...args }) => {
   if (type === sendParameterWriteCommandType) {
     const { ...otherArgs } = args;
@@ -64,10 +60,3 @@ export const handleMavlinkParameters = async (ws, { type, ...args }) => {
 };
 
 export * from "./device.js";
-
-export default {
-  handleMavlinkPacketSend,
-  handleRequestCommandListCommand,
-  handleMavlinkParameters,
-  handleMessage,
-};

@@ -1,13 +1,4 @@
-import {
-  MavLinkProtocolV1,
-  MavLinkProtocolV2,
-  send,
-  minimal,
-  common,
-  ardupilotmega,
-} from "node-mavlink";
-
-// TODO: - Set param
+import { MavLinkProtocolV1, send, common } from "node-mavlink";
 
 // Read param
 const buildReadMessage = (args = {}) => {
@@ -34,6 +25,7 @@ const buildReadMessage = (args = {}) => {
   return packet;
 };
 
+// write param
 const buildWriteMessage = (args = {}) => {
   const { paramId, paramValue, paramType } = args;
 
