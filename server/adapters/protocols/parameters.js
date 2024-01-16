@@ -7,6 +7,9 @@ import {
   ardupilotmega,
 } from "node-mavlink";
 
+// TODO: - Set param
+
+// Read param
 const buildMavlinkPacket = (args = {}) => {
   const { paramId, paramIndex = -1, ...otherArgs } = args;
 
@@ -31,6 +34,7 @@ const buildMavlinkPacket = (args = {}) => {
   return message;
 };
 
+// read param
 export const requestParamRead = async (port, args = {}) => {
   return await send(port, buildMavlinkPacket(args), new MavLinkProtocolV1());
 };
