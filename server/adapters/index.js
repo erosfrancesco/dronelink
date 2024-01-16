@@ -1,5 +1,7 @@
 import { setupMavlinkReader, MavlinkPacketClassNames } from "./mavlink.js";
-import { sendMavlinkCommandPacket } from "./mavlinkCommands.js";
+import { sendMavlinkCommandPacket } from "./protocols/commands.js";
+import requestParamRead from "./protocols/parameters.js";
+
 import {
   openSerialConnection,
   closeSerialConnection,
@@ -67,6 +69,7 @@ export const handleOpenDeviceConnectionCommand = async (
     });
 
     ws.send(messageCommand({ message: MessageDeviceConnected }));
+    /*
     ws.send(
       messageCommand({
         message: MessagePacketNamesList,
@@ -74,6 +77,7 @@ export const handleOpenDeviceConnectionCommand = async (
       })
     );
     ws.send(sendCommandListCommand(getCommandList()));
+    /** */
   } catch (error) {
     ws.send(messageCommand({ error }));
   }
@@ -107,11 +111,24 @@ export const handleMessage = (ws, { type, ...args }) => {
   ws.send(messageCommand({ error, message }));
 };
 
+export const handleMavlinkParameters = async (ws, { type, ...args }) => {
+  if (type !== "MavlinkParameters") {
+    return;
+  }
+
+  console.log('Hello other args', args)
+
+  const { ...otherArgs } = args;
+  const port = ws.deviceConnected; //
+  await requestParamRead(port, otherArgs);
+};
+
 export default {
   handleOpenDeviceConnectionCommand,
   handleCloseDeviceConnectionCommand,
   handleMavlinkPacketSend,
   handleRequestCommandListCommand,
   handleRequestPortListCommand,
+  handleMavlinkParameters,
   handleMessage,
 };

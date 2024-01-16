@@ -95,7 +95,7 @@ const WidgetClose = ({ lastReceivedPacket }) => {
 //
 export const CommandResultWidget = () => {
   const packetType = mavlinkClasses.val?.COMMAND_ACK;
-  const data = van.state(mavlinkPackets[packetType] || {});
+  const data = van.state(mavlinkPackets.val[packetType] || {});
   if (packetType) {
     event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
       data.val = e;

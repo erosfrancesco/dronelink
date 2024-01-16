@@ -1,8 +1,10 @@
 export const defaultDataParser = (data) =>
-  JSON.stringify(
-    data,
-    // bigint and other values??
-    (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+  JSON.parse(
+    JSON.stringify(
+      data,
+      // bigint and other values??
+      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+    )
   );
 
 // Don't use this. Use the function below

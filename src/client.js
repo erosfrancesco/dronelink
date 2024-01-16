@@ -12,14 +12,17 @@ import {
 const ws = new WebSocket("ws://localhost:" + 5000);
 
 // Event manager
-export const SERVER_ERROR = "ServerError";
-export const SERVER_CONNECTED = "ServerConnected";
-export const SERVER_MESSAGE_RECEIVED = "ServerMessageReceived";
-export const SERVER_ERROR_RECEIVED = "ServerErrorReceived";
-export const MAVLINK_PACKET_RECEIVED = "MavlinkPacketReceived";
-export const DEVICE_CONNECTED = "DeviceConnected";
 export const COMMANDLIST_RECEIVED = "CommandListReceived";
+export const DEVICE_CONNECTED = "DeviceConnected";
+
 export const PACKET_CLASSES_RECEIVED = "PacketClassesReceived";
+export const MAVLINK_PACKET_RECEIVED = "MavlinkPacketReceived";
+
+export const SERVER_CONNECTED = "ServerConnected";
+export const SERVER_ERROR = "ServerError";
+export const SERVER_ERROR_RECEIVED = "ServerErrorReceived";
+export const SERVER_MESSAGE_RECEIVED = "ServerMessageReceived";
+
 export const event = new EventEmitter();
 //
 

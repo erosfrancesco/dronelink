@@ -60,7 +60,7 @@ const WidgetClose = ({ receivedOn }) => {
 
 export const HeartbeatWidget = () => {
   const packetType = mavlinkClasses.val?.HEARTBEAT;
-  const data = van.state(mavlinkPackets[packetType] || {});
+  const data = van.state(mavlinkPackets.val[packetType] || {});
   if (packetType) {
     event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
       data.val = e;

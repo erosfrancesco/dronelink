@@ -6,7 +6,7 @@ import {
   defaultDataParser,
   parseStatusText,
   parseSysStatus,
-} from "../parsers/index.js";
+} from "../../parsers/index.js";
 
 //
 export const MavlinkPacketClasses = {
@@ -15,15 +15,18 @@ export const MavlinkPacketClasses = {
   ...ardupilotmega.REGISTRY,
 };
 
-export const MavlinkPacketClassNames = Object.keys(MavlinkPacketClasses).reduce((res, key) => {
-  const { MSG_NAME } = MavlinkPacketClasses[key];
-  res[MSG_NAME] = MSG_NAME;
+export const MavlinkPacketClassNames = Object.keys(MavlinkPacketClasses).reduce(
+  (res, key) => {
+    const { MSG_NAME } = MavlinkPacketClasses[key];
+    res[MSG_NAME] = MSG_NAME;
 
-  return res;
-}, {});
+    return res;
+  },
+  {}
+);
 //
 
-export const mavlinkPacketDataParser = (packetType, data, msgId) => {
+export const mavlinkMessageParser = (packetType, data, msgId) => {
   if (packetType === MavlinkPacketClassNames.HEARTBEAT) {
     return HeartBeatParser(data);
   }
@@ -47,4 +50,4 @@ export const mavlinkPacketDataParser = (packetType, data, msgId) => {
   return defaultDataParser(data);
 };
 
-export default mavlinkPacketDataParser;
+export default mavlinkMessageParser;

@@ -6,6 +6,7 @@ import {
   handleRequestCommandListCommand,
   handleMessage,
   handleRequestPortListCommand,
+  handleMavlinkParameters,
 } from "./adapters/index.js";
 
 import { messageCommand } from "../messages.js";
@@ -28,6 +29,7 @@ wss.on("connection", (ws) => {
       handleMavlinkPacketSend(ws, data);
       handleRequestCommandListCommand(ws, data);
       handleRequestPortListCommand(ws, data);
+      handleMavlinkParameters(ws, data);
     } catch (error) {
       console.log("Error parsing message: ", buffer, error);
       ws.send(messageCommand({ error }));
