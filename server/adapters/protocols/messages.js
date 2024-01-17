@@ -49,5 +49,3 @@ export const mavlinkMessageParser = (packetType, data, msgId) => {
 
   return defaultDataParser(data);
 };
-
-export default mavlinkMessageParser;

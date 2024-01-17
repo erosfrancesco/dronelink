@@ -20,7 +20,7 @@ export const Home = () =>
     },
     ConnectionWidget(),
     HeartbeatWidget()
-    // TODO: - Widget to send requestmessage
+    // TODO: - Widget to set/get parameters
   );
 
 export default Home;

@@ -1,5 +1,5 @@
 import van from "vanjs-core";
-import { COMMANDLIST_RECEIVED, event, wsSend } from "../client.js";
+import { COMMANDLIST_RECEIVED, event, wsSend } from "../client/index.js";
 import { sendMavlinkPacketCommand } from "../../messages.js";
 
 // {value: '16', flag: 'NAV_WAYPOINT'}

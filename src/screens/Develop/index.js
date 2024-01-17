@@ -1,55 +1,46 @@
 import van from "vanjs-core";
-import WidgetBorders from "../../components/WidgetBorders.js";
-import { Input, Button } from "../../components/index.js";
-
-import { mavlinkPackets } from "../../logic/index.js";
-import { MAVLINK_PACKET_RECEIVED, event } from "../../client.js";
+import ws, {
+  MAVLINK_PACKET_RECEIVED,
+  event,
+  wsParameterRead,
+} from "../../client/index.js";
+import { mavlinkClasses, mavlinkPackets } from "../../logic/index.js";
 
 const { div, span } = van.tags;
 
-const width = van.state("25em");
-
-// Filter ?
-// TODO: - Packet tree and prop views
-
-const packetTypesReceived = van.state([]);
-event.on(MAVLINK_PACKET_RECEIVED, ({ packetType, packetData }) => {
-  const oldValue = [...packetTypesReceived.val];
-
-  const i = oldValue.findIndex((item) => {
-    return item.packetType === packetType;
-  });
-
-  if (i >= 0) {
-    oldValue[i] = { packetType, packetData };
-  } else {
-    console.log("Got new data: ", packetData);
-    oldValue.push({ packetType, packetData });
-  }
-
-  packetTypesReceived.val = [...oldValue];
-});
-
-const PacketClassDetails = ({ packetType, packetData }) => {
-  // console.log(packetType, packetData);
-
-  return div(
-    span(packetType),
-    div(
-      Object.keys(packetData).map((key) =>
-        div(span(key + ":"), span(packetData[key]))
-      )
-    )
-  );
+const sendParamRequest = () => {
+  wsParameterRead({ paramId: "ATC_ANG_YAW_P" });
 };
 
-const PacketList = ({ packetTypesReceived }) =>
-  packetTypesReceived.val.map((packet) => {
-    return div(PacketClassDetails(packet || {}));
-  });
+// TODO: - Widget to read and send request for param
+// TODO: - fetch from https://autotest.ardupilot.org/Parameters/ArduCopter/apm.pdef.xml
+
+const widget = () => {
+  const packetType = mavlinkClasses.val?.PARAM_VALUE;
+  const data = van.state(mavlinkPackets.val[packetType] || {});
+  if (packetType) {
+    event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
+      data.val = e;
+
+      const { lastReceivedPacket } = e;
+      if (lastReceivedPacket.paramId === "STAT_RUNTIME") {
+      } // remove time sync
+
+      const { paramId, paramType, paramValue } = lastReceivedPacket;
+      // Yaw P parameter
+      if (paramId === "ATC_ANG_YAW_P") {
+        console.log(paramId, paramValue);
+      }
+    });
+  }
+
+  sendParamRequest();
+
+  return div(van.derive(() => div()));
+};
 
 export const Develop = () => {
-  return div(van.derive(() => div(PacketList({ packetTypesReceived }))));
+  return div(van.derive(() => widget()));
 };
 
 export default Develop;

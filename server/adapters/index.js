@@ -1,13 +1,20 @@
 import { sendMavlinkCommandPacket } from "./protocols/commands.js";
 import { requestParamRead, requestParamWrite } from "./protocols/parameters.js";
+import { MavlinkPacketClassNames } from "./protocols/messages.js";
 import { getCommandList } from "../parsers/index.js";
 
 import {
   messageCommand,
   messageCommandType,
+  sendPacketClassesType,
+  sendPacketClassesMessage,
+
+  // commands
   sendMavlinkPacketCommandType,
   sendCommandListCommandType,
   sendCommandListCommand,
+
+  // parameters
   sendParameterWriteCommandType,
   sendParameterReadCommandType,
 } from "../../messages.js";
@@ -20,6 +27,14 @@ export const handleMessage = (ws, { type, ...args }) => {
 
   const { error, message } = args;
   ws.send(messageCommand({ error, message }));
+};
+
+export const handleSendPacketClasses = (ws, { type, ...args }) => {
+  if (type !== sendPacketClassesType) {
+    return;
+  }
+
+  ws.send(sendPacketClassesMessage(MavlinkPacketClassNames));
 };
 
 // commands

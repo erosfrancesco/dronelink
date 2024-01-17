@@ -3,7 +3,7 @@ import {
   MAVLINK_PACKET_RECEIVED,
   PACKET_CLASSES_RECEIVED,
   event,
-} from "../client.js";
+} from "../client/index.js";
 
 export { MAVLINK_PACKET_RECEIVED, event };
 

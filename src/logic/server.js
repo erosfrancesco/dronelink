@@ -5,7 +5,7 @@ import {
   SERVER_ERROR,
   SERVER_ERROR_RECEIVED,
   SERVER_MESSAGE_RECEIVED,
-} from "../client.js";
+} from "../client/index.js";
 
 //
 export const isServerConnected = van.state(false);

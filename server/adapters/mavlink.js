@@ -5,6 +5,8 @@ import {
   MavlinkPacketClasses,
 } from "./protocols/messages.js";
 
+export { MavlinkPacketClasses };
+
 // MavLinkPacketParser has many options.
 // Maybe some higher-order setup options?
 
@@ -29,5 +31,3 @@ export const setupMavlinkReader = (port, onPacketReceived = () => () => {}) => {
 
   return reader;
 };
-
-export default setupMavlinkReader;

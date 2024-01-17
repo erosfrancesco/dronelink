@@ -78,3 +78,20 @@ export const sendParameterWriteCommand = (args) => {
     ...args,
   });
 };
+
+//
+export const sendPacketClassesType = 'mavlink/packets/classes';
+export const requestPacketClasses = () => {
+  return  JSON.stringify({
+    type: sendPacketClassesType,
+  }); 
+}
+
+export const sendPacketClassesMessage = (packetClasses) => {
+  return  JSON.stringify({
+    type: messageCommandType,
+    message: MessagePacketNamesList,
+    packetClasses
+  });
+}
+//

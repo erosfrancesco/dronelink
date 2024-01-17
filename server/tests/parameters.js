@@ -1,7 +1,6 @@
 import { send, common } from "node-mavlink";
-import { SerialPort } from "serialport";
 
-import { port, reader, setOnDataReceived } from "./mavlink.js";
+import { port, setOnDataReceived } from "./mavlink.js";
 
 setOnDataReceived((packetType, data) => {
   console.log("got", packetType);

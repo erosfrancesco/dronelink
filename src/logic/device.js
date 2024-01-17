@@ -4,7 +4,7 @@ import {
   event,
   wsOpenDeviceConnection,
   wsCloseDeviceConnection,
-} from "../client.js";
+} from "../client/index.js";
 
 // STATE
 export const isConnected = van.state(false);

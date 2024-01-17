@@ -1,6 +1,7 @@
 import { WebSocketServer } from "ws";
 import {
   handleMessage,
+  handleSendPacketClasses,
   handleMavlinkCommands,
   handleMavlinkParameters,
   handleDeviceConnection,
@@ -21,6 +22,7 @@ wss.on("connection", (ws) => {
     try {
       const data = JSON.parse(buffer);
       handleMessage(ws, data);
+      handleSendPacketClasses(ws, data);
       await handleDeviceConnection(ws, data);
       await handleMavlinkParameters(ws, data);
       await handleMavlinkCommands(ws, data);
