@@ -54,3 +54,16 @@ export const ParamValue = {
   paramCount: 973,
   paramIndex: 65535,
 };
+
+// Mavlink classes list
+export const MavlinkPacketClasses = {
+  HEARTBEAT: "HEARTBEAT",
+  PARAM_VALUE: "PARAM_VALUE",
+};
+
+// 
+export const YawParameterP = {
+  paramId: "ATC_ANG_YAW_P",
+  paramValue: 4.00001203,
+  paramType: 9,
+};

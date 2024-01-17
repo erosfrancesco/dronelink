@@ -6,7 +6,25 @@ import ws, {
 } from "../../client/index.js";
 import { mavlinkClasses, mavlinkPackets } from "../../logic/index.js";
 
+import { MavlinkPacketClasses, YawParameterP } from "./mocks.js";
+
 const { div, span } = van.tags;
+
+const setupWithMock = () => {
+  mavlinkClasses.val = MavlinkPacketClasses;
+
+  const packetType = MavlinkPacketClasses.PARAM_VALUE;
+  mavlinkPackets.val[packetType] = {
+    lastReceivedPacket: YawParameterP,
+  };
+
+  setTimeout(() => {
+    event.emit(
+      MAVLINK_PACKET_RECEIVED + "-" + packetType,
+      mavlinkPackets.val[packetType]
+    );
+  }, 200);
+};
 
 const sendParamRequest = () => {
   wsParameterRead({ paramId: "ATC_ANG_YAW_P" });
@@ -16,8 +34,13 @@ const sendParamRequest = () => {
 // TODO: - fetch from https://autotest.ardupilot.org/Parameters/ArduCopter/apm.pdef.xml
 
 const widget = () => {
+  setupWithMock();
+
   const packetType = mavlinkClasses.val?.PARAM_VALUE;
   const data = van.state(mavlinkPackets.val[packetType] || {});
+
+  // console.log(data);
+
   if (packetType) {
     event.on(MAVLINK_PACKET_RECEIVED + "-" + packetType, (e) => {
       data.val = e;
@@ -33,8 +56,6 @@ const widget = () => {
       }
     });
   }
-
-  sendParamRequest();
 
   return div(van.derive(() => div()));
 };
