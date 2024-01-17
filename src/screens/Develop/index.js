@@ -45,14 +45,6 @@ const setupWithMock = () => {
     );
   }, 1200);
 };
-const writeParameter = (packet) => {
-  console.log(packet);
-};
-
-//
-const sendParamRequest = () => {
-  wsParameterRead({ paramId: "ATC_ANG_YAW_P" });
-};
 
 export const Develop = () => {
   setupWithMock();
