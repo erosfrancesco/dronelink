@@ -7,4 +7,5 @@ export * from "./FiltrableSelection.js";
 export * from "./Typography.js";
 export * from "./WidgetBorders.js";
 
+export * from "./MavlinkPacketWrapper.js";
 export * from "./utils.js";
