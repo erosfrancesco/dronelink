@@ -4,11 +4,12 @@ import {
   event,
   wsParameterRead,
 } from "../../client/index.js";
+import { widget } from "./widget.js";
 import { mavlinkClasses, mavlinkPackets } from "../../logic/index.js";
 import { MavlinkPacketWrapper } from "../../components/index.js";
 import { MavlinkPacketClasses, YawParameterP } from "./mocks.js";
 
-const { div, span } = van.tags;
+const { div, span, input } = van.tags;
 
 //
 let singleton = false;
@@ -44,57 +45,13 @@ const setupWithMock = () => {
     );
   }, 1200);
 };
+const writeParameter = (packet) => {
+  console.log(packet);
+};
 
 //
 const sendParamRequest = () => {
   wsParameterRead({ paramId: "ATC_ANG_YAW_P" });
-};
-
-// TODO: - Write param
-// TODO: - Optional. fetch from https://autotest.ardupilot.org/Parameters/ArduCopter/apm.pdef.xml
-
-const widget = ({ paramId }) => {
-  const lastPacket = van.state({});
-  const packetValueHistory = van.state([]);
-
-  return MavlinkPacketWrapper(
-    {
-      packetName: "PARAM_VALUE",
-      onPacketReceived: (e) => {
-        const { lastReceivedPacket } = e;
-        const {
-          paramId: packetParamId,
-          paramType,
-          paramValue,
-        } = lastReceivedPacket;
-
-        if (paramId === packetParamId) {
-          packetValueHistory.val.unshift(paramValue);
-          lastPacket.val = lastReceivedPacket;
-        }
-      },
-    },
-    () => {
-      const { paramValue, paramId } = lastPacket.val || {};
-      const previousValues = packetValueHistory.val.map((v, i) => {
-        if (i) {
-          return v;
-        }
-      });
-
-      return div(
-        () => span(paramId),
-        div(),
-        () => span(paramValue),
-        div(),
-        () => span("Previous values: "),
-        div(),
-        previousValues.map((value, i) => {
-          return div(() => span(value));
-        })
-      );
-    }
-  );
 };
 
 export const Develop = () => {
