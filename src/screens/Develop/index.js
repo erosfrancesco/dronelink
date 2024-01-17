@@ -50,7 +50,7 @@ const sendParamRequest = () => {
   wsParameterRead({ paramId: "ATC_ANG_YAW_P" });
 };
 
-// TODO: - Widget to read and write param
+// TODO: - Write param
 // TODO: - Optional. fetch from https://autotest.ardupilot.org/Parameters/ArduCopter/apm.pdef.xml
 
 const widget = ({ paramId }) => {
@@ -69,13 +69,18 @@ const widget = ({ paramId }) => {
         } = lastReceivedPacket;
 
         if (paramId === packetParamId) {
-          packetValueHistory.val.push(paramValue);
+          packetValueHistory.val.unshift(paramValue);
           lastPacket.val = lastReceivedPacket;
         }
       },
     },
     () => {
       const { paramValue, paramId } = lastPacket.val || {};
+      const previousValues = packetValueHistory.val.map((v, i) => {
+        if (i) {
+          return v;
+        }
+      });
 
       return div(
         () => span(paramId),
@@ -84,10 +89,7 @@ const widget = ({ paramId }) => {
         div(),
         () => span("Previous values: "),
         div(),
-        packetValueHistory.val.map((value, i) => {
-          if (i > packetValueHistory.val.length - 2) {
-            return;
-          }
+        previousValues.map((value, i) => {
           return div(() => span(value));
         })
       );
