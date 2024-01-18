@@ -12,95 +12,42 @@
  */
 // TODO: - Optional. fetch from https://autotest.ardupilot.org/Parameters/ArduCopter/apm.pdef.xml
 import van from "vanjs-core";
-// import { wsParameterRead, wsParameterWrite } from "../../client/index.js";
+import { wsParameterRead, wsParameterWrite } from "../../client/index.js";
 import { MavlinkPacketWrapper } from "../../components/index.js";
 const { div, span, input } = van.tags;
 
 //
 const writeParameter = (packet) => {
   console.log(packet);
-  // wsParameterWrite(packet);
+  wsParameterWrite(packet);
 };
 
-const readParameter = () => {
-  console.log("Hello parameter");
-  // wsParameterRead({ paramId: "ATC_ANG_YAW_P" });
+const readParameter = (paramId) => {
+  console.log("Hello parameter", paramId);
+  wsParameterRead({ paramId });
 };
 //
+
+//
+const computeParamValue = (input) => {
+  return parseFloat(input);
+};
+
+const setupWidget = (paramId) => {
+  readParameter(paramId);
+};
 
 // TODO: - not necessary. parseFloat should be the solution to everything
-//
-const computeInputTypeProps = (paramType) => {
-  const isUnsigned = paramType % 2;
-  const paramTypeIndex = (paramType - isUnsigned) / 2;
-  const nBit = 2 ** (paramTypeIndex + 3);
 
-  if (paramType < 9) {
-    if (paramType < 7) {
-      // unsigned
-      if (isUnsigned) {
-        return {
-          step: 1,
-          min: 0,
-          max: 2 ** nBit - 1,
-        };
-      }
-
-      //signed
-      return {
-        step: 1,
-        min: -(2 ** (nBit - 1)),
-        max: 2 ** (nBit - 1) - 1,
-      };
-    }
-
-    // MAV_PARAM_TYPE_UINT64	64-bit unsigned integer 0-18446744073709551615
-    // MAV_PARAM_TYPE_INT64	    64-bit signed integer
-    if (isUnsigned) {
-      return {
-        type: "bigint",
-        step: BigInt(1),
-        min: BigInt(0),
-        max: BigInt(-1) + BigInt(2 ** nBit), // for 64-bit unsigned integer
-      };
-    }
-
-    return {
-      type: "bigint",
-      step: BigInt(1),
-      min: BigInt(-(2 ** (nBit - 1))),
-      max: BigInt(-1) + BigInt(2 ** (nBit - 1)),
-    };
-  }
-
-  /*
-  // TODO: - Float
-  if (paramType === 8) {
-    return {
-      step: 1,
-      min: 0,
-      max: BigInt(-1 + 2 ** nBit),
-    };
-  }
-
-  if (paramType === 9) {
-    return {
-      step: 1,
-      min: 0,
-      max: 18446744073709551615,
-    };
-  }
-  /** */
-
-  return {
-    step: "0.0000000001",
-  };
-};
-//
-
-export const widget = ({ paramId }) => {
+export const ParameterWatcher = ({ paramId }) => {
   const lastPacket = van.state({});
   const packetValueHistory = van.state([]);
+  const setupDone = van.state(false);
+
+  if (!setupDone.val) {
+    setupWidget(paramId);
+    setupDone.val = true;
+  }
 
   return MavlinkPacketWrapper(
     {
@@ -109,7 +56,7 @@ export const widget = ({ paramId }) => {
         const { lastReceivedPacket } = e;
         const {
           paramId: packetParamId,
-          paramType,
+          // paramType,
           paramValue,
         } = lastReceivedPacket;
 
@@ -133,16 +80,18 @@ export const widget = ({ paramId }) => {
         div(
           span("Set new value "),
           input({
-            // ...computeInputTypeProps(7),
-            // type: "number",
-            // Maybe string?
-            value: inputValue,
-            disabled: inputValue.val === null || inputValue.val === undefined,
+            type: "number",
+            value: () => inputValue.val,
+            disabled: () =>
+              inputValue.val === null || inputValue.val === undefined,
             onkeyup: (e) => {
+              const { value } = e.target;
+              inputValue.val = value;
+
               if (e.key === "Enter") {
                 writeParameter({
                   paramId,
-                  paramValue: inputValue.val,
+                  paramValue: computeParamValue(value),
                   paramType,
                 });
               }

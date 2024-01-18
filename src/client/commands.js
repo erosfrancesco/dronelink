@@ -13,10 +13,10 @@ import {
 export const wsSend = (args) => ws.send(args);
 
 // Parameters
-export const wsParameterRead = (...args) =>
+export const wsParameterRead = (args) =>
   ws.send(sendParameterReadCommand({ ...args }));
 
-export const wsParameterWrite = (...args) =>
+export const wsParameterWrite = (args) =>
   ws.send(sendParameterWriteCommand({ ...args }));
 
 // Device

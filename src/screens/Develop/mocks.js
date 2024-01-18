@@ -64,6 +64,6 @@ export const MavlinkPacketClasses = {
 // 
 export const YawParameterP = {
   paramId: "ATC_ANG_YAW_P",
-  paramValue: 4.00001203,
+  paramValue: 4.099999904632568,
   paramType: 9,
 };

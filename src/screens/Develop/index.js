@@ -4,9 +4,8 @@ import {
   event,
   wsParameterRead,
 } from "../../client/index.js";
-import { widget } from "./widget.js";
+import { ParameterWatcher } from "./widget.js";
 import { mavlinkClasses, mavlinkPackets } from "../../logic/index.js";
-import { MavlinkPacketWrapper } from "../../components/index.js";
 import { MavlinkPacketClasses, YawParameterP } from "./mocks.js";
 
 const { div, span, input } = van.tags;
@@ -45,10 +44,11 @@ const setupWithMock = () => {
     );
   }, 1200);
 };
+//
 
 export const Develop = () => {
-  setupWithMock();
-  return widget({ paramId: "ATC_ANG_YAW_P" });
+  // setupWithMock();
+  return ParameterWatcher({ paramId: "ATC_ANG_YAW_P" });
 };
 
 export default Develop;
