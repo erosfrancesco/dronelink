@@ -29,7 +29,7 @@ const buildReadMessage = (args = {}) => {
 const buildWriteMessage = (args = {}) => {
   const { paramId, paramValue, paramType } = args;
 
-  const packet = common.ParamSet();
+  const packet = new common.ParamSet();
   packet.paramId = paramId;
   packet.paramType = paramType;
   packet.paramValue = paramValue;
