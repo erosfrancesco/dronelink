@@ -11,6 +11,10 @@
 10	MAV_PARAM_TYPE_REAL64	64-bit floating-point
  */
 // TODO: - Optional. fetch from https://autotest.ardupilot.org/Parameters/ArduCopter/apm.pdef.xml
+
+// parser = new DOMParser();
+// xmlDoc = parser.parseFromString(text,"text/xml");
+
 import van from "vanjs-core";
 import { wsParameterRead, wsParameterWrite } from "../../client/index.js";
 import { MavlinkPacketWrapper } from "../../components/index.js";
@@ -18,12 +22,10 @@ const { div, span, input } = van.tags;
 
 //
 const writeParameter = (packet) => {
-  console.log(packet);
   wsParameterWrite(packet);
 };
 
 const readParameter = (paramId) => {
-  console.log("Hello parameter", paramId);
   wsParameterRead({ paramId });
 };
 //

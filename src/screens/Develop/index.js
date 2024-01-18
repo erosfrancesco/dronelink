@@ -4,7 +4,7 @@ import {
   event,
   wsParameterRead,
 } from "../../client/index.js";
-import { ParameterWatcher } from "./widget.js";
+import { ParameterWatcher } from "../../ui/ParamWatcher.widget.js";
 import { mavlinkClasses, mavlinkPackets } from "../../logic/index.js";
 import { MavlinkPacketClasses, YawParameterP } from "./mocks.js";
 
