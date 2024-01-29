@@ -1,12 +1,46 @@
 import van from "vanjs-core";
-import {
-  MAVLINK_PACKET_RECEIVED,
-  event,
-  wsParameterRead,
-} from "../../client/index.js";
+import { MAVLINK_PACKET_RECEIVED, event } from "../../client/index.js";
 import { ParameterWatcher } from "../../ui/ParamWatcher.widget.js";
 import { mavlinkClasses, mavlinkPackets } from "../../logic/index.js";
 import { MavlinkPacketClasses, YawParameterP } from "./mocks.js";
+
+import { loadXML, xmlParser } from "./parameters.js";
+
+const fieldParser = (field) => {
+  const { attributes, childNodes } = field;
+  const { value: name } = attributes.name;
+  const { nodeValue: value } = childNodes[0];
+
+  return { name, value };
+};
+
+const a = async () => {
+  const data = await loadXML("param.xml");
+  const parsed = xmlParser(data);
+  const parametersData =
+    parsed.document.childNodes[0].childNodes[0].childNodes[0].childNodes;
+
+  const parameters = parametersData.map((data) => {
+    const { attributes, childNodes } = data;
+    const { documentation: docNode, name: nameNode, humanName } = attributes;
+
+    const documentation = docNode.value;
+    const name = nameNode.value;
+    const readableName = humanName.value;
+    const fieldsArray = childNodes.map(fieldParser);
+    const fields = fieldsArray.reduce((acc, field) => {
+      const { name, value } = field;
+      acc[name] = value;
+
+      return acc;
+    }, {});
+
+    return { documentation, name, readableName, fields };
+  });
+
+  console.log(parameters, parametersData);
+};
+a();
 
 const { div, span, input } = van.tags;
 
@@ -47,11 +81,25 @@ const setupWithMock = () => {
 //
 
 export const Develop = () => {
-  // setupWithMock();
+  setupWithMock();
+
   return div(
+    ParameterWatcher({
+      setup: () => {},
+      paramId: "AHRS_YAW_P",
+      parameterOptions: {
+        type: "range",
+        min: "0.1",
+        max: "0.4",
+        increment: 0.01,
+      },
+    })
+    /*
     ParameterWatcher({ paramId: "ATC_RAT_YAW_P" }),
     ParameterWatcher({ paramId: "ATC_RAT_YAW_I" }), // 0.07999999821186066
     ParameterWatcher({ paramId: "ATC_RAT_YAW_D" })
+    // AHRS_TRIM_X
+    /** */
   );
 };
 

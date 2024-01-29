@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paramfile>
+  <vehicles>
+    <parameters name="ArduCopter">
+      <param humanName="Eeprom format version number" name="ArduCopter:FORMAT_VERSION" documentation="This value is incremented when changes are made to the eeprom format" user="Advanced">
+        <field name="ReadOnly">True</field>
+      </param>
+      <param humanName="MAVLink system ID of this vehicle" name="ArduCopter:SYSID_THISMAV" documentation="Allows setting an individual MAVLink system id for this vehicle to distinguish it from others on the same network" user="Advanced">
+        <field name="Range">1 255</field>
+      </param>
+      <param humanName="My ground station number" name="ArduCopter:SYSID_MYGCS" documentation="Allows restricting radio overrides to only come from my ground station" user="Advanced">
+        <field name="Range">1 255</field>
+        <field name="Increment">1</field>
+      </param>
+      <param humanName="Yaw P" name="AHRS_YAW_P" documentation="This controls the weight the compass or GPS has on the heading. A higher value means the heading will track the yaw source (GPS or compass) more rapidly." user="Advanced">
+        <field name="Range">0.1 0.4</field>
+        <field name="Increment">.01</field>
+      </param>
+    </parameters>
+  </vehicles>
+</paramfile>

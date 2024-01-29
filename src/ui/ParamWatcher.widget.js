@@ -10,59 +10,13 @@ import {
   VerticalLayout,
 } from "../components/index.js";
 
-// TODO: - WRAPPER
-function loadXMLDoc() {
-  const xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      console.log("Got it", xmlhttp.responseXML);
-      const paramFile = xmlhttp.responseXML.getElementsByTagName("paramfile");
-      // paramfile => vehicle => parameters
-      const parameters = paramFile[0].childNodes[1].children[0];
-
-      const {
-        childNodes,
-        textContent,
-        tagName,
-        attributes: attributeEnum,
-      } = parameters;
-      childNodes.forEach((node) => {
-        const {
-          textContent,
-          tagName,
-          childNodes,
-          attributes: attributeEnum,
-        } = node;
-
-        Object.keys(attributeEnum || {}).forEach((attributeName) => {
-          const attribute = attributeEnum[attributeName];
-          const { nodeName, nodeValue } = attribute;
-          console.log(
-            attributeEnum.humanName.nodeValue,
-            ":",
-            nodeName,
-            "=",
-            nodeValue
-          );
-        });
-      });
-    }
-    /**
-     * eg:
-  Takeoff Check RPM maximum : humanName = Takeoff Check RPM maximum
-  Takeoff Check RPM maximum : name = ArduCopter:TKOFF_RPM_MAX
-  Takeoff Check RPM maximum : documentation = Takeoff is not permitted until motors report no more than this RPM.  Set to zero to disable check
-  Takeoff Check RPM maximum : user = Standard
-     */
-  };
-  xmlhttp.open("GET", "apm.pdef.xml", true);
-  xmlhttp.send();
-}
-loadXMLDoc();
-
 const { div, span, input } = van.tags;
 
 // TODO: - Button for copying previous values
+/** // TODO: - 
+  <field name="Range">0.1 0.4</field>
+  <field name="Increment">.01</field> 
+ */
 
 //
 const writeParameter = (packet) => {
@@ -78,12 +32,13 @@ const readParameter = (paramId) => {
 const computeParamValue = (input) => {
   return parseFloat(input);
 };
+//
 
-const setupWidget = (paramId) => {
-  readParameter(paramId);
-};
-
-const ParamWatcherContent = ({ lastPacket, packetValueHistory }) => {
+const ParamWatcherContent = ({
+  lastPacket,
+  packetValueHistory,
+  parameterOptions = {},
+}) => {
   const { paramValue, paramId, paramType } = lastPacket.val || {};
   const inputValue = van.state(paramValue);
   const previousValues = packetValueHistory.val
@@ -94,6 +49,32 @@ const ParamWatcherContent = ({ lastPacket, packetValueHistory }) => {
     })
     .filter((v) => v);
 
+  const inputOptions = {
+    // type="range" min="1" max="100" value="50
+    // type: "number",
+    color: "primary",
+    value: inputValue,
+
+    // disabled: () => inputValue.val === null || inputValue.val === undefined,
+
+    onclick: (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    onkeyup: (e) => {
+      const { value } = e.target;
+      inputValue.val = value;
+
+      if (e.key === "Enter") {
+        writeParameter({
+          paramId,
+          paramValue: computeParamValue(value),
+          paramType,
+        });
+      }
+    },
+  };
+
   return WidgetBorders(
     VerticalLayout(
       HorizontalLayout(
@@ -101,30 +82,7 @@ const ParamWatcherContent = ({ lastPacket, packetValueHistory }) => {
         TextBold(String(paramValue))
       ),
 
-      Input({
-        type: "number",
-        color: "primary",
-        value: inputValue,
-
-        disabled: () => inputValue.val === null || inputValue.val === undefined,
-
-        onclick: (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        },
-        onkeyup: (e) => {
-          const { value } = e.target;
-          inputValue.val = value;
-
-          if (e.key === "Enter") {
-            writeParameter({
-              paramId,
-              paramValue: computeParamValue(value),
-              paramType,
-            });
-          }
-        },
-      }),
+      Input({ ...inputOptions, ...parameterOptions }),
 
       TextNormal("Previous values: "),
       previousValues.length
@@ -135,13 +93,13 @@ const ParamWatcherContent = ({ lastPacket, packetValueHistory }) => {
 };
 //
 
-export const ParameterWatcher = ({ paramId }) => {
+export const ParameterWatcher = ({ paramId, setup = readParameter }) => {
   const lastPacket = van.state({});
   const packetValueHistory = van.state([]);
   const setupDone = van.state(false);
 
   if (!setupDone.val) {
-    setupWidget(paramId);
+    setup(paramId);
     setupDone.val = true;
   }
 
